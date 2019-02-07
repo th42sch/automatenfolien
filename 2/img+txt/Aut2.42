@@ -1,0 +1,37 @@
+%!PS
+%%BoundingBox: -20 -64 66 10 
+%%HiResBoundingBox: -19.92845 -63.7429 65.57744 9.48534 
+%%Creator: MetaPost 1.504
+%%CreationDate: 2014.05.15:1111
+%%Pages: 1
+%*Font: ectt1000 9.96265 9.96265 22:8009fc03900a6801fb7ef08
+%%BeginProlog
+%%EndProlog
+%%Page: 1 1
+ 0 0 0 setrgbcolor
+0 0 moveto
+(conference) ectt1000 9.96265 fshow
+-9.88783 -19.84248 moveto
+(track) ectt1000 9.96265 fshow
+36.03342 -19.84248 moveto
+(track) ectt1000 9.96265 fshow
+-15.11699 -38.57826 moveto
+(speaker) ectt1000 9.96265 fshow
+-9.88783 -58.7105 moveto
+(track) ectt1000 9.96265 fshow
+ 0 0.79701 dtransform truncate idtransform setlinewidth pop [] 0 setdash
+ 1 setlinecap 1 setlinejoin 10 setmiterlimit
+newpath 19.15253 -2.99992 moveto
+10.17807 -10.75563 lineto stroke
+newpath 33.13858 -2.99992 moveto
+42.11304 -10.75563 lineto stroke
+ 0.79701 0 dtransform exch truncate exch idtransform pop setlinewidth
+newpath 3.18492 -22.8424 moveto
+3.18492 -29.49142 lineto stroke
+newpath 3.18492 -43.79153 moveto
+3.18492 -49.62376 lineto stroke
+ 0.6 0 0 setrgbcolor 0 0.79701 dtransform truncate idtransform setlinewidth pop
+newpath 65.17892 9.08682 moveto
+-19.52994 -63.34439 lineto stroke
+showpage
+%%EOF

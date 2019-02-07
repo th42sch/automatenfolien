@@ -1,0 +1,1618 @@
+%\setbeamertemplate{navigation symbols}{}
+%\beamertemplatenavigationsymbolsempty
+
+\setcounter{part}{5}
+
+%%% \showfromto{5}{5}
+
+\begin{document}
+
+  % ------------------------------------------------------------------------------------------
+  \begin{frame}
+    \titlepage
+    \note{
+      \textbf{8:30}
+      
+      \parI
+      \textbf{TODO:} \\
+      • Übersetzung ABA $\to$ NBA besser verstehen \\
+      ~~ (v.\,a.\ Beweisdetails in T5.8, 5.10 und Bsp.-Automat T5.11). \\
+      • Beweise sauberer führen (Finkbeiner-Skript z.\,T.\ lakonisch \& hat Fehler) \\
+      • Intuition hinter Automatenkonstruktion klarer fassen ($X$, $W$) \\
+      • konkreten Automaten mit Bsp.-Run, dem kein Run-DAG entspricht, angeben
+
+      \parII
+      \textbf{TODO:}~
+      Weitere Themen siehe TODO.txt.
+      \par
+    }
+  \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+  \begin{frame}
+    \frametitle{Warum Alternierung?}
+    
+    \begin{Itemize}
+      \item
+        Starke Beziehungen zwischen Logik und Automaten, z.\,B.:
+        \begin{Itemize}
+          \item
+            NBAs $\leftrightarrow$ LTL~ (Teil~3 dieser Vorlesung)
+          \item
+            NEAs $\leftrightarrow$ S1S~ (Satz von Büchi-Elgot-Trakhtenbrot, VL Logik)
+        \end{Itemize}
+%        {\footnotesize z.\,B.\ NEAs $\leftrightarrow$ S1S, (G)NBAs $\leftrightarrow$ LTL}
+        \parI
+      \item
+        In Logiken kann man aber Sprachen oder Eigenschaften oft deutlich kürzer ausdrücken, z.\,B.:
+        \begin{Itemize}
+          \item
+            LTL-Formel $\to$ NBA:~ exponentielle Explosion
+          \item
+            S1S-Formel $\to$ NEA:~ sogar nicht-elementare Explosion
+        \end{Itemize}
+%        {\footnotesize z.\,B.\ LTL-Formel $\to$ (G)NBA: exponentielle Explosion; S1S-Formel $\to$ NEA: nicht-elementare Explosion}
+        \parI
+      \item
+        Verkleinern dieser Lücke:
+        
+        \parI
+        Erlaube in Automaten nicht nur \Emph{existenzielle} ($=$ nichtdeterm.) "`Verzweigungen"',
+        sondern auch \Emph{universelle}.
+%        \parI
+%      \item
+%        Wir beschränken uns im Folgenden auf $\omega$-\Emph{Wort}automaten, \\
+%        also auf alternierende Büchi-Automaten.
+    \end{Itemize}
+
+    \note{
+      \textbf{8:30}
+      
+      \par
+      Büchi-Elgot-Trakhtenbrot:~ Logik-VL. S1S $=$ monad.\ SO auf lin.\ Strukt.
+      
+      \parIII
+      "`nicht-elementar"':~ jede Negation erfordert Potenzmengenkonstruktion, vergrößert Automaten exp. \\
+      $\to$ "`exp.\ Turm"' unbeschränkt (Verschachtelungstiefe $\lnot$ (und $\exists$))
+      
+      \parIII
+      Um die Lücke zu verkleinern, erweitert man das Automatenmodell so, \\
+      dass es der Logik ähnlicher wird.
+      
+      \par
+    }
+  \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+  \begin{frame}
+    \frametitle{Warum Alternierung?}
+    
+    \begin{Itemize}
+      \item
+        "`Alternierung"' heißt also, dass ein Maschinenmodell (abwechselnd)
+        existenzielle und universelle Entscheidungen treffen kann.
+        \parI
+      \item
+        Alternierende Varianten gibt es für alle Automatentypen aus dieser Vorlesung
+        (auf endlichen oder unendlichen Objekten, Wörtern oder Bäumen)
+        und für andere Maschinenmodelle (z.\,B.\ Turingmaschinen).
+        \parI
+      \item
+        Für alternierende Automaten ist Komplementierung besonders leicht zu erreichen.
+        \parI
+      \item
+        Wir beschränken uns im Folgenden auf $\omega$-\Emph{Wort}automaten, \\
+        also auf alternierende Büchi-Automaten.
+    \end{Itemize}
+    
+    \note{
+      \textbf{8:32}
+      
+      \par
+      "`Abwechselnd"' ist hier wichtig.~ Nur ex./nur univ.\ ist witzlos.
+      
+      \parII
+      Für TMs:~ erlaubt z.\,B.\ feinere Komplexitätsanalyse
+      
+      
+      \par
+    }
+  \end{frame}
+    
+  % ------------------------------------------------------------------------------------------
+  \begin{frame}
+  \frametitle{Überblick}
+    \tableofcontents
+    \note{
+      \textbf{8:33}
+      
+      \par
+    }
+  \end{frame}
+
+  % ==============================================================================================
+  % ==============================================================================================
+  \section[Einführung]{Einführung und Grundbegriffe}
+
+  % ------------------------------------------------------------------------------------------
+  \begin{frame}
+    \frametitle{Alternierung: Grundidee}
+    
+    \begin{Itemize}
+      \item
+        Nichtdeterministischer Automat \Aut{A} akzeptiert eine Eingabe, \\
+        wenn ein erfolgreicher Run \Emph{existiert}.
+        \parI
+%      \item
+        d.\,h.: falls $(q,a,q'),~(q,a,q'') \in \Delta$, kann \Aut{A} in Situation $(q,a)$ "`entscheiden"',
+        wie der Run fortgesetzt wird.
+        \parI
+        \Emph{Mindestens eine} dieser Entscheidungen muss zum Ziel führen.
+        \parI
+      \item
+        Alternierung erlaubt auch \Emph{universelle Entscheidungen}, \\
+        in beliebiger Kombination mit existenziellen.
+        \parI
+      \item
+        "`Beliebige Kombination"' wird realisiert durch \Bmph{positive Boolesche Formel},
+        d.\,h.\ aussagenlogische Formel ohne $\lnot$.
+        \parI
+      \item
+        Statt eines Runs (Zustandsfolge) gibt es nun einen \Bmph{Run-Baum,}
+        der alle universellen Entscheidungen berücksichtigt.
+    \end{Itemize}
+
+    \note{
+      \textbf{8:33}
+      
+      \par
+      Positive Formeln werden manchmal auch monoton genannt. Hier egal. \\
+      Wichtig:~ keine Negation!
+      
+      \par
+    }
+  \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+  \begin{frame}
+    \frametitle{Positive Boolesche Formeln}
+    
+    \begin{Definition}[Syntax]
+%      Seien $X,Y$ Mengen mit $Y \subseteq X$.
+      %
+%      \begin{Enumerate}
+%        \item
+          Die Menge der \Bmph{positiven Booleschen Formeln (PBFs)} über einer Menge $X$,
+          geschrieben \Bmph{$\PBF(X)$}, ist die kleinste Menge, für die gilt:
+          %
+          \begin{Itemize}
+            \item
+              Jedes Element $x \in X$ ist eine PBF.
+            \item
+              Die Konstanten $\texttt{0},\texttt{1}$ sind PBFs.
+            \item
+              Wenn $\varphi,\psi$ PBFs sind, dann auch $\varphi \land \psi$ und $\varphi \lor \psi$.
+          \end{Itemize}
+%        \item
+%          Eine Menge $Y \subseteq X$ \Bmph{erfüllt} eine PBF $\varphi \in \mathcal{B}^+(X)$,
+%          geschrieben \Bmph{$Y \models \varphi$}, wenn die Belegung, die 
+%      \end{Enumerate}
+    \end{Definition}
+    
+    \parI
+    \uncover<2->{%
+      \begin{Definition}[Semantik]
+        Jede Menge $Y \subseteq X$ definiert eine \Bmph{Belegung $V_Y$}${} : X \to \{0,1\}$: \\[2pt]
+        \qquad $V_Y(x) = 1$,~ falls $x \in Y$;\quad $V_Y(x) = 0$ sonst.
+        
+        \parII
+        Eine Menge $Y \subseteq X$ \Bmph{erfüllt} eine PBF $\varphi \in \PBF(X)$,
+        geschrieben \Bmph{$Y \models \varphi$}, wenn $V_Y \models \varphi$ (nach Standard-Semantik AL).
+      \end{Definition}
+      
+%      \parI
+      \Tafel
+    }
+
+    \note{
+      \textbf{8:35}
+      
+      \par
+    }
+  \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+  \begin{frame}
+    \frametitle{Alternierende Automaten}
+    
+    \begin{Definition}
+      Ein \Bmph{alternierender Büchi-Automat} auf $\omega$-Wörtern \Bmph{(ABA)}
+      ist ein 5-$\!$Tupel
+      $\Aut{A} = (Q, \Sigma, \delta, I, F)$, wobei
+      \begin{Itemize}
+        \item
+          $Q$ eine endliche nichtleere \Bmph{Zustandsmenge} ist,
+        \item
+          $\Sigma$ eine \Bmph{Alphabet} (endliche nichtleere Menge von Zeichen) ist,
+        \item
+          $\delta : Q \times \Sigma \to \PBF(Q)$ die \Emph{Überführungsfunktion} ist,
+        \item
+          $I \subseteq Q$ die Menge der \Bmph{Anfangszustände} ist,
+        \item
+          $F \subseteq Q$ die Menge der \Bmph{akzeptierenden Zustände} ist.
+      \end{Itemize}
+    \end{Definition}
+
+    \parII
+    \uncover<2->{%
+      Wir nehmen wieder o.\,B.\,d.\,A.\ $I = \{q_I\}$ an.
+      
+      \parII
+      Alternative Akzeptanzbedingungen (Muller, Parität usw.) sind auch möglich.
+    }
+
+    \note{
+      \textbf{8:41}
+      
+      \par
+      Überführungs\textbf{funktion:}~
+      weil die PBF bereits die nichtdeterministischen Entscheidungen enthält
+      
+      \par
+    }
+  \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+  \begin{frame}
+    \frametitle{Run-Bäume}
+    
+    Betrachten \Bmph{Baum mit Verzweigungsgrad $\leq n$,} für festes $n \in \mathbb{N}$
+    %
+    \begin{Itemize}
+      \item
+        Positionen:~ Menge $P \subseteq \{1,\dots,n\}^*$, präfix-abgeschlossen
+      \item
+        \Bmph{Kinder} eines Knotens $p$:~ $\Bmph{Kinder}(p) \subseteq \{p1,\dots,pn\}$
+      \item
+        \Bmph{Tiefe, Ebene, Nachfolger, Pfad:}~ wie gehabt
+    \end{Itemize}
+
+    \parIII
+    \uncover<2->{%
+      \Bmph{Pfad} in $P$:~ endliche oder unendliche Folge $\pi = \pi_0\pi_1\pi_2 \cdots$ von \Emph{Positionen} $\pi_i \in P$ mit
+      %
+      \begin{Itemize}
+        \item
+          $\pi_0 = \varepsilon$ und 
+        \item
+          $\pi_{i+1} \in \text{Kinder}(\pi_i)$ für alle $i \geq 0$
+      \end{Itemize} 
+    }
+    
+    \parIII
+    \uncover<3->{%
+      \Bmph{$\Sigma$-Baum $(P,t)$} (Alphabet $\Sigma$):
+      %
+      \begin{Itemize}
+        \item
+          $P$ wie oben
+        \item
+          $t : P \to \Sigma$ ist Markierungsfunktion \Tafel
+      \end{Itemize}
+    }
+    
+    \note{
+      \textbf{8:43}
+      
+      \parII
+      Runs sind jetzt Bäume mit endlichem Verzweigungsgrad;
+      Bäume müssen nicht vollständig sein.
+      
+      \parII
+      Präfix-Abg.: wie bei endlichen Bäumen; jedes Kind braucht sein Elter!
+      
+      \par
+    }
+  \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+  \begin{frame}
+    \frametitle{Berechnungen und Akzeptanz}
+    
+    \begin{Definition}
+      Ein \Bmph{Run} eines ABA $\Aut{A} = (Q,\Sigma,\delta,\{q_i\},F)$
+      auf einem Wort $\alpha = \alpha_0\alpha_1\alpha_2\cdots \in \Sigma^\omega$ ist ein
+      \Emph{$Q$-Baum} $(P,r)$, so dass:
+      %
+      \begin{Itemize}
+        \item
+          $r(\varepsilon) = q_I$
+        \item
+          für alle $p \in P$:~ wenn $r(p)=q$, dann
+          \par\vspace*{-.4\baselineskip}
+          \[
+            \Big\{r(p') \mid p' \in \text{Kinder}(p)\Big\} ~\models~ \delta\big(q,\alpha_{|p|}\big)\,.
+          \]
+          \par\vspace*{-1.4\baselineskip}
+          \Tafel
+      \end{Itemize}
+      
+      \parIII
+      \uncover<2->{%
+        Run $(P,r)$ ist \Bmph{erfolgreich,}
+        wenn für \Emph{jeden unendlichen} Pfad $\pi = \pi_0\pi_1\pi_2\dots$ in $P$ gilt:
+        \par\vspace*{-.4\baselineskip}
+        \[
+          \text{Inf}(r,\pi) \cap F \neq \emptyset
+        \]
+        \par\vspace*{-1.4\baselineskip}
+%        (und analog für andere Akzeptanzbedingungen)
+        \TafelForts
+      }
+      
+      \parIII
+      \uncover<3->{%
+        \Bmph{$L_\omega(\Autb{A})$}${} = \{\alpha \in \Sigma^\omega \mid \Aut{A} \text{~hat einen erfolgr.\ Run auf~} \alpha\}$
+        \TafelForts
+      }
+      \end{Definition}      
+      
+%      \par\vspace*{-.1\baselineskip}
+      (für andere Akzeptanzbedingungen analog)
+
+    \note{
+      \textbf{8:48 bis 8:59}
+      
+      \par
+      Bedingung 2, Run: \\
+      die Kinder eines Knotens $p$ enthalten \Emph{eine} Menge von Zuständen, \\
+      die die PBF erfüllen,
+      die $\delta$ dem Paar $\big(r(p),\,\text{|p|-tes Zeichen von $\alpha$}\big)$ zuweist
+            
+      \parII
+      Ein Beispiel an Tafel;~ weiteres Beispiel im nächsten Abschnitt (LTL)!
+    }
+  \end{frame}
+
+  % ==============================================================================================
+  % ==============================================================================================
+  \section[LTL]{Von LTL zu alternierenden Automaten}
+
+  % ------------------------------------------------------------------------------------------
+  \begin{frame}
+    \frametitle{Vorbetrachtungen}
+    
+    Übersetzung logischer Formeln in alternierende Automaten \\
+    ist oft einfacher als in nichtdeterministische Automaten.
+    
+    \parII
+    Hier am Beispiel LTL $\to$ ABA
+    
+    \parIII
+    \uncover<2->{%
+      \begin{tabular}{@{}l@{\quad}l@{}}
+        \Bmph{Erinnerung an LTL:} &
+        $
+          \varphi ::= x \mid \lnot \varphi \mid \varphi \land \varphi \mid \varphi \lor \varphi \mid X\varphi \mid \varphi \mathbin{U} \varphi
+        $ \\[4pt]
+%        \parI%\vspace*{-\baselineskip}
+        & mit $x \in \text{AV}$ (Aussagenvariablen)
+      \end{tabular}
+    }
+  
+    \parIII  
+    \uncover<3->{%
+      $s,i \models \varphi\mathbin{U}\psi$,\quad falls $s,j \models \psi$ für ein $j \geqslant i$\\
+      \hspace*{26mm}und $s,k \models \varphi$ für alle $k$ mit $i \leqslant k < j$
+    }
+
+    \parIII
+    \uncover<4->{%
+%      \begin{Itemize}
+%        \item
+          $F\varphi \equiv (x \lor \lnot x) \mathbin{U} \varphi$
+          \parI
+%        \item
+          $G\varphi \equiv \lnot F \lnot \varphi$
+%      \end{Itemize}
+    }
+    
+    \parIII
+    \uncover<5->{%
+      \Bmph{Expansionsgesetz:} \\
+      $s,i \models \varphi \mathbin{U} \psi$
+      \,\Emph{gdw.}\,
+      $s,i \models \psi$ \,oder\, \big($s,i \models \varphi$ und\, $s,i\!+\!1 \models \varphi \mathbin{U} \psi$\big)
+    }
+    
+
+    \note{
+      \textbf{8:59}
+      
+      \par
+      Formeln hier als Grammatik angegeben. \\
+      • Variablen als $x$, nicht $p$ (schon für Positionen vergeben). \\
+      • $\lor$ ist eigentlich überflüssig, kann man aber gleich ganz bequem behandeln. \\
+      • $F,G$ sind nur Abkürzungen mittels $U$.
+      
+      \parIII
+      Expansionsgesetz:~
+      kann man leicht semantisch überprüfen. \\
+      Haben wir damals auch im (G)NBA kodiert. \\
+      Allerdings jetzt einfacher mit ABA modellierbar!
+      
+      \par
+    }
+  \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+  \begin{frame}
+    \frametitle{Intuitionen der Konstruktion}
+    
+    Seien $\varphi$ eine LTL-Formel und $\psi$ eine beliebige Teilformel.
+
+    \parII    
+    $\Bmph{$\Neg\psi$} = \begin{cases}
+                            \vartheta & \text{falls } \psi = \lnot\vartheta \\
+                            \lnot\psi & \text{sonst}
+                          \end{cases}$
+    \parII
+    $\Bmph{$\cl(\varphi)$} = \{\psi, \Neg\psi \mid \psi \text{ ist Teilformel von } \varphi\}$
+    
+    \parIII
+    \uncover<2->{%
+      \Bmph{Bestandteile des ABA $\Autb{A}_\varphi$\,}
+      %
+      \begin{Itemize}
+        \item
+          Eingabealphabet:~ $\Sigma = 2^{\text{AV}}$ wie gehabt
+        \item
+          Zustände:~ für jede Formel $\psi \in \text{cl}(\varphi)$ ein $q_\psi$;~ Startzustand $q_\varphi$
+        \item<3->
+          Übergänge:
+          %
+          \begin{itemize}
+            \item
+              für $\land,\lor$:~ mittels PBF
+            \item
+              für $\lnot$:~ per "`Negation"' der PBF
+            \item
+              für $X\psi$:~ schicke $q_\psi$ zur nächsten Position
+            \item
+              für $U$:~ per Expansionsgesetz
+          \end{itemize}
+        \item<4->
+          $F$ verhindert unendliches "`Aufschieben"' von $U$-Teilformeln!
+      \end{Itemize}
+    }
+
+    \note{
+      \textbf{9:03}
+      
+      \par
+      "`Negation der PBF"':~ geht natürlich nicht, weil PBFs keine $\lnot$ haben. \\
+      Gleich mehr.
+      
+      \par
+    }
+  \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+  \begin{frame}
+    \frametitle{"`Negation von PBFs"'}
+    
+    \Bmph{Idee:}~ Nutzen stattdessen Dualität von $\land,\lor$ (de Morgan), \\
+    um Negation nach innen zu ziehen.
+    
+    \parI
+    Negation eines Atoms $q_\psi$ ist dann $q_{\Neg \psi}$\,.
+    
+    \parIII
+    \Bmph{Genauer:}~ mittels Operator $\overline{\rule{0pt}{6pt}~~}$ wie folgt:
+    %
+    \begin{align*}
+      \overline{\zeta_1 \land \zeta_2} & = \overline{\zeta_1} \lor \overline{\zeta_2} \\
+      \overline{\zeta_1 \lor \zeta_2}  & = \overline{\zeta_1} \land \overline{\zeta_2} \\
+      \overline{q_\psi}                & = q_{\Neg\psi} \\
+      \overline{\texttt{1}}            & = \texttt{0} \\
+      \overline{\texttt{0}}            & = \texttt{1}
+    \end{align*}
+    
+
+    \note{
+      \textbf{9:07}
+      
+      \parI
+      Achtung: wir wollen \emph{nur PBFs} "`negieren"', nicht LTL-Formeln. \\
+      Deshalb brauchen wir nur Fälle für $\land$, $\lor$ und Atome.
+      
+      \parI
+      Aussagenvariablen sind aber hier immer nur die $q_\psi$; \\
+      und die können wir negieren, indem wir $\psi$ negieren.
+      
+      \par
+    }
+  \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+  \begin{frame}
+    \frametitle{Konstruktion des ABA}
+    
+    \begin{Itemize}
+      \item
+        $Q = \{q_\psi \mid \psi \in \textsf{cl}(\varphi)\}$,\quad $q_I = q_\varphi$
+        \parI
+      \item
+        $\Sigma = 2^{\text{AV}}$
+        \parI
+      \item
+        $\delta : Q \times \Sigma \to \PBF(Q)$ wie folgt:
+        %
+        \begin{align*}
+          \delta(q_x,a)                           & = \begin{cases}
+                                                       \texttt{1} & \text{falls~} x \in a \\
+                                                       \texttt{0} & \text{sonst}
+                                                     \end{cases}                                     \\[2pt]
+          \delta(q_{\Neg \psi}, a)                & = \overline{\delta(q_\psi, a)}                   \\[2pt]
+          \delta(q_{\psi \land \vartheta}, a)     & = \delta(q_\psi, a) \land \delta(q_\vartheta, a) \\[2pt]
+          \delta(q_{\psi \lor \vartheta}, a)      & = \delta(q_\psi, a) \lor \delta(q_\vartheta, a)  \\[2pt]
+          \delta(q_{X\psi}, a)                    & = q_\psi                                         \\[2pt]
+          \delta(q_{\psi\mathbin{U}\vartheta}, a) & = \delta(q_\vartheta, a) \lor \big(\delta(q_\psi, a) \land q_{\psi\mathbin{U}\vartheta}\big)
+        \end{align*}
+        \parI
+      \item
+        $F = \{q_{\lnot(\psi \mathbin{U} \vartheta)} \mid \lnot(\psi \mathbin{U} \vartheta) \in \textsf{cl}(\varphi)\}$
+        \Tafel
+    \end{Itemize}
+
+    \note{
+      \textbf{9:09}
+      
+      \parI
+      \textbf{Erklären, 5min Pause, dann Beispiel vorrechnen $\to$ bis 9:30\,?}
+      
+      \parII
+      Man kann natürlich für die Zustände direkt $\psi$ statt $q_\psi$ schreiben. \\
+      Das sorgt aber für Verwirrung in der Definition von $\overline{\rule{0pt}{6pt}~~}$, \\
+      weil man bei $\land,\lor$ nicht mehr sieht, ob PBFs oder LTL-Formeln verknüpft werden.
+      
+      \par
+    }
+  \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+  \begin{frame}
+    \frametitle{Vergleich mit Konstruktion LTL $\to$ (G)NBA aus Teil 3}
+    
+    \Bmph{Auf"|fällige Unterschiede}
+    %
+    \begin{Itemize}
+      \item
+        ABA hat linear viele Zustände, GNBA exponentiell viele.
+      \item
+        Hier wird die Bedeutung \Emph{aller} Operatoren in $\delta$ kodiert.
+    \end{Itemize}
+
+    \parI    
+    \Bmph{Gemeinsamkeiten}
+    %
+    \begin{Itemize}
+      \item
+        Beide Konstruktionen verwenden das Expansionsgesetz.
+      \item
+        Beide Akzeptanzbedingungen verfolgen denselben Zweck: \\
+        verbieten, die Erfüllung von $U$-Formeln $\infty$ weit hinauszuzögern.
+    \end{Itemize}
+
+    \parII
+    1.\ Punkt bedeutet natürlich, dass es zu einem ABA im Allg. \\
+    keinen polynomiell großen äquivalenten NBA geben kann.
+    
+%    \parI
+%    (Mehr dazu später.)
+
+    \note{
+      \textbf{9:30}
+
+      \parI
+      Letzter Satz: wenn ABA $\to$ NBA wieder gemacht wird, \\
+      dann "`Mehr dazu später"' in Folie wieder einkommentieren.
+            
+      \par
+    }
+  \end{frame}
+
+  % ==============================================================================================
+  % ==============================================================================================
+  \section{Komplementierung}
+
+  % ------------------------------------------------------------------------------------------
+  \begin{frame}
+    \frametitle{Abschluss unter Komplement}
+    
+    \dots\ ist für ABA-erkennbare Sprachen besonders leicht zu zeigen.
+    
+    \parIII
+    Für eine PBF $\varphi$ definieren wir \Bmph{$\textsf{dual}(\varphi)$} \\
+    als die PBF, die durch "`Umdrehen"' von $\land$ und $\lor$ entsteht,
+    
+    \parI
+    z.\,B.:~ $\textsf{dual}\big((q_1 \land q_2) \lor q_3\big) = (q_1 \lor q_2) \land q_3$
+    
+    \parIII
+    Wir betrachten zur weiteren Erleichterung jetzt A\Emph{M}As \\
+    (alternierende \Emph{Muller}-Aut., Akzeptanzkomp.\ $\calF \subseteq 2^Q$ wie gehabt)
+    
+    \note{
+      \textbf{9:31}
+      
+      \par
+      Grund für Muller:\\
+      Akzeptanzbedingung des Komplementautomaten wird einfacher.
+      
+      \par
+    }
+  \end{frame}
+  
+  % ------------------------------------------------------------------------------------------
+  \begin{frame}
+    \frametitle{Abschluss unter Komplement}
+    
+    \begin{Satz}
+      Die Klasse der AMA-erkennbaren $\omega$-Sprachen ist unter Komplement abgeschlossen.
+    \end{Satz}
+    
+    \parI
+    \uncover<2->{%
+      \Bmph{Beweis.}~
+      Sei $\Aut{A} = (Q,\Sigma,\delta,\{q_I\},\calF)$ ein AMA.
+    }
+    
+    \parII
+    \uncover<3->{%
+      Konstruiere AMA $\Aut{A}' = (Q,\Sigma,\delta',\{q_I\},\calF')$ wie folgt:
+      %
+      \begin{Itemize}
+        \item
+          Für alle $q \in Q$ und $a \in \Sigma$, setze \\
+          $\delta'(q,a) = \textsf{dual}\big(\delta(q,a)\big)$.
+          \parI
+        \item<4->
+          $\calF' = 2^Q \setminus \calF$ \Tafel
+      \end{Itemize}
+    }
+    
+    \parI
+    \uncover<5->{%
+      Dann gilt: $L_\omega(\Aut{A}') = \overline{L_\omega(\Aut{A})}$
+      \quad (Beweis mittels Spielen)
+%      \Tafel~~~~
+      \par\vspace*{-.95\baselineskip}\qed
+    }
+    
+    \parIII
+    \uncover<6->{%
+      Insbesondere ist $\Aut{A}'$ (bis auf $\calF'$) nicht größer als $\Aut{A}$\,!
+    }
+
+    \note{
+      \textbf{9:32 bis 9:45 (nur Bsp. und kein Beweis)}
+      
+      \par
+      Konstruktion: vergleiche mit Safra-Konstruktion
+      
+      \parII
+      Beweis: braucht Spiele (sehr ähnlich zu denen aus Kap.\,4) \\
+      und alternative Def.\ alternierender Automaten $\leadsto$ hier nicht.
+      
+      \parII
+      \textbf{TODO:}~ Wenn Satz bewiesen werden soll, dann Beweis ganz neu ausarbeiten; \\
+      man muss wohl Alternierung mittels existenzieller und universeller Zust. definieren; \\
+      siehe Notizen zwischen T5.5 und T5.6.
+      
+      \par
+    }
+  \end{frame}
+
+%  % ==============================================================================================
+%  % ==============================================================================================
+%  \section[ABA $\to$ NBA]{Übersetzung zu nichtdeterministischen Automaten}
+%
+%  % ------------------------------------------------------------------------------------------
+%  \begin{frame}
+%    \frametitle{Ziel}
+%    
+%    \begin{Satz}[Miyano \& Hayashi 1984]
+%      Für jeden ABA $\Aut{A}$ gibt es einen NBA $\Aut{A}'$ mit $L_\omega(\Aut{A})=L_\omega(\Aut{A}')$.
+%      \label{thm:ABAvsNBA}
+%    \end{Satz}
+%    
+%    Alternierende und nichtdeterministische Büchi-Automaten
+%    sind also \Emph{gleichmächtig.}
+%    
+%    \parIII
+%    \uncover<2->{%
+%      \Bmph{Vorgehensweise}
+%      %
+%      \begin{Itemize}
+%        \item[\Bmph{(1)}]
+%          Repräsentieren Runs von $\Aut{A}$ (Bäume) als DAGs (gerichtete azyklische Graphen).
+%          
+%          \parI
+%          Run-DAGs entsprechen genau den \Emph{gedächtnislosen} Runs.
+%        \item[\Bmph{(2)}]
+%          Zeigen:~ $\Aut{A}$ akzeptiert Eingabe $\alpha$ gdw.\ es einen
+%          \Emph{gedächtnislosen} Run-Baum (und damit einen Run-DAG) von $\Aut{A}$ auf $\alpha$ gibt.
+%          \parI
+%        \item[\Bmph{(3)}]
+%          Konstruktion des NBAs $\Aut{A}'$ mit Anleihen von der Potenzmengenkonstruktion; 
+%          Korrektheitsbeweis verwendet~\Bmph{(2)}.
+%      \end{Itemize}
+%    }
+%
+%    \note{
+%      \textbf{8:30}
+%      
+%      \par
+%      Zuerst 5\,min Kurzwdhlg.\ ABAs!
+%      
+%      \par
+%    }
+%  \end{frame}
+%
+%  \newcommand{\mystrut}{\rule[-2pt]{0pt}{10pt}}
+%  % ------------------------------------------------------------------------------------------
+%  \begin{frame}
+%    \frametitle{Runs als DAGs}
+%    
+%    Betrachte den ABA $\Aut{A}$:
+%    \qquad
+%    %
+%    \begin{tikzpicture}[%
+%      node distance=15mm,>=Latex,baseline=-2pt,
+%      initial text="", initial where=below left,
+%      every state/.style={draw=black,thick,fill=ddblue!10,inner sep=.8mm,minimum size=6mm},
+%      accepting/.style={double distance=1.5pt, double=white},
+%      every edge/.style={draw=black,thick}
+%    ]
+%      \node[state,initial,accepting]                          (p)    {$p$};
+%      \node[rectangle,fill=black,minimum size=1.6mm,inner sep=0mm,right of=p] (rect) {};
+%      \node[state,right of=rect]                              (q)    {$q$};
+%%      \node[rectangle,draw=none]                              (true) {\texttt{1}};
+%      
+%      \path[->]
+%        (p)    edge             node[near start, above] {$b$} (q)
+%        (rect) edge[out=300,in=320]                                (p)
+%%        (q)    edge             node[above]             {$b$} (true)
+%        (p)    edge[loop above] node[right=1mm]             {$a$} ()
+%        (q)    edge[loop above] node[right=1mm]             {$a,b$} ();
+%        
+%      \node () [below right=-1.5mm and -.5mm of rect] {\footnotesize $\land$};
+%    \end{tikzpicture}
+%    
+%    \par\vspace*{5mm}
+%    \uncover<2->{%
+%      \parbox[t]{.55\linewidth}{%
+%        Möglicher Run auf dem Wort $b^\omega$\,:
+%        %
+%        \begin{center}
+%          \begin{tikzpicture}[
+%            >=Latex,
+%            every node/.style = {draw=none, fill=none, inner sep=.4mm, minimum size=1mm},
+%            level 1/.style = {sibling distance = 14mm, level distance=9mm},
+%            level 2/.style = {sibling distance = 11mm, level distance=9mm},
+%            level 3/.style = {sibling distance =  8.2mm, level distance=9mm},
+%            level 4/.style = {sibling distance =  6mm, level distance=9mm},
+%            edge from parent/.style = {draw=black, thin, ->}%
+%          ]
+%            \node (eps) {\mystrut $p$}
+%            child {
+%              node (0) {\mystrut $p$}
+%              child {
+%                node (00) {\mystrut $p$}
+%                child {
+%                  node (000) {\mystrut $p$}
+%                  child {
+%                    node (0000) {$\vdots$}
+%                  }
+%                  child {
+%                    node (0001) {$\vdots$}
+%                  }
+%                }
+%                child {
+%                  node (001) {\mystrut $q$}
+%                  child [missing] {node {}}
+%                  child {
+%                    node (0011) {$\vdots$}
+%                  }
+%                }
+%              }
+%              child {
+%                node (01) {\mystrut $q$}
+%                child [missing] {node {}}
+%                child {
+%                  node (011) {\mystrut $q$}
+%                  child [missing] {node {}}
+%                  child {
+%                    node (0111) {$\vdots$}
+%                  }
+%                }
+%              }
+%            }
+%            child {
+%              node (1) {\mystrut $q$}
+%              child [missing] {node {}}
+%              child {
+%                node (11) {\mystrut $q$}
+%                child [missing] {node {}}
+%                child {
+%                  node (111) {\mystrut $q$}
+%                  child [missing] {node {}}
+%                  child {
+%                    node (1111) {$\vdots$}
+%                  }
+%                }
+%              }
+%            };
+%          \end{tikzpicture}
+%        \end{center}
+%      }%
+%    }%
+%    \hspace*{\fill}
+%    \uncover<3->{%
+%      \parbox[t]{.4\linewidth}{%
+%        Repräsentation als DAG:
+%        %
+%        \begin{center}
+%          \begin{tikzpicture}[
+%            >=Latex,
+%            every node/.style = {draw=none, fill=none, inner sep=.2mm, minimum size=1mm},
+%            level 1/.style = {sibling distance = 16mm, level distance=9mm},
+%            level 2/.style = {sibling distance =  9mm, level distance=9mm},
+%            level 3/.style = {sibling distance =  7mm, level distance=9mm},
+%            level 4/.style = {sibling distance =  5mm, level distance=9mm},
+%            edge from parent/.style = {draw=black, thin, ->}%
+%          ]
+%            \node (eps) {$(p,0)$}
+%            child {
+%              node (0) {$(p,1)$}
+%              child {
+%                node (00) {$(p,2)$}
+%                child {
+%                  node (000) {$(p,3)$}
+%                  child {
+%                    node (0000) {$\vdots$}
+%                  }
+%                }
+%              }
+%            }
+%            child {
+%              node (1) {$(q,1)$}
+%              child {
+%                node (10) {$(q,2)$}
+%                child {
+%                  node (100) {$(q,3)$}
+%                  child {
+%                    node (1000) {~~~$\vdots$~~~}
+%                  }
+%                }
+%              }
+%            };
+%            
+%            \path[->]
+%              (0)   edge (10)
+%              (00)  edge (100)
+%              (000) edge (1000);
+%            
+%          \end{tikzpicture}
+%        \end{center}
+%      }%
+%    }
+%    
+%    \parII
+%    \uncover<4->{%
+%      \scalebox{.95}[1]{Offenbar entspricht jeder Pfad im Run einem Pfad im DAG \& umgekehrt.\hspace*{-10mm}}
+%    }
+%
+%    \note{
+%      \textbf{8:37}
+%      
+%      \par
+%      Im Run-DAG wird einfach Information zusammengefasst:
+%      
+%      (v.o.n.u.)
+%      %
+%      \begin{itemize}
+%        \item
+%          Wenn in Ebene 0 (Wurzel) $p$ vorkommt, \\
+%          dann in den Kindern (Ebene 1) $p$ und $q$.
+%        \item
+%          Wenn in Ebene 1 $p$ vorkommt, dann in den Kindern (Ebene 2) $p$ \& $q$.
+%        \item
+%          Wenn in Ebene 2 $q$ vorkommt, dann in den Kindern (Ebene 2) nur $q$.
+%        \item
+%          usw.
+%      \end{itemize}
+%      
+%      \par
+%    }
+%  \end{frame}
+%
+%  % ------------------------------------------------------------------------------------------
+%  \begin{frame}
+%    \frametitle{Run-DAGs}
+%    
+%    \begin{definition}
+%      Sei $\Aut{A} = (Q, \Sigma, \delta, \{q_I\}, F)$ ein ABA und $\alpha = \alpha_0\alpha_1\alpha_2\cdots \in \Sigma^\omega$.
+%      
+%      \parI
+%      Ein \Emph{Run-DAG} von $\Aut{A}$ auf $\alpha$ ist ein gerichteter azyklischer Graph (DAG) \Bmph{$G=(V,E)$}
+%      mit den folgenden Eigenschaften.
+%      %
+%      \begin{Itemize}
+%        \item<2->
+%          $V \subseteq Q \times \mathbb{N}$ und $\auf q_I,0\zu \in V$
+%          \parI
+%        \item<3->
+%          Wenn $(v,v') \in E$, dann $v=\auf q,\ell\zu$ und $v'=\auf q', \ell\!+\!1\zu$\\
+%          mit $q,q' \in Q$ und $\ell \in \mathbb{N}$.
+%%        \item
+%%          $\auf q_I,0\zu \in V$
+%          \parI
+%        \item<4->
+%          Wenn $\auf q,\ell\zu \in V$, dann gibt es $X \subseteq Q$ mit $X \models \delta(q, \alpha_\ell)$ und:
+%          %
+%          \begin{Itemize}
+%%            \item
+%%              $X \models \delta(q, \alpha_i)$
+%            \item
+%              $\auf q',\ell\!+\!1\zu \in V$ für alle $q' \in X$
+%            \item
+%              $\big(\auf q,\ell\zu,\,\auf q',\ell\!+\!1\zu\big) \in E$ für alle $q' \in X$
+%          \end{Itemize}
+%      \end{Itemize}
+%      %
+%      \parI
+%      \uncover<5->{%
+%        Run-DAG $G=(V,E)$ ist \Bmph{erfolgreich,}
+%        wenn auf jedem Pfad unendlich viele Knoten aus $F \times \mathbb{N}$ vorkommen.
+%      }
+%    \end{definition}
+%
+%    \note{
+%      \textbf{8:40}
+%      
+%      \par
+%      Knoten (Paare) hier mit Winkelklammern, hat keine tiefere Bedeutung, \\
+%      nur zum Unterscheiden von Kanten (Paaren von Knoten).
+%      
+%      \par
+%    }
+%  \end{frame}
+%
+%  % ------------------------------------------------------------------------------------------
+%  \begin{frame}
+%    \frametitle{Runs ohne DAGs}
+%    
+%    Nicht jeder Run eines ABA
+%    kann als Run-DAG repräsentiert werden:
+%    
+%%    Betrachte ABA $\Aut{A}'$:
+%%    \qquad
+%%    %
+%%    \begin{tikzpicture}[%
+%%      node distance=15mm,>=Latex,baseline=-2pt,
+%%      initial text="", initial where=below left,
+%%      every state/.style={draw=black,thick,fill=ddblue!10,inner sep=.8mm,minimum size=6mm},
+%%      accepting/.style={double distance=1.5pt, double=white},
+%%      every edge/.style={draw=black,thick}
+%%    ]
+%%      \node[state,initial,accepting]                          (p)    {$p$};
+%%      \node[rectangle,fill=black,minimum size=1.6mm,inner sep=0mm,right of=p] (rect) {};
+%%      \node[state,right of=rect]                              (q)    {$q$};
+%%      \node[rectangle,draw=none,right of=q]                   (true) {\texttt{1}};
+%%      
+%%      \path[->]
+%%        (p)    edge             node[near start, above] {$b$} (q)
+%%        (rect) edge[out=300,in=320]                           (p)
+%%        (q)    edge             node[above]             {$b$} (true)
+%%        (p)    edge[loop above] node[right=1mm]         {$a$} ()
+%%        (q)    edge[loop above] node[right=1mm]         {$a$} ();
+%%        
+%%      \node () [below right=-1.5mm and -.5mm of rect] {\footnotesize $\land$};
+%%    \end{tikzpicture}
+%    
+%    \par\vspace*{5mm}
+%    \uncover<2->{%
+%      \parbox[t]{.55\linewidth}{%
+%        Betrachte folgenden Run eines ABA:
+%        %
+%        \begin{center}
+%          \begin{tikzpicture}[
+%            >=Latex,
+%            every node/.style = {draw=none, fill=none, inner sep=.4mm, minimum size=1mm},
+%            level 1/.style = {sibling distance = 14mm, level distance=9mm},
+%            level 2/.style = {sibling distance = 11mm, level distance=9mm},
+%            level 3/.style = {sibling distance =  8.2mm, level distance=9mm},
+%            level 4/.style = {sibling distance =  6mm, level distance=9mm},
+%            edge from parent/.style = {draw=black, thin, ->}%
+%          ]
+%            \node (eps) {\mystrut $p$}
+%            child {
+%              node (0) {\mystrut $p$}
+%              child {
+%                node (00) {\mystrut $p$}
+%                child {
+%                  node (000) {\mystrut $p$}
+%                  child {
+%                    node (0000) {$\vdots$}
+%                  }
+%                  child {
+%                    node (0001) {$\vdots$}
+%                  }
+%                }
+%                child {
+%                  node (001) {\mystrut $q$}
+%                  child [missing] {node {}}
+%                  child {
+%                    node (0011) {$\vdots$}
+%                  }
+%                }
+%              }
+%              child {
+%                node[circle,draw=ddred] (01) {\mystrut \Emph{$q$}}
+%                child [missing] {node {}}
+%                child {
+%                  node (011) {\mystrut \Emph{$p$}}
+%                  child [missing] {node {}}
+%                  child {
+%                    node (0111) {$\vdots$}
+%                  }
+%                }
+%              }
+%            }
+%            child {
+%              node (1) {\mystrut $q$}
+%              child [missing] {node {}}
+%              child {
+%                node[circle,draw=ddred] (11) {\mystrut \Emph{$q$}}
+%                child [missing] {node {}}
+%                child {
+%                  node (111) {\mystrut \Emph{$q$}}
+%                  child [missing] {node {}}
+%                  child {
+%                    node (1111) {$\vdots$}
+%                  }
+%                }
+%              }
+%            };
+%          \end{tikzpicture}
+%        \end{center}
+%      }%
+%    }%
+%    \hspace*{\fill}
+%    \uncover<3->{%
+%      \parbox[t]{.4\linewidth}{%
+%        Zugehöriger DAG wäre:
+%        %
+%        \begin{center}
+%          \begin{tikzpicture}[
+%            >=Latex,
+%            every node/.style = {draw=none, fill=none, inner sep=.2mm, minimum size=1mm},
+%            level 1/.style = {sibling distance = 16mm, level distance=9mm},
+%            level 2/.style = {sibling distance =  9mm, level distance=9mm},
+%            level 3/.style = {sibling distance =  7mm, level distance=9mm},
+%            level 4/.style = {sibling distance =  5mm, level distance=9mm},
+%            edge from parent/.style = {draw=black, thin, ->}%
+%          ]
+%            \node (eps) {$(p,0)$}
+%            child {
+%              node (0) {$(p,1)$}
+%              child {
+%                node (00) {$(p,2)$}
+%                child {
+%                  node (000) {$(p,3)$}
+%                  child {
+%                    node (0000) {$\vdots$}
+%                  }
+%                }
+%              }
+%            }
+%            child {
+%              node (1) {$(q,1)$}
+%              child {
+%                node (10) {$(q,2)$}
+%                child {
+%                  node (100) {$(q,3)$}
+%                  child {
+%                    node (1000) {~~~$\vdots$~~~}
+%                  }
+%                }
+%              }
+%            };
+%            
+%            \path[->]
+%              (0)   edge (10)
+%              (00)  edge (100)
+%              (000) edge (1000)
+%
+%              (eps) edge[very thick,draw=dred] (1)
+%              (1)   edge[very thick,draw=dred] (10)
+%              (10)  edge[very thick,draw=dred] (000)
+%              (000) edge[very thick,draw=dred] (0000);
+%            
+%          \end{tikzpicture}
+%        \end{center}
+%      }%
+%    }
+%
+%    \parII
+%    \uncover<4->{%
+%%      \scalebox{.95}[1]{
+%      \hspace*{\fill}
+%      Markierter DAG-Pfad entspricht \Emph{keinem} Run-Pfad.
+%      
+%      \parI
+%      \Bmph{Ursache:}~
+%      Teilbäume unter den zwei 
+%      \tikz[baseline=-3pt] \node[circle,draw=ddred,inner sep=.2mm] (01) {\mystrut \Emph{$q$}};
+%%      \Emph{$q$} 
+%      in Ebene 2 sind verschieden, \\
+%      hängen von \Emph{"`Vorgeschichte"'} (Vorgängern auf Ebenen 0,1) ab.
+%%      \hspace*{-10mm}}
+%    }
+%
+%    \note{
+%      \textbf{8:44}
+%      
+%      \par
+%    }
+%  \end{frame}
+%
+%  % ------------------------------------------------------------------------------------------
+%  \begin{frame}
+%    \frametitle{Gedächtnislose Runs}
+%    
+%    Sei $(P,r)$ ein Run von $\Aut{A}$ mit $n$ Zuständen.
+%    
+%    \parI
+%    Zur Erinnerung:~ $\textsf{Kinder}(p) \subseteq \{p1,\dots,pn\}$ für alle $p \in P$.
+%    
+%    \parIII
+%    \uncover<2->{%
+%      Zwei Positionen $p_1$ und $p_2$ heißen \Bmph{gleichartig,} \\
+%      wenn $|p_1|=|p_2|$ und $r(p_1) = r(p_2)$.
+%    }
+%    
+%    \parIII
+%    \uncover<3->{%
+%      In gedächtnislosen Runs hängen die Inhalte der Teilbäume unter gleichartigen Positionen
+%      nicht von der "`Vorgeschichte"' ab:
+%      
+%      \begin{definition}
+%        Ein Run $(P,r)$ ist \Bmph{gedächtnislos,}
+%        wenn für je zwei gleichartige Positionen $p_1,p_2$ und alle $i \in \{1,\dots,n\}^*$ gilt:
+%        %
+%        \begin{Itemize}
+%          \item
+%            $p_1i \in P$ ~gdw.~ $p_2i \in P$
+%          \item
+%            $r(p_1i) = r(p_2i)$
+%        \end{Itemize}
+%      \end{definition}%
+%    }
+%
+%    \note{
+%      \textbf{8:46}
+%      
+%      \par
+%      "`Gleichartig"' heißt:~ $p_1,p_2$ sind auf derselben Ebene und mit demselben Zustand markiert.
+%      
+%      \par
+%    }
+%  \end{frame}
+%
+%  % ------------------------------------------------------------------------------------------
+%  \begin{frame}
+%    \frametitle{Existenz gedächtnisloser Runs}
+%    
+%    \begin{Satz}
+%      Sei $\Aut{A}$ ein ABA und $\alpha \in L_\omega(\Aut{A})$.\\
+%      Dann gibt es einen \Emph{gedächtnislosen} erfolgreichen Run von $\Aut{A}$ auf $\alpha$.%
+%      \label{thm:gedaechtnislos}%
+%    \end{Satz}
+%    
+%    \uncover<2->{%
+%      \Bmph{Beweis.}~
+%      Sei $(P,r)$ ein erfolgreicher Run von $\Aut{A}$ auf $\alpha$.
+%      
+%      \parI
+%      Konstruieren gedächtnislosen Run $(P',r')$ durch gezieltes Kopieren.
+%    }
+%    
+%    \parII
+%    \uncover<3->{%
+%      \Bmph{Intuition:}\\
+%      wenn Zustand $q$ in Ebene $\ell$ von $(P,r)$ mehrmals vorkommt, \\
+%      kopiere nur das Vorkommen, bei dem der \Emph{letzte akzeptierende} Zustand \Emph{am weitesten zurückliegt.}\Tafel
+%    }
+%
+%    \parII
+%    \uncover<4->{%
+%      Definiere dazu Funktion $\Bmph{$\gamma$} : P \to \mathbb{N}$ wie folgt:
+%      %
+%      \begin{align*}
+%        \gamma(\varepsilon) & = 0 \\
+%        \gamma(pi)          & = \begin{cases}
+%                                  \gamma(p) + 1 & \text{wenn~} r(p) \notin F \\
+%                                  0             & \text{sonst}
+%                                \end{cases}
+%      \end{align*}
+%      \par\vspace*{-1.4\baselineskip}
+%      \TafelForts
+%    }
+%    
+%    \note{
+%      \textbf{8:49}
+%      
+%      \par
+%      Das ist die "`Hauptzutat"', die wir dann bei der Umwandlung ABA $\to$ NBA brauchen.
+%      
+%      \par
+%    }
+%  \end{frame}
+%
+%  % ------------------------------------------------------------------------------------------
+%  \begin{frame}
+%    \frametitle{Existenz gedächtnisloser Runs}
+%    
+%    Definieren nun Abbildung $\Bmph{pos} : Q \times \mathbb{N} \to P$,
+%    die jedem Paar $\auf q,\ell\zu$ eine eindeutige Position in $(P,r)$ zuweist:
+%    
+%    \parII
+%    \uncover<2->{%
+%      \begin{Itemize}
+%        \item
+%          Wenn $q$ nicht in Ebene $\ell$ von $(P,r)$ vorkommt, dann ist $\textsf{pos}(q,\ell)$ undefiniert.
+%        \item<3->
+%          Sonst ist $\textsf{pos}(q,\ell)$ die am weitesten links liegende Position $p$ in Ebene $\ell$ mit
+%          %
+%          \begin{Itemize}
+%            \item
+%              $r(p) = q$
+%            \item
+%              Für alle $p'$ auf Ebene $\ell$ mit $r(p')=q$ gilt $\gamma(p') \leq \gamma(p)$
+%          \end{Itemize}
+%          %
+%          \TafelForts
+%      \end{Itemize}
+%      
+%    }
+%
+%    \note{
+%      \textbf{8:54}
+%      
+%      \par
+%    }
+%  \end{frame}
+%
+%  % ------------------------------------------------------------------------------------------
+%  \begin{frame}
+%    \frametitle{Existenz gedächtnisloser Runs}
+%    
+%    Konstruieren $(P',r')$ durch Kopieren aus $(P,r)$ mithilfe von pos:
+%    %
+%    \begin{Itemize}
+%      \item
+%        $\varepsilon \in P'$ und $r'(\varepsilon) = r(\varepsilon)$
+%      \item<2->
+%        Wenn $p$ bereits in Ebene $\ell$ von $P'$ und $i \leq n$ eine mögliche Kind-Nummer ist, dann:
+%        %
+%        \begin{Itemize}
+%          \item
+%            $pi \in P'$ ~gdw.~ $\text{pos}(r'(p),\ell) \cdot i \in P$
+%          \item<3->
+%            Wenn $pi \in P'$, dann $r'(pi) = r\big(\text{pos}(r'(p),\ell) \cdot i\big)$
+%        \end{Itemize}
+%        %
+%        \uncover<3->{%
+%          \TafelForts
+%        }
+%    \end{Itemize}
+%    
+%    \parI
+%    \uncover<4->{%
+%      \Bmph{Nun gilt:}~
+%      %
+%      \begin{Itemize}
+%        \item
+%          $(P',r')$ ist ein Run von $\Aut{A}$ auf $\alpha$
+%          \Tafel
+%        \item
+%          $(P',r')$ erfolgreich
+%          \Tafel
+%        \item
+%          $(P',r')$ gedächtnislos
+%%          \Tafel~~~~
+%%          \par\vspace*{-.95\baselineskip}\qed
+%          \Tafel
+%      \end{Itemize}
+%      %
+%      \qed
+%    }
+%
+%    \note{
+%      \textbf{8:57 bis 9:12, ggf.\ 5\,min Pause}
+%      
+%      \par
+%    }
+%  \end{frame}
+%
+%  % ------------------------------------------------------------------------------------------
+%  \begin{frame}
+%    \frametitle{Konstruktion des NBA}
+%    
+%    Sei $\Aut{A} = (Q, \Sigma, \delta, \{q_I\}, F)$ ein ABA.
+%    
+%    \parI
+%    Konstruiere NBA $(Q', \Sigma, \Delta, I', F')$ wie folgt.
+%    %
+%    \begin{Itemize}
+%      \item<2->
+%        $Q' = 2^Q \times 2^Q$
+%        \parI
+%      \item<3->
+%        $I' = \{\auf \{q_0\},\emptyset\zu\}$
+%        \parI
+%      \item<4->
+%        $\Delta = \{(\auf X,\emptyset\zu,\,a,\,\auf X',X'\!\setminus\!F\zu) \mid X' \models \bigwedge\limits_{q \in X} \delta(q,a)\}$ \\[2pt]
+%        \uncover<5->{%
+%          \qquad ${}\cup \{(\auf X,W\zu,\,a,\,\auf X',W'\!\setminus\!F\zu) \mid W \neq \emptyset,~ W' \subseteq X',$ \\[4pt]
+%          \hspace*{34mm} $X' \models \bigwedge\limits_{q \in X} \delta(q,a),~ W' \models \bigwedge\limits_{q \in W} \delta(q,a)\}$
+%        }
+%        \parI
+%      \item<6->
+%        $F' = \{\auf X,\emptyset\zu \mid X \subseteq Q\}$
+%        \Tafel
+%    \end{Itemize}
+%
+%    \uncover<7->{%
+%      \begin{lemma}
+%        $L_\omega(\Aut{A}') = L_\omega(\Aut{A})$
+%        \label{lem:Korr_NBA_Konstr}
+%      \end{lemma}
+%      
+%      \Bmph{Beweis:}~ s.\ Tafel
+%      \Tafel~~~~
+%      \par\vspace*{-.95\baselineskip}\qed
+%    }
+%
+%    \note{
+%      \textbf{9:17 bis ca.\ 9:35; fast fertig}
+%      
+%      \par
+%    }
+%  \end{frame}
+%
+%  % ------------------------------------------------------------------------------------------
+%  \begin{frame}
+%    \frametitle{"`Ernte"'}
+%    
+%    Aus Lemma~\ref{lem:Korr_NBA_Konstr} folgt nun wie gewünscht:
+%
+%    \begin{block}{Satz~\ref{thm:ABAvsNBA} (Miyano \& Hayashi 1984)}
+%      Für jeden ABA $\Aut{A}$ gibt es einen NBA $\Aut{A}'$ mit $L_\omega(\Aut{A})=L_\omega(\Aut{A}')$.
+%    \end{block}
+%
+%    \note{
+%      ~
+%      
+%      \par
+%    }
+%  \end{frame}
+%
+%%  % ------------------------------------------------------------------------------------------
+%%  \begin{frame}
+%%    \frametitle{\dots}
+%%    
+%%    \dots
+%%
+%%    \note{
+%%      ~
+%%      
+%%      \par
+%%    }
+%%  \end{frame}
+
+  \AtBeginSection{}
+  % ==============================================================================================
+  % ==============================================================================================
+  \section*{}
+
+  % ------------------------------------------------------------------------------------------
+  \begin{frame}
+    \frametitle{Alternierende vs.\ nichtdeterministische Automaten}
+    
+    \begin{Satz}[Miyano \& Hayashi 1984]
+      Für jeden ABA $\Aut{A}$ gibt es einen NBA $\Aut{A}'$ mit $L_\omega(\Aut{A})=L_\omega(\Aut{A}')$.
+      \label{thm:ABAvsNBA}
+    \end{Satz}
+    
+    \parII
+    Alternierende und nichtdeterministische Büchi-Automaten
+    sind also \Emph{gleichmächtig.}
+    
+    \parIII
+    \Bmph{Beweisskizze:}~ Siehe Folien aus dem letzten Jahr \\
+    \url{http://tinyurl.com/ws1718-automaten}
+
+    \note{
+      \textbf{9:45}
+      
+      \parI
+      Noch ein wichtiges Resultat, aber ohne Beweis
+            
+      \par
+    }
+  \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+  \begin{frame}
+    \frametitle{Fast fertig für dieses Semester \dots}
+    
+    \begin{center}
+      \includegraphics[width=.8\textwidth]{img/pythagoras_tree_col_skewed.png}
+      \par
+      \begin{footnotesize}
+        Pythagoras-Baum. Quelle: Wikipedia, User Gjacquenot (Lizenz CC BY-SA 3.0)
+        \par
+      \end{footnotesize}
+    \end{center}
+    
+    \parII
+    \begin{center}
+      \begin{LARGE}
+        \Bmph{Danke für Eure Aufmerksamkeit!}
+      \end{LARGE}
+    \end{center}
+
+    \note{
+      \textbf{9:46}
+
+      • Literatur \\
+      • Eval. \\
+      • Prüfungshinweise?
+      
+      \par
+    }
+  \end{frame}
+%
+%  % ==============================================================================================
+%  % ==============================================================================================
+%  \section[CTL]{Alternierende Baumautomaten und CTL}
+%
+%  % ------------------------------------------------------------------------------------------
+%  \begin{frame}
+%    \frametitle{\dots}
+%    
+%    \dots
+%
+%    \note{
+%      ~
+%      
+%      \par
+%    }
+%  \end{frame}
+%
+%  
+%
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Literatur für diesen Teil}
+      \begin{small}
+        \begin{thebibliography}{99}
+          \bibitem{Fin15}
+            Bernd Finkbeiner.
+            \newblock
+            Automata, Games, and Verification.
+            \newblock
+            Vorlesungsskript, Universität des Saarlandes, SoSe 2015.
+            \newblock
+            Kap.\,8: Alternating Büchi Automata.
+            \newblock
+            \url{https://www.react.uni-saarland.de/teaching/automata-games-verification-15/lecture-notes.html}
+            \newblock
+            \url{https://www.react.uni-saarland.de/teaching/automata-games-verification-15/downloads/notes.pdf}
+%          \bibitem{LNCS2500}
+%            E.\ Grädel, W.\ Thomas, T.\ Wilke (Hrsg.).
+%            \newblock
+%            Automata, Logics, and Infinite Games.
+%            \newblock
+%            LNCS 2500, Springer, 2002, S. 153--167.
+%            \newblock
+%            Kapitel 9 über alternierende Baumautomaten.\\
+%            \url{http://www.cs.tau.ac.il/~rabinoa/Lncs2500.zip}
+%            \newblock
+%            Auch erhältlich auf Anfrage in der BB Mathematik im MZH:\\
+%            \texttt{19h inf 001 k/100-2500}
+        \end{thebibliography}
+        \par
+      \end{small}
+      \note{~}
+    \end{frame}
+
+%  % ------------------------------------------------------------------------------------------
+%    \begin{frame}
+%      \frametitle{Literatur für diesen Teil (2)}
+%      \begin{small}
+%        \begin{thebibliography}{99}
+%          \bibitem{BK08}
+%            Christel Baier, Joost-Pieter Katoen.
+%            \newblock
+%            Principles of Model Checking.
+%            \newblock
+%            MIT Press 2008.
+%            \newblock
+%            Abschnitt 6 "`Computation Tree Logic"'.
+%            \newblock
+%            SUB, Zentrale:
+%            \texttt{a inf 440 ver/782},~ \texttt{a inf 440 ver/782a}
+%          \bibitem{CGP99}
+%            Edmund M.\ Clarke, Orna Grumberg, Doron A.\ Peled.
+%            \newblock
+%            Model Checking.
+%            \newblock
+%            MIT Press 1999.
+%            \newblock
+%            Abschnitt 3 "`Temporal Logics"',\\
+%            Abschnitt 4 "`Model Checking"'.
+%%             Abschnitt 9.4 "`Translating LTL into Automata"'.
+%            \newblock
+%            SUB, Zentrale:
+%            \texttt{a\hfill inf\hfill 440\hfill ver/780(6)},\hfill\hfill  \texttt{a\hfill inf\hfill 440\hfill ver/780(6)a}
+%        \end{thebibliography}
+%        \par
+%      \end{small}
+%      \note{~}
+%    \end{frame}
+
+
+%   \AtBeginSection{\frame{\frametitle{Und nun \dots}\tableofcontents[currentsection]}}
+  
+
+%     % ------------------------------------------------------------------------------------------
+%     \begin{frame}
+%       \frametitle{Ausblick}
+% 
+%       \dots
+%       
+%       \par\bigskip
+%       \uncover<2>{%
+%         \begin{center}
+%           \begin{Huge}
+%             \dblu{\textbf{Thank you.}}
+%           \end{Huge}
+%         \end{center}
+%       }
+%     \end{frame}
+
+%   % ==============================================================================================
+%   % ==============================================================================================
+%   \appendix
+%   
+%     % ------------------------------------------------------------------------------------------
+%     \begin{frame}
+%       \frametitle{\dots}
+%       \dots
+%     \end{frame}
+
+\mode<presentation>{
+  {   
+    \setbeamercolor{background canvas}{bg=black}
+    \begin{frame}<handout:0>[plain]{}
+      \note{~}
+    \end{frame}
+  }
+}
+
+\end{document}

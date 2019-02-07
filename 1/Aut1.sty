@@ -1,0 +1,325 @@
+\RequirePackage[ngerman]{babel}
+\RequirePackage[utf8x]{inputenc}
+\RequirePackage{ifthen}
+
+%\show\checkmark                % to have a look at the original definition
+\newcommand{\beamercheckmark}{} % make sure it does not yet exist
+\let\beamercheckmark\checkmark  % save its contents in this command
+\let\checkmark\relax            % make \checkmark look undefined
+
+% \RequirePackage{dingbat,skull}
+% \RequirePackage{dingbat}
+% \RequirePackage{textcomp}
+\RequirePackage{pifont}
+%\RequirePackage[weather]{ifsym}
+\RequirePackage{marvosym}
+\RequirePackage{turnstile}
+\RequirePackage{wasysym}
+\RequirePackage{fourier-orns}
+\RequirePackage{amsmath}
+\RequirePackage{latexsym}
+\RequirePackage{xspace}
+\RequirePackage[T1]{fontenc}
+\RequirePackage{lmodern}
+\RequirePackage[normalem]{ulem}
+\renewcommand{\ULthickness}{.8pt}
+\RequirePackage{rotating}
+% \RequirePackage{pdfpages}
+% \RequirePackage{multirow}
+\RequirePackage{tikz}
+\RequirePackage{array}
+\RequirePackage{microtype}
+\RequirePackage{url}
+\RequirePackage{arydshln} % !!!always goes AFTER array and similar packages for tables!!!
+\RequirePackage{pgfpages}
+\RequirePackage[vlined]{algorithm2e}
+\RequirePackage{xrts}
+\RequirePackage{scalerel}
+\RequirePackage[parent]{currfile}
+
+\usetikzlibrary{automata,positioning,arrows.meta}
+
+\DeclareGraphicsRule{*}{mps}{*}{}
+
+\mode<presentation>
+{
+%   \usetheme[bicycleoff]{Manchester}
+  \usetheme{Bremen}
+%   \setbeamercovered{highly dynamic}
+  \setbeamercovered{invisible}
+  \setbeamertemplate{navigation symbols}{}
+}
+
+\title[%
+  Teil 1: endliche Wörter%
+]{%
+  Automatentheorie und ihre Anwendungen\\
+  Teil 1: endliche Automaten auf endlichen Wörtern%
+}%
+
+\def\Hy@colorlink{}
+\def\Hy@endcolorlink{}
+
+\author[Automatentheorie u.\,i.\,A.\ WiSe 2018/19]{Wintersemester 2018/19\texorpdfstring{\qquad}{,} Thomas Schneider}
+
+\institute{AG Theorie der k\"unstlichen Intelligenz (TdKI)}
+
+\date{\url{http://tinyurl.com/ws1819-autom}}
+
+\newcommand{\enorde}[2]{\ifen#1\else#2\fi}
+
+% \AtBeginPart{\frame{\partpage}\note{~}}
+\AtBeginSection{\frame{\frametitle{Und nun \dots}\tableofcontents[currentsection]}\note{~}}
+
+\DeclareMathAlphabet{\mathsfbf}{OT1}{cmss}{bx}{n}
+\DeclareMathAlphabet{\mathsfsl}{OT1}{cmss}{m}{sl}
+\DeclareMathAlphabet{\mathsf}{OT1}{cmss}{m}{n}
+\renewcommand{\ttdefault}{cmtt}
+
+\SetSymbolFont{symbols}{normal}{OMS}{cmsy}{b}{n}
+\SetSymbolFont{lasy}{normal}{U}{lasy}{b}{n}
+\DeclareSymbolFont{plusgleich}{OT1}{cmr}{m}{n}
+\SetSymbolFont{plusgleich}{normal}{OT1}{cmr}{b}{n}
+\SetSymbolFont{plusgleich}{bold}{OT1}{cmr}{b}{n}
+\DeclareMathSymbol{=}{\mathrel}{plusgleich}{"3D}
+\DeclareMathSymbol{+}{\mathrel}{plusgleich}{"2B}
+
+% \DeclareSymbolFont{AMSb}{U}{ccb}{m}{n}
+% \DeclareSymbolFontAlphabet{\mathbbb}{AMSb}
+\DeclareSymbolFont{mathcalreg}{OMS}{cmsy}{m}{n}
+\DeclareSymbolFontAlphabet{\mathcalreg}{mathcalreg}
+
+%%%%% Theorems unnumbered, body font upright
+% \setbeamertemplate{theorems}[normal font]
+%%%%% Theorems numbered, body font italics
+% \setbeamertemplate{theorems}[numbered]
+%%%%% Theorems numbered, body font upright
+\setbeamertemplate{theorem begin}{%
+  \normalfont% ignore body font
+  \begin{\inserttheoremblockenv}{%
+      %     \inserttheoremheadfont
+      \inserttheoremname
+      \inserttheoremnumber
+      \ifx\inserttheoremaddition\@empty\else\ (\inserttheoremaddition)\fi%
+      %     \inserttheorempunctuation
+    }%
+  }
+  \setbeamertemplate{theorem end}{\end{\inserttheoremblockenv}}
+%%%%% End
+
+\numberwithin{theorem}{part}
+\newtheorem{korollar}[theorem]{Korollar}
+\newtheorem{fakt}[theorem]{Fakt}
+
+\definecolor{ddred}{rgb}{0.3,0.0,0.0}
+\definecolor{dred}{rgb}{0.6,0.0,0.0}
+%\definecolor{dgreen}{rgb}{0.0,0.375,0.0}
+\definecolor{ddgreen}{rgb}{0.0,0.15,0.0}
+\definecolor{dgreen}{rgb}{0.0,0.31,0.0}
+\definecolor{dbrown}{rgb}{0.3,0.2,0.1}
+\definecolor{dyell}{rgb}{0.7,0.6,0.0}
+% \definecolor{dblue}{rgb}{0.15,0.15,0.525}  % alt: 0.85  % This is for the block title bar
+\definecolor{dblue}{rgb}{0.2,0.2,0.4}  % alt: 0.85  % This is for the block title bar
+\definecolor{ddblue}{rgb}{0.07,0.07,0.26}
+\definecolor{dgray}{rgb}{0.3,0.3,0.3}
+\definecolor{lgray}{rgb}{0.6,0.6,0.6}
+
+\definecolor{lred}{rgb}{.92,.8,.8}
+\definecolor{lblue}{rgb}{0.85,0.85,1}
+\definecolor{mblue}{rgb}{0.76,0.76,0.96}
+
+%\definecolor{pink}{rgb}{0.88,0.3,0.4}
+\definecolor{pink}{rgb}{0.55,0.19,0.25}
+
+\newcommand{\stab}{\rule[-3.5pt]{0pt}{15.5pt}}
+
+% \newif\ifcomments
+% % \commentstrue
+% % \newcommand{\comment}[1]{\emph{#1}}
+% \commentsfalse
+% \newcommand{\comment}[1]{\relax}
+\newcommand{\comment}[1]{\hfill {\small\dgra{\emph{\%\,#1}}}}
+
+\newcommand{\herv}[1]{\textcolor{drot}{\textbf{#1}}}
+
+\newif\ifcompileall
+\compilealltrue
+
+\newcommand{\dred}[1]{\textcolor{dred}{#1}}
+\newcommand{\ddred}[1]{\textcolor{ddred}{#1}}
+\newcommand{\dblu}[1]{\textcolor{dblue}{#1}}
+\newcommand{\ddblu}[1]{\textcolor{ddblue}{#1}}
+\newcommand{\lblu}[1]{\textcolor{lblue}{#1}}
+\newcommand{\dgre}[1]{\textcolor{dgreen}{#1}}
+\newcommand{\ddgre}[1]{\textcolor{ddgreen}{#1}}
+\newcommand{\dgra}[1]{\textcolor{dgray}{#1}}
+\newcommand{\lgra}[1]{\textcolor{lgray}{#1}}
+\newcommand{\dbro}[1]{\textcolor{dbrown}{#1}}
+\newcommand{\pink}[1]{\textcolor{pink}{#1}}
+\newcommand{\black}[1]{\textcolor{black}{#1}}
+
+\newcommand{\Lit}[1]{\textcolor{dgray}{#1}}
+\newcommand{\LIT}[1]{\begin{footnotesize}\color{dgray}#1\par\end{footnotesize}}
+\newcounter{figno}
+\newcommand{\Fig}[2][]{\includegraphics[#1]{img/\currfilebase.#2}}
+
+\newcommand{\Heading}[1]{\textbf{\dblu{#1}}}
+
+\newcommand{\YES}{\dgre{\ding{51}}\xspace}
+\newcommand{\NO}{\dred{\ding{56}}\xspace}
+
+% \newcommand{\EXP}{E{\scriptsize XP}T{\scriptsize IME}\xspace}
+% \newcommand{\EXPTIME}{\EXP\xspace}
+% \newcommand{\NEXP}{NE{\scriptsize XP}T{\scriptsize IME}\xspace}
+% \newcommand{\NEXPTIME}{\NEXP\xspace}
+
+\newcommand{\DL}[1]{\ensuremath{\mathcalreg{#1}}\xspace}
+\newcommand{\ALC}{\DL{ALC}\xspace}
+
+\renewcommand{\bfdefault}{sbc}
+\newcommand{\@mph}[1]{\textbf{{\boldmath#1}}}
+\newcommand{\Emph}[1]{\textcolor{ddred}{\@mph{#1}}}
+\newcommand{\Bmph}[1]{\textcolor{ddblue}{\@mph{#1}}}
+\newcommand{\Gmph}[1]{\textcolor{ddgreen}{\@mph{#1}}}
+
+\newenvironment{Itemize}{\par\begin{itemize}\topsep4pt\itemsep4pt}{\end{itemize}}
+\newenvironment{Enumerate}{\par\begin{enumerate}\topsep4pt\itemsep4pt}{\end{enumerate}}
+\newenvironment{Description}{\par\begin{description}\topsep4pt\itemsep4pt}{\end{description}}
+
+\newcommand{\emphitem}{\item[\dred{$\blacktriangleright\!$}]}
+
+\newcommand{\Aut}[1]{\ensuremath{\mathcalreg{#1}}}
+\newcommand{\Autb}[1]{\ensuremath{\mathcal{#1}}}
+
+%\newcommand{\Tafel}{\hspace*{\fill}\ddgre{$\bullet$}}
+%\newcommand{\Tafelvielleicht}{\hspace*{\fill}\ddgre{$(\bullet)$}}
+
+\newcounter{tafel}
+\resetcounteronoverlays{tafel}
+\setcounter{tafel}{0}
+\newcommand{\Tafel}{\refstepcounter{tafel}\hspace*{\fill}\Gmph{T\,\arabic{part}.\arabic{tafel}}}
+\newcommand{\TafelForts}{\hspace*{\fill}\Gmph{T\,\arabic{part}.\arabic{tafel} Forts.}}
+
+\renewcommand{\footnoterule}{}
+
+\definecolor{Lcolor}    {rgb}{0.00,0.15,0.00}
+\definecolor{NLcolor}   {rgb}{0.00,0.31,0.00}
+\definecolor{Pcolor}    {rgb}{0.10,0.35,0.10}
+\definecolor{NPcolor}   {rgb}{0.10,0.10,0.70}
+\definecolor{PScolor}   {rgb}{0.18,0.09,0.62}
+\definecolor{EXPcolor}  {rgb}{0.26,0.08,0.54}
+\definecolor{DEXPcolor} {rgb}{0.34,0.07,0.46}
+\definecolor{NEXPcolor} {rgb}{0.42,0.06,0.38}
+% \definecolor{NDEXPcolor}{rgb}{0.50,0.05,0.30}
+\definecolor{EXPSPACEcolor}{rgb}{0.50,0.05,0.30}
+\definecolor{nonelcolor}{rgb}{0.65,0.03,0.15}
+\definecolor{coREcolor} {rgb}{0.80,0.00,0.00}
+
+\newcommand{\LS}{\textcolor{Lcolor}{\textbf{L}}\xspace}
+\newcommand{\NL}{\textcolor{NLcolor}{\textbf{NL}}\xspace}
+\newcommand{\coNL}{\textcolor{NLcolor}{\textbf{coNL}}\xspace}
+\newcommand{\PT}{\textcolor{Pcolor}{\textbf{P}}\xspace}
+\newcommand{\NP}{\textcolor{NPcolor}{\textbf{NP}}\xspace}
+\newcommand{\coNP}{\textcolor{NPcolor}{\textbf{coNP}}\xspace}
+\newcommand{\PS}{\textcolor{PScolor}{\textbf{PSpace}}\xspace}
+\newcommand{\PSPACE}{\PS}
+\newcommand{\EXP}{\textcolor{EXPcolor}{\textbf{ExpTime}}\xspace}
+\newcommand{\DEXP}{\textcolor{DEXPcolor}{\textbf{2ExpTime}}\xspace}
+\newcommand{\NEXP}{\textcolor{NEXPcolor}{\textbf{NExpTime}}\xspace}
+\newcommand{\coNEXP}{\textcolor{NEXPcolor}{\textbf{coNExpTime}}\xspace}
+\newcommand{\EXPSPACE}{\textcolor{EXPSPACEcolor}{\textbf{ExpSpace}}\xspace}
+% \newcommand{\NDEXP}{\textcolor{NDEXPcolor}{\textbf{N2EXP}}}
+\newcommand{\nonel}{\textcolor{nonelcolor}{\textbf{n.d.}}\xspace}
+\newcommand{\coRE}{\textcolor{coREcolor}{\textbf{coRE}}\xspace}
+
+\newcommand{\Phantom}[1]{\textcolor{white}{#1}}
+
+\newcommand{\calF}{\ensuremath{\mathcalreg{F}}\xspace}
+\newcommand{\calM}{\ensuremath{\mathcalreg{M}}\xspace}
+\newcommand{\calP}{\ensuremath{\mathcalreg{P}}\xspace}
+\newcommand{\calS}{\ensuremath{\mathcalreg{S}}\xspace}
+\newcommand{\calT}{\ensuremath{\mathcalreg{T}}\xspace}
+
+\newcommand{\Amc}{\ensuremath{\mathcalreg{A}}\xspace}
+\newcommand{\Bmc}{\ensuremath{\mathcalreg{B}}\xspace}
+\newcommand{\Fmc}{\ensuremath{\mathcalreg{F}}\xspace}
+\newcommand{\Mmc}{\ensuremath{\mathcalreg{M}}\xspace}
+\newcommand{\Pmc}{\ensuremath{\mathcalreg{P}}\xspace}
+\newcommand{\Smc}{\ensuremath{\mathcalreg{S}}\xspace}
+\newcommand{\Tmc}{\ensuremath{\mathcalreg{T}}\xspace}
+
+\newcommand{\Amcb}{\ensuremath{\mathcal{A}}\xspace}
+\newcommand{\Bmcb}{\ensuremath{\mathcal{B}}\xspace}
+
+
+% \newcommand{\TD}{\ensuremath{\mathord{\downarrow}}}
+% \newcommand{\TD}{\hspace*{-1pt}\emph{TD}\hspace*{1.5pt}}
+% \newcommand{\TD}{{\footnotesize TD}}
+\newcommand{\NETDBA}{NETDBA}
+
+\newcommand{\Inf}{\textsf{Inf}}
+
+\renewcommand{\Vec}[1]{\ensuremath{\overrightarrow{#1}}}
+
+\newcommand{\Uwave}[1]{\uwave{\rule[-2.5pt]{0pt}{0pt}#1}}
+\newcommand{\UWave}[1]{\uwave{\rule[-4pt]{0pt}{0pt}#1}}
+
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,inner sep=1pt,line width = .8pt] (char) {{\small #1}};}}
+
+% \newcommand{\PROP}{\textup{PROP}\xspace}
+\newcommand{\PROP}{\textup{AV}\xspace}
+
+\newcommand{\cl}{\textup{cl}}
+
+\newcounter{showfr@m}
+\setcounter{showfr@m}{0}
+\newcounter{showt@}
+\setcounter{showt@}{999}
+\newcommand{\showfromto}[2]{%
+  \setcounter{showfr@m}{#1}%
+  \setcounter{showt@}{#2}%
+}
+\newcommand{\mysectioncontent}[1]{%
+  \ifthenelse{%
+    \(\(\value{section} > \value{showfr@m}\) \OR \(\value{section} = \value{showfr@m}\)\) \AND
+    \(\(\value{section} < \value{showt@}\) \OR \(\value{section} = \value{showt@}\)\)
+  }{%
+    #1
+  }{%
+    \relax
+  }
+}
+% \newcommand{\mysectioncontent}[1]{\relax}
+
+\newcommand{\Succ}{\scalebox{.95}[1]{\textsf{\textit{succ}}}}
+\newcommand{\Plus}{\scalebox{.95}[1]{\textsf{\textit{plus}}}}
+
+\newcommand{\Danger}{\dred{\danger}\xspace}
+
+\newcommand{\Neg}{\ensuremath{\mathord{\sim}}}
+
+\newcommand{\parI}{\par\smallskip}
+\newcommand{\parII}{\par\medskip}
+\newcommand{\parIII}{\par\bigskip}
+\newcommand{\Paths}{\textsf{Paths}\xspace}
+
+\newcommand{\auf}{\ensuremath{\langle}}
+\newcommand{\zu}{\ensuremath{\rangle}}
+
+\renewcommand{\Game}[2]{\ensuremath{G_{\Aut{#1},#2}}}
+\newcommand{\Gameb}[2]{\ensuremath{G_{\Autb{#1},#2}}}
+\newcommand{\AUT}{\textup{\textbf{Aut}}\xspace}
+\newcommand{\PF}{\textup{\textbf{PF}}\xspace}
+\newcommand{\Lst}{\ensuremath{L_{s,t}}\xspace}
+
+\newcommand{\PBF}{\ensuremath{\textsf{B}^+}\xspace}
+
+\newcommand{\uz}[1]{\textbf{{\boldmath #1}}}
+\newcommand{\uzz}[2]{\uz{#1} \quad \textcolor{black!70}{\uz{#2}}}
+\newcommand{\uzzz}[3]{\uz{#1} \quad \textcolor{black!70}{\uz{#2}} \quad \textcolor{black!50}{\uz{#3}}}
+
+\newcommand{\textgrey}{\color{black!70}}
+\newcommand{\textgray}{\color{black!70}}
+\newcommand{\textblack}{\color{black}}
+

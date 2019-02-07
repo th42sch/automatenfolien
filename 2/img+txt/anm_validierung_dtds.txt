@@ -1,0 +1,35 @@
+* XML-Validierer der W3C http://validator.w3.org/check
+
+  - beanstandet DTDs mit nichtdeterministischen RAs:
+    vergleiche http://www.informatik.uni-bremen.de/tdki/lehre/ss14/automaten/conference.xml
+    mit http://www.informatik.uni-bremen.de/tdki/lehre/ss14/automaten/conference2.xml
+
+  - sagt nicht, ob nichtdeterministischer RA aequivalent zu einem deterministischem ist
+
+
+* XML-Validierer auf http://www.validome.org/xml/validate
+
+  - beanstandet nichtdeterministische RAs NICHT:
+    teste http://www.informatik.uni-bremen.de/tdki/lehre/ss14/automaten/conference.xml
+
+* XML-Validierer auf http://xmlvalidation.com/index.php?id=1&L=0
+
+  - beanstandet nichtdeterministische RAs NICHT:
+    teste Quelltext von http://www.informatik.uni-bremen.de/tdki/lehre/ss14/automaten/conference.xml
+
+* Ich habe kein Programm/Skript im Netz gefunden, das aus einem RAs einen DRA macht (wenn das moeglich ist).
+
+------------------------------
+
+DRAs -> DEAs:
+
+Gerard BERRY, Ravi SETHI. FROM REGULAR EXPRESSIONS TO DETERMINISTIC AUTOMATA. Theor. Comp. Sci. 48 (1986), 117-126, Elsevier.
+
+==============================
+
+* NEHAs fuer DTDs sind DEHAs. Bei EDTDs nicht mehr.
+
+* ZH mit Petrinetzen: dort Kausalitaet, mehrere Vorbedingungen. Hier unendliche Laeufe -> die Forderung, dass aus jedem Knoten eine Kante ausgeht
+
+
+

@@ -1,0 +1,100 @@
+%!PS
+%%BoundingBox: -35 -15 232 15 
+%%HiResBoundingBox: -34.5466 -14.57172 231.51071 14.57172 
+%%Creator: MetaPost 1.902
+%%CreationDate: 2015.04.20:2211
+%%Pages: 1
+%*Font: ec-lmsso10 9.96265 9.96265 4d:80100c0088
+%*Font: lmmi10 9.96265 9.96265 3b:a
+%*Font: ec-lmss10 9.96265 9.96265 10:a0000000000044000000656214
+%*Font: cmbsy10 9.96265 9.96265 29:804
+%*Font: rm-lmss10 10.9091 9.96265 3f:8
+%*Font: ec-lmsso10 10.9091 9.96265 58:800004
+%*Font: cmbsy10 10.9091 9.96265 32:8
+%%BeginProlog
+%%EndProlog
+%%Page: 1 1
+ 0.25 0.25 0.25 setrgbcolor
+newpath 42.5196 14.1732 moveto
+99.21242 14.1732 lineto
+99.21242 -14.1732 lineto
+42.5196 -14.1732 lineto
+ closepath fill
+ 0 0 0 setrgbcolor 0 0.79701 dtransform truncate idtransform setlinewidth pop
+ [] 0 setdash 1 setlinejoin 10 setmiterlimit
+newpath 42.5196 14.1732 moveto
+99.21242 14.1732 lineto
+99.21242 -14.1732 lineto
+42.5196 -14.1732 lineto
+ closepath stroke
+ 1 setlinecap
+newpath 0 0 moveto
+42.5196 0 lineto stroke
+newpath 36.12659 -2.3269 moveto
+42.5196 0 lineto
+36.12659 2.3269 lineto
+ closepath
+gsave fill grestore stroke
+newpath 99.21242 0 moveto
+141.73203 0 lineto stroke
+newpath 135.339 -2.3269 moveto
+141.73203 0 lineto
+135.339 2.3269 lineto
+ closepath
+gsave fill grestore stroke
+newpath 145.41438 2.126 moveto
+154.00641 7.08661 lineto stroke
+newpath 145.41438 -2.126 moveto
+154.00641 -7.08661 lineto stroke
+4.7108 4.9372 moveto
+(Eingab) ec-lmss10 9.96265 fshow
+33.3809 4.9372 moveto
+(e) ec-lmss10 9.96265 fshow
+102.99593 4.9372 moveto
+(A) ec-lmss10 9.96265 fshow
+109.36122 4.9372 moveto
+(usgab) ec-lmss10 9.96265 fshow
+133.52063 4.9372 moveto
+(e) ec-lmss10 9.96265 fshow
+-34.5466 -3.03311 moveto
+(m) ec-lmsso10 9.96265 fshow
+-23.29 -3.03311 moveto
+(2) cmbsy10 9.96265 fshow
+-12.4695 -3.03311 moveto
+(M) ec-lmsso10 9.96265 fshow
+ 1 1 1 setrgbcolor
+50.87581 -3.32124 moveto
+(m) ec-lmsso10 10.9091 fshow
+63.20181 -3.32124 moveto
+(2) cmbsy10 10.9091 fshow
+75.05011 -3.32124 moveto
+(X) ec-lmsso10 10.9091 fshow
+85.705 -3.32124 moveto
+(?) rm-lmss10 10.9091 fshow
+ 0 0 0 setrgbcolor
+157.00641 4.5959 moveto
+(\022) ec-lmss10 9.96265 fshow
+162.539 4.5959 moveto
+(ja\020) ec-lmss10 9.96265 fshow
+186.309 4.5959 moveto
+(\)) cmbsy10 9.96265 fshow
+201.08691 4.5959 moveto
+(m) ec-lmsso10 9.96265 fshow
+212.3435 4.5959 moveto
+(2) cmbsy10 9.96265 fshow
+223.164 4.5959 moveto
+(X) ec-lmsso10 9.96265 fshow
+157.00641 -10.20491 moveto
+(\022nein\020) ec-lmss10 9.96265 fshow
+186.8347 -10.20491 moveto
+(\)) cmbsy10 9.96265 fshow
+201.61261 -10.20491 moveto
+(m) ec-lmsso10 9.96265 fshow
+214.51581 -10.20491 moveto
+(=) lmmi10 9.96265 fshow
+212.8692 -10.20491 moveto
+(2) cmbsy10 9.96265 fshow
+223.68971 -10.20491 moveto
+(X) ec-lmsso10 9.96265 fshow
+showpage
+%%EOF

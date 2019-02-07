@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- DTD -->
+<!DOCTYPE conference [
+     <!ELEMENT conference (track+|(session,break?)+)>
+     <!ELEMENT track      (session,break?)+>
+     <!ELEMENT session    (chair,talk+)>
+     <!ELEMENT talk       (title,(authors|speaker))>
+     <!ELEMENT authors    (#PCDATA)>
+     <!ELEMENT speaker    (#PCDATA)>
+     <!ELEMENT chair      (#PCDATA)>
+     <!ELEMENT break      (#PCDATA)>
+     <!ELEMENT title      (#PCDATA)>
+]>
+
+<!-- XML-Dokument -->
+<conference>
+  <track>
+    <session>
+      <chair> Moshe Y. Vardi </chair>
+      <talk>
+        <title> Finite Automata on Infinite Words </title>
+        <speaker> Julius Richard Büchi </speaker>
+        <authors> Julius Richard Büchi </authors>
+      </talk>
+    </session>
+  </track>
+</conference>

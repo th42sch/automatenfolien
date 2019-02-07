@@ -1,0 +1,1407 @@
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Reaktive Systeme und Verifikation}
+
+      \Bmph{Reaktive Systeme}
+      \begin{Itemize}
+        \item
+          interagieren mit ihrer Umwelt
+        \item
+          terminieren oft nicht
+        \item
+          Beispiele:
+          \begin{Itemize}
+            \item
+              Betriebssysteme, Bankautomaten, Flugsicherungssysteme, \dots
+            \item
+              s.\,a.\ Philosophenproblem, Konsument-Produzent-Problem
+          \end{Itemize}
+      \end{Itemize}
+
+      \par\bigskip
+      \uncover<2->{%
+        \Bmph{Verifikation} $=$ Prüfen von Eigenschaften eines Systems
+        \begin{Itemize}          
+          \item
+            Eingabe-Ausgabe-Verhalten hat hier keine Bedeutung
+          \item
+            Andere Eigenschaften sind wichtig,\\
+            z.\,B.: keine Verklemmung (deadlock) bei Nebenläufigkeit
+        \end{Itemize}
+      }
+
+      \note{
+        \textbf{16:08}
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Repräsentation eines Systems}
+
+      \Bmph{Bestandteile}
+      \begin{Itemize}
+        \item
+          \Bmph{Variablen:} repräsentieren Werte, die zur Beschreibung des Systems notwendig sind
+        \item
+          \Bmph{Zustände:} "`Schnappschüsse"' des Systems\\
+          Zustand enthält Variablenwerte zu einem bestimmten Zeitpunkt
+        \item
+          \Bmph{Transitionen:} erlaubte Übergänge zwischen Zuständen
+      \end{Itemize}
+
+      \par\bigskip
+%      \uncover<2->{%
+        \Bmph{Pfad} (Berechnung) in einem System:\\
+        unendliche Folge von Zuständen entlang der Transitionen
+%      }
+
+      \note{
+        \textbf{16:09}
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Transitionsgraph als Kripke-Struktur${}^*$}
+      
+      \begin{Definition}
+        Sei AV eine Menge von Aussagenvariablen.
+        Eine \Bmph{Kripke-Struktur} $\calS$ über AV ist ein Quadrupel $\calS=(S,S_0,R,\ell)$, wobei
+        \begin{Itemize}
+          \item
+            $S$ eine endliche nichtleere Menge von \Bmph{Zuständen} ist,
+          \item
+            $S_0 \subseteq S$ die Menge der \Bmph{Anfangszustände} ist,
+          \item<2->
+            $R \subseteq S \times S$ eine \Bmph{Übergangsrelation} ist,\\
+            die \Bmph{total ist}:~ $\forall s \in S~ \exists s' \in S : sRs'$
+          \item<3->
+            $\ell : S \to 2^{\text{AV}}$ eine Funktion ist, die \Bmph{Markierungsfunktion}.\\
+            \begin{small}
+              $\ell(s) = \{p_1,\dots,p_m\}$ bedeutet: in $s$ sind genau $p_1,\dots,p_m$ wahr
+            \end{small}
+%             die jeden Zustand
+%             mit der Menge von Aussagenvariablen markiert, die dort wahr sind.
+        \end{Itemize}
+        
+        \par\medskip
+        \uncover<4->{%
+          Ein \Bmph{Pfad} in $\calS$ ist eine unendliche Folge $\pi = s_0s_1s_2\ldots$ von Zuständen
+          mit $s_0 \in S_0$ und $s_iRs_{i+1}$ für alle $i \geqslant 0$.%
+        }
+
+      \end{Definition}
+
+      \par\bigskip
+      {\footnotesize ${}^*$\,Saul Kripke, geb.\ 1940, Philosoph und Logiker, Princeton und New York, USA}
+
+      \note{
+        \textbf{16:10}
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \label{fra:bsp_mikrowelle}
+      \frametitle{Beispiel 1: Mikrowelle}
+
+      \begin{center}
+        \begin{minipage}{.7\textwidth}
+          \includegraphics[angle=270,width=\linewidth]{img/mc_microwave.jpg}\\
+          {\footnotesize aus: E.\,M.\ Clarke et al., Model Checking, MIT Press 1999}
+        \end{minipage}
+      \end{center}
+
+      \note{
+        \textbf{16:14}
+        
+        \parI
+        \textbf{TODO:}~ Mikrowellenbeispielbild selber tikzen; \\
+        vernünftige Bezeichnungen ($\lnot$ statt $\sim$, "`offen"' statt "`Close"', \\
+        keine Pfeilbeschriftungen usw.)
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Beispiel 2: nebenläufiges Programm}
+
+      \begin{tabular}{@{}l>{\footnotesize}rll@{}}
+        $P$   &  0        & \textbf{cobegin}                        &                                         \\
+              &  1        & \quad $P_0 \| P_1$                      &                                         \\
+              &  2        & \textbf{coend}                          &                                         \\[8pt]
+        \uncover<2->{%
+        $P_0$ & 10        & \textbf{while}(true) \textbf{do}        &                                         \\
+              & 11        & \quad \textbf{wait}($\text{turn} = 0$)  &                                         \\
+              & \dred{12} & \dred{\quad $\text{turn} \leftarrow 1$} & \uncover<3->{\Emph{kritischer Bereich}} \\
+              & 13        & \textbf{end while}                      &                                         \\[8pt]
+        }%
+        \uncover<4->{%
+        $P_1$ & 20        & \textbf{while}(true) \textbf{do}        &                                         \\
+              & 21        & \quad \textbf{wait}($\text{turn} = 1$)  &                                         \\
+              & \dred{22} & \dred{\quad $\text{turn} \leftarrow 0$} & \uncover<5->{\Emph{kritischer Bereich}} \\
+              & 23        & \textbf{end while}                      &
+        }
+      \end{tabular}
+
+      \note{
+        \textbf{16:17}
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \label{fra:nebenlaeufigkeit}
+      
+      \frametitle{Beispiel 2: nebenläufiges Programm}
+
+      Variablen in der zugehörigen Kripke-Struktur: $v_1, v_2, v_3$ mit
+      \begin{Itemize}
+        \item
+          $v_1,v_2$: Werte der Programmzähler für $P_0,P_1$\\
+          (einschl. $\bot$: Teilprogramm ist nicht aktiv)
+        \item
+          $v_3$: Werte der gemeinsamen Variable turn
+      \end{Itemize}
+
+      Kripke-Struktur: \\
+      \Fig{60}
+      
+      \note{
+        \textbf{16:20}
+        
+        \parI
+        Hier benutzen wir für jede Programmzeile eine getrennte Aussagenvariable \\
+        (auch wenn wir die wenigen möglichen Zustände mit weniger AVs kodieren könnten).
+        
+        \parI
+        \textbf{TODO:}~ Variablen sind falsch beschrieben. Es gibt nicht nur $v_1,v_2,v_3$, \\
+        sondern $10,11,12,13,\,20,21,22,23,\,\bot_0,\bot_1,t_0,t_1$ (letztere für "`turn${}_i$"'). \\
+        $\leadsto$ Beschreibung und Bild anpassen
+        
+        \par
+      }
+    \end{frame}
+
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Spezifikationen}
+
+      \dots\ sind Zusicherungen über die Eigenschaften eines Systems, z.\,B.:
+      \par\smallskip
+      \begin{Itemize}
+        \item
+          "`Wenn ein Fehler auftritt, ist er nach endlicher Zeit behoben."'
+        \item
+          "`Wenn die Mikrowelle gestartet wird, \\
+          fängt sie immer nach endlicher Zeit an zu heizen."'
+        \item
+          "`Wenn die Mikrowelle gestartet wird, \\
+          ist es \emph{möglich}, danach zu heizen."'
+          \par\bigskip
+        \item<2->
+          "`Es kommt nie vor,\\
+          dass beide Teilprogramme zugleich im kritischen Bereich sind."'
+        \item<2->
+          "`Jedes Teilprog.\ kommt beliebig oft in seinen krit.\ Bereich."'
+        \item<2->
+          "`Jedes Teilprogramm \emph{kann} beliebig oft in seinen kritischen Bereich gelangen."'
+          \par\bigskip
+        \item<3->
+          \dots
+      \end{Itemize}
+
+      \note{
+        \textbf{16:24}
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}[t]
+      \frametitle{Spezifikationen für das Beispiel Mikrowelle}
+      
+      \begin{minipage}{.7\textwidth}
+        \includegraphics[angle=270,width=\linewidth]{img/mc_microwave.jpg}
+      \end{minipage}
+      \hfill
+      \begin{minipage}{.25\textwidth}
+        \begin{footnotesize}
+          aus:\\
+          E.\,M.\ Clarke et al.,\\
+          Model Checking,\\
+          MIT Press 1999
+          \par
+        \end{footnotesize}
+      \end{minipage}
+
+      \par\medskip
+      \only<2-3|handout:1>{\strut "`Wenn ein Fehler auftritt, ist er nach endlicher Zeit behoben."'}\only<3|handout:1>{ \NO}%
+      \only<4-5|handout:2>{\strut \mbox{"`Wenn MW gestartet, beginnt sie immer nach endl.\ Zeit zu heizen."'\only<5|handout:2>{ \NO}\hspace*{-7mm}}}%
+      \only<6-7|handout:3>{\strut "`Wenn MW gestartet, ist es \emph{möglich}, danach zu heizen."'}\only<7|handout:3>{ \YES}%
+
+      \note{
+        \textbf{16:26}
+        
+        \parII
+        \textbf{Jeweils fragen:}~ Ist die Zusicherung erfüllt?
+        
+        \parII
+        \textbf{Vorsicht:}~ Es kommt darauf an, ob gemeint ist "`in jedem Lauf"' oder "`es gibt einen Lauf"'.
+        (univ.\ vs.\ exist.\ Model-Checking) -- \textbf{Diskutieren!}
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}[t]
+      \frametitle{Spezifikationen für das Beispiel Nebenläufigkeit}
+      
+      \vspace*{2\baselineskip}
+      \Fig{60}
+      
+      \par\medskip
+      \only<2-3|handout:1>{\strut "`Es kommt nie vor,\\ dass beide Teilprogramme zugleich im kritischen Bereich sind."'}\only<3|handout:1>{ \YES}%
+      \only<4-5|handout:2>{\strut ~\\"`Jedes $P_i$ kommt beliebig oft in seinen kritischen Bereich."'}\only<5|handout:2>{ \NO}%
+      \only<6-7|handout:3>{\strut ~\\\mbox{"`Jedes $P_i$ \emph{kann} beliebig oft in seinen kritischen Bereich kommen."'\only<7|handout:3>{ \YES}\hspace*{-5mm}}}%
+
+%       Es kommt nie vor,\\
+%       dass beide Teilprogramme zugleich im kritischen Bereich sind.
+%       \uncover<2->{\YES}
+% 
+%       \par\bigskip
+%       \uncover<3->{%
+%         Jedes $P_i$ kommt beliebig oft in seinen kritischen Bereich.
+%         \uncover<4->{\NO}
+%       }
+% 
+%       \par\bigskip
+%       \uncover<5->{%
+%         Jedes $P_i$ \emph{kann} beliebig oft in seinen kritischen Bereich kommen.
+%         \uncover<6->{\YES}
+%       }
+
+      \note{
+        \textbf{16:30}
+        
+        \parII
+        \textbf{Jeweils wieder fragen \dots}
+        
+        \parII
+        \textbf{Anmerken:}~ Diese Sätze sind mit Absicht schwammig formuliert.
+        Wir werden noch Hilfsmittel kennen lernen, mit denen man sie präzise formulieren kann.
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Model-Checking}
+
+      \dots\ beantwortet die Frage,\\
+      ob ein gegebenes System eine gegebene Spezifikation erfüllt
+
+      \par\bigskip
+      \uncover<2->{%
+        \begin{Definition}[Model-Checking-Problem \Bmph{MCP}]
+          Gegeben ein System $\calS$ und eine Spezifikation $E$,
+          \begin{Itemize}
+            \item
+              gilt $E$ \Emph{für jeden Pfad} in $\calS$\,?\\
+              \Bmph{(universelle Variante)}
+            \item
+              \Emph{gibt es einen Pfad} in $\calS$, der $E$ erfüllt?\\
+              \Bmph{(existenzielle Variante)}
+          \end{Itemize}
+          \label{def:model-checking-problem}
+        \end{Definition}
+      }
+
+      \par\bigskip
+      \uncover<3->{%
+        \Emph{Frage:} Wie kann man Model-Checking
+        \begin{Itemize}
+          \item
+            exakt beschreiben und
+          \item
+            algorithmisch lösen?
+        \end{Itemize}
+      }
+
+      \note{
+        \textbf{16:33}
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Model-Checking mittels Büchi-Automaten!}
+
+      \Bmph{Schritt 1}
+      \par\smallskip
+      \begin{Itemize}
+        \item
+          Stellen System $\calS$ als NBA $\Aut{A}_{\calS}$ dar
+          \par\smallskip
+          $\leadsto$ Pfade in $\calS$ sind erfolgreiche Runs von $\Aut{A}_{\calS}$
+          \par\bigskip
+        \item<2->
+          Stellen Spezifikation $E$ als NBA $\Aut{A}_E$ dar
+          \par\smallskip
+          $\leadsto$ $\Aut{A}_E$ beschreibt die Pfade, die $E$ erfüllen
+          \par\bigskip
+        \item<3->[$\leadsto$]
+          Universelles MCP ~$=$~ "`$L(\Aut{A}_{\calS}) \subseteq L(\Aut{A}_E)$\,?"'
+          \par\smallskip
+          Existenzielles MCP ~$=$~ "`$L(\Aut{A}_{\calS}) \cap L(\Aut{A}_E) \neq \emptyset$\,?"'
+          \par\smallskip
+          {\footnotesize (beide reduzierbar zum Leerheitsproblem, benutzt Abschlusseigenschaften)}
+      \end{Itemize}
+
+      \par\bigskip
+      \uncover<4->{%
+        \Bmph{Schritt 2}
+        \begin{Itemize}
+          \item
+            intuitivere Beschreibung von $E$ mittels Temporallogik
+          \item
+            Umwandlung von Temporallogik-Formel $\varphi_E$ in Automaten $\Aut{A}_E$
+        \end{Itemize}
+      }
+
+      \note{
+        \textbf{16:35}
+        
+        \parII
+        Nun zunächst Schritt 1.
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Konstruktion des NBA $\Aut{A}_{\calS}$ für das System $\calS$}
+
+      \Bmph{Erinnerung:} $\calS$ gegeben als Kripke-Struktur $\calS = (S,S_0,R,\ell)$\\
+      \hspace*{18.5mm}{\small (Zustände, Anfangszustände, Transitionen, Markierungen)}
+
+      \par\bigskip
+      \uncover<2->{%
+        \Bmph{Zugehöriger Automat} $\Aut{A}_{\calS} = (Q,\Sigma,\Delta,I,F)$\,:
+        \begin{Itemize}
+          \item
+            $\Sigma = 2^{\text{AV}}$
+          \item
+            $Q=S \uplus \{q_0\}$
+          \item
+            $I=\{q_0\}$
+          \item
+            $F=Q$
+          \item
+            \begin{tabular}[t]{@{}c@{~}c@{~}c@{~}l@{}}
+              $\Delta$ & $=$ &        & $\{~(q_0, \ell(s), s)~ \mid s \in S_0\}$ \\[4pt]
+                       &     & $\cup$ & $\{~(s, \ell(s'), s')~ \mid (s,s') \in R\}$
+            \end{tabular}
+        \end{Itemize}
+      }
+
+      \par\bigskip
+      \uncover<3->{%
+        \Gmph{Beispiel:} siehe Tafel. \Tafel
+      }
+      
+      \note{
+        \textbf{16:37}
+        
+        \parII
+        Kripke-Struktur in Automaten umwandeln ist ganz einfach: \\
+        im Prinzip ist die KS bereits der Automat.
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Beschreibung von $E$ durch NBA $\Aut{A}_E$}
+
+      \Bmph{Beispiel Mikrowelle}~ {\footnotesize (siehe Bild auf Folie \ref{fra:bsp_mikrowelle})}
+      \begin{Itemize}
+        \item[(a)]
+          "`Wenn ein Fehler auftritt, ist er nach endlicher Zeit behoben."'
+        \item[(b)]
+          "`Wenn die Mikrowelle gestartet wird, \\
+          fängt sie nach endlicher Zeit an zu heizen."'
+        \item[(c)]
+          "`Wenn die Mikrowelle gestartet wird, \\
+          ist es \emph{möglich}, danach zu heizen."'
+      \end{Itemize}
+
+      \par\bigskip
+      \Bmph{Beispiel Nebenläufigkeit}~ {\footnotesize (siehe Bild auf Folie \ref{fra:nebenlaeufigkeit})}
+      \begin{Itemize}
+        \item[(d)]
+          "`Es kommt nie vor,\\
+          dass beide Teilprog.\ zugleich im kritischen Bereich sind."'
+        \item[(e)]
+          "`Jedes Teilprog.\ kommt beliebig oft in seinen krit.\ Bereich."'
+        \item[(f)]
+          "`Jedes Teilprogramm \emph{kann} beliebig oft in seinen kritischen Bereich gelangen."'
+      \end{Itemize}
+
+      \Tafel
+
+      \note{
+        \textbf{16:43 bis 16:55 und 5min Pause}
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Verifikation mittels der konstruierten NBAs}
+
+      Gegeben sind wieder System $\calS$ und Spezifikation $E$.
+
+      \par\bigskip
+      \Bmph{Universelles MCP}
+      \begin{Itemize}
+        \item
+          Gilt $E$ für jeden Pfad in $\calS$\,?
+        \item<2->
+          äquivalent:~ $L(\Aut{A}_{\calS}) \subseteq L(\Aut{A}_E)$\,?
+        \item<3->
+          äquivalent:~ $L(\Aut{A}_{\calS}) \cap \overline{L(\Aut{A}_E)} = \emptyset$\,?
+        \item<4->[$\leadsto$]
+          Komplementierung $\Aut{A}_E$, Produktautomat, Leerheitsproblem
+        \item<5->
+          Komplexität: \PS~
+          \mbox{{\small \scalebox{.98}[1]{(exponentielle Explosion bei Komplementierung)}}\hspace*{-20mm}}
+      \end{Itemize}
+
+      \par\bigskip
+      \uncover<6->{%
+        \Bmph{Existenzielles MCP}
+        \begin{Itemize}
+          \item
+            Gibt es einen Pfad in $\calS$, der $E$ erfüllt?
+          \item<7->
+            äquivalent: $L(\Aut{A}_{\calS}) \cap L(\Aut{A}_E) \neq \emptyset$\,?
+          \item<8->[$\leadsto$]
+            Produktautomat, Leerheitsproblem
+          \item<9->
+            Komplexität: \NL \hfill
+            {\small (keine exponentielle Explosion)}
+        \end{Itemize}
+      }
+      
+      \note{
+        \textbf{17:00}
+        
+        \parI
+        "`Exponentielle Explosion"':~ wie schon gesagt, liefert der Weg über die Safra-Konstruktion
+        einen \textbf{doppelt} exp.\ Blowup.
+        
+        \parI
+        Es gibt aber direkte Verfahren zur Komplementierung mit einfach exp.\ Blowup.
+        
+        \parII
+        Außerdem kann man natürlich nicht den exp.\ großen Komplement-Automaten im Ganzen
+        erzeugen, wenn man nur Polyplatz zur Verfügung hat.
+        
+        \parI
+        Man muss ihn also "`on the fly"' stückchenweise generieren, \\
+        während man den Algo.\ für das Leerheitsproblem laufen lässt.
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Bemerkung zur Implementierung}
+
+      \Bmph{Praktisches Problem}
+      \par\smallskip
+      \begin{Itemize}
+        \item
+          Komplexität von MCP wird \Emph{bezüglich $|\Aut{A}_{\calS}| + |\Aut{A}_E|$} gemessen 
+        \item
+          $|\calS|$ und damit $|\Aut{A}_{\calS}|$ ist \Emph{exponentiell} in der Anzahl der Variablen:\\
+          \Emph{State space explosion problem}
+        \item[$\leadsto$]
+          universelles bzw.\ existenzielles MCP sind eigentlich\\
+          in \EXPSPACE\ bzw.\ in \PSPACE\ bezüglich Anz.\ der Variablen
+      \end{Itemize}
+
+      \par\bigskip
+      \uncover<2->{%
+        \Bmph{Abhilfe:}
+        \begin{Itemize}
+          \item
+            "`On-the-fly model checking"'
+          \item
+            Zustände von $\Aut{A}_{\calS}$ werden während des Leerheitstests\\
+            nur bei Bedarf erzeugt
+        \end{Itemize}
+      }
+
+      \note{
+        \textbf{17:06}
+        
+        \parI
+        "`Abhilfe"':~ macht natürlich nicht die Komplexität kleiner, \\
+        vermeidet aber, den ganzen Automaten in den Speicher schreiben zu müssen.
+
+        \par
+      }
+    \end{frame}
+    
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Spezifikationen mittels Linearer Temporallogik (LTL)}
+
+      \Bmph{Nun zu Schritt 2.}~ Ziele:
+      \begin{Itemize}
+        \item
+          intuitivere Beschreibung der Spezifikation $E$ durch Formel $\varphi_E$
+          \par\smallskip
+        \item
+          Prozedur zur Umwandlung $\varphi_E$ in $\Aut{A}_E$\\
+          (!) allerdings ist $|\Aut{A}_E|$ exponentiell in $|\varphi_E|$
+          \par\smallskip
+        \item
+          dafür Explosion bei Komplementierung vermeiden:\\
+          wandle $\lnot\varphi_E$ in Automaten um
+          \par\smallskip
+        \item[$\leadsto$]
+          beide MCP für LTL sind \PSPACE-vollständig
+      \end{Itemize}
+
+      \note{
+        \textbf{17:08}
+        
+        \parII
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{LTL im Überblick}
+%       \begin{tabular}{@{}r@{~}c@{~}l@{}}
+%         \Bmph{LTL} & $=$ & Aussagenlogik \\
+%                    &     & plus Operatoren, die über \Emph{Pfade} sprechen:
+%       \end{tabular}
+      \Bmph{LTL} $=$ Aussagenlogik $+$ Operatoren, die über \Emph{Pfade} sprechen:
+
+%       \par\smallskip
+%       \hrule
+
+      \par\smallskip
+      \begin{Itemize}
+        \item[$F$]
+          \dblu{($F$uture)}
+          \par\smallskip
+          $F\varphi$ bedeutet "`$\varphi$ ist irgendwann in der Zukunft wahr"'
+          \par\medskip
+        \item[$G$]
+          \dblu{($G$lobal)}
+          \par\smallskip
+          $G\varphi$ bedeutet "`$\varphi$ ist ab jetzt immer wahr"'
+          \par\medskip
+        \item[$X$]
+          \dblu{(ne$X$t)}
+          \par\smallskip          
+          $X\varphi$ bedeutet "`$\varphi$ ist im nächsten Zeitpunkt wahr"'
+          \par\medskip
+        \item[$U$:]
+          \dblu{($U$ntil)}
+          \par\smallskip          
+          $\varphi U\psi$ bedeutet "`$\psi$ ist irgendwann in der Zukunft wahr\\
+          \hspace*{25mm} und bis dahin ist immer $\varphi$ wahr"'
+      \end{Itemize}
+
+%       \par\smallskip
+%       \hrule
+%       
+%       \par\smallskip
+%       \Bmph{Pfad} $=$ Abbildung $s : \mathbb{N} \to 2^\PROP$ \Tafel\\
+%       (\PROP ist abzählbare Menge von \Bmph{Aussagenvariablen})
+
+      \note{
+        \textbf{17:09}
+        
+        \parII
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{LTL-Syntax}
+      
+      Sei \Bmph{\PROP{}} abzählbare Menge von \Bmph{Aussagenvariablen}.
+      
+      \begin{Definition}[LTL-Formeln]
+        \begin{Itemize}
+          \item
+            Jede Aussagenvariable $p \in \PROP$ ist eine LTL-Formel.
+          \item<2->
+            Wenn $\varphi$ und $\psi$ LTL-Formeln sind,\\
+            dann sind die folgenden auch LTL-Formeln.
+            \begin{Itemize}
+              \item
+                $\lnot \varphi$       \hfill "`nicht $\varphi$"'
+              \item
+                $\varphi \land \psi$  \hfill "`$\varphi$ und $\psi$"'
+%               \item
+%                 $\varphi \lor \psi$   \hfill "`$\varphi$ oder $\psi$"'
+              \item
+                $F\varphi$            \hfill "`in Zukunft irgendwann $\varphi$"'
+              \item
+                $G\varphi$            \hfill "`in Zukunft immer $\varphi$"'
+              \item
+                $X\varphi$            \hfill "`im nächsten Zeitpunkt $\varphi$"'
+              \item
+                $\varphi \mathbin U \psi$      \hfill "`in Zukunft irgendwann $\psi$; bis dahin immer $\varphi$"'
+            \end{Itemize}
+        \end{Itemize}
+      \end{Definition}
+      
+      \par\smallskip
+      \uncover<3->{%
+        Verwenden die üblichen Abkürzungen\qquad
+        $\varphi \lor \psi = \neg(\neg\varphi \land \neg\psi)$,
+        $\varphi \to \psi = \neg\varphi \lor \psi$,\qquad
+        $\varphi \leftrightarrow \psi = (\varphi \to \psi) \land (\psi \to \varphi)$
+      }
+
+      \note{
+        \textbf{17:11}
+        
+        \parI
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{LTL-Semantik}
+
+%       \begin{tabular}{@{}l@{~~}l@{}}
+%         \Bmph{Pfad:} & Abbildung $\pi : \mathbb{N} \to 2^{\PROP}$ \\
+%                      & schreiben $\pi_0\pi_1\pi_2\ldots$ statt $\pi(0)\pi(1)\pi(2)\ldots$
+%       \end{tabular}
+      \mbox{\Bmph{Pfad:} Abbildung $\pi : \mathbb{N} \to 2^{\PROP}$\quad Schreiben $\pi_0\pi_1\dots$ statt $\pi(0)\pi(1)\dots$\hspace*{-10mm}}
+
+      \begin{Definition}<2->
+        Sei $\varphi$ eine LTL-Formel, $\pi$ ein Pfad und $i \in \mathbb{N}$.\\
+        Das \Bmph{Erfülltsein} von $\varphi$ in $\pi,i$ ~\Bmph{($\pi,i \models \varphi$)}~ ist wie folgt definiert.
+        \vspace*{-.1pt}
+        \begin{Itemize}
+          \item<3->
+            $\pi,i \models p$,\quad falls $p \in \pi_i$\,, für alle $p \in \PROP$
+            \vspace*{-.08pt}
+          \item<4->
+            $\pi,i \models \neg \psi$,\quad falls $\pi,i \not\models \psi$
+            \vspace*{-.08pt}
+          \item<5->
+            $\pi,i \models \varphi \land \psi$,\quad falls $\pi,i \models \varphi$ und $\pi,i \models \psi$
+            \vspace*{-.08pt}
+          \item<6->
+            $\pi,i \models F\varphi$,\quad falls $\pi,j \models \varphi$ für ein $j \geqslant i$
+            \vspace*{-.08pt}
+          \item<7->
+            $\pi,i \models G\varphi$,\quad falls $\pi,j \models \varphi$ für alle $j \geqslant i$
+            \vspace*{-.08pt}
+          \item<8->
+            $\pi,i \models X\varphi$,\quad falls $\pi,i\!+\!1 \models \varphi$
+            \vspace*{-.08pt}
+          \item<9->
+            $\pi,i \models \varphi\mathbin{U}\psi$,\quad falls $\pi,j \models \psi$ für ein $j \geqslant i$\\
+            \hspace*{28mm}und $\pi,k \models \varphi$ für alle $k$ mit $i \leqslant k < j$
+        \end{Itemize}
+      \end{Definition}
+
+      \uncover<10->{%
+        \Tafel
+      }
+
+      \note{
+        \textcolor{black!70}{\textbf{17:13 bis Ende 17:40}}
+        
+        \par
+        \textbf{8:30 -- Kurzwdhlg.:}~ Syntax+Semantik LTL; Bsp.\ $a\mathbin{U}b$ an Tafel
+        
+        \parII
+        \textbf{Hinweisen:}~ "`nicht strikte Semantik"', also "`$\geqslant$"' statt "`$>$"';\\
+        "`für ein"' ($=$ "`es gibt"') vs.\ "`für alle"'
+        
+        \par
+      }
+    \end{frame}
+
+%   % ------------------------------------------------------------------------------------------
+%     \begin{frame}
+%       \frametitle{Beispiele}
+% 
+%       \begin{block}{}
+%         \begin{Itemize}
+%           \item
+%             $s,i \models p$,\quad falls $p \in s_i$, für alle $p \in \PROP$
+%           \item
+%             $s,i \models \neg \psi$,\quad falls $s,i \not\models \psi$
+%           \item
+%             $s,i \models \varphi \land \psi$,\quad falls $s,i \models \varphi$ und $s,i \models \psi$
+%           \item
+%             $s,i \models F\varphi$,\quad falls $s,j \models \varphi$ für ein $j \geqslant i$
+%           \item
+%             $s,i \models G\varphi$,\quad falls $s,j \models \varphi$ für alle $j \geqslant i$
+%           \item
+%             $s,i \models X\varphi$,\quad falls $s,i\!+\!1 \models \varphi$
+%           \item
+%             $s,i \models \varphi\mathbin{U}\psi$,\quad falls $s,j \models \psi$ für ein $j \geqslant i$\\
+%             \hspace*{28mm}und $s,k \models \varphi$ für alle $k$ mit $i \leqslant k < j$
+%         \end{Itemize}
+%       \end{block}
+%       
+%       \par\bigskip
+%       Siehe Tafel. \Tafel
+%       \note{~}
+%     \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Beispiel-Spezifikationen als LTL-Formeln}
+      
+      \Gmph{Beispiel Mikrowelle} {\footnotesize (siehe Bild auf Folie \ref{fra:bsp_mikrowelle})}
+      \begin{Itemize}
+        \item%[(a)]
+          "`Wenn ein Fehler auftritt, ist er nach endlicher Zeit behoben."'
+          \par\smallskip
+          $G(e \to F \neg e)$ \hfill {\footnotesize ($e \in \PROP$ steht für "`Error"')}
+          \par\smallskip
+        \item<2->%[(b)]
+          "`Wenn die Mikrowelle gestartet wird, \\
+          fängt sie nach endlicher Zeit an zu heizen."'
+          \par\smallskip
+          $G(s \to F h)$ \hfill {\footnotesize ($s,h \in \PROP$ stehen für "`Start"' bzw.\ "`Heat"')}
+          \par\smallskip
+        \item<3->
+          "`Irgendwann ist für genau einen Zeitpunkt die Tür geöffnet."'
+          \par\smallskip
+          $F(c \land X(\neg c \land Xc))$ \hfill {\footnotesize ($c \in \PROP$ steht für "`Close"')}
+          \par\smallskip
+        \item<4->
+          "`Irgendwann ist für genau einen Zeitpunkt die Tür geöffnet,\\
+          und bis dahin ist sie geschlossen."'
+          \par\smallskip
+          $c\mathbin{U}(\neg c \land Xc)$
+      \end{Itemize}
+
+%       \par\smallskip
+%       \uncover<3->{%
+%         \Bmph{Beispiel Nebenläufigkeit}
+%         \begin{Itemize}
+%           \item[(c)]
+%             Es kommt nie vor,\\
+%             dass beide Teilprog.\ zugleich im kritischen Bereich sind.
+%             \par\smallskip
+%             $G(\neg (p_{12} \land p_{22})$ \hfill {\footnotesize ($p_i \in \PROP$ stehen für "`Programmzähler in Zeile $i$"')}
+%           \item<4->[(d)]
+%             Jedes Teilprog.\ kommt beliebig oft in seinen krit.\ Bereich.
+%             \par\smallskip
+%             $GF p_{12} \land GF p_{22}$
+% %           \item<6->[(f)]
+% %             Jedes Teilprogramm \emph{kann} beliebig oft in seinen kritischen Bereich gelangen. \Tafel
+%         \end{Itemize}
+%       }
+      \note{
+        \textbf{8:32}
+        
+        \parII
+        Wir brauchen das Bild nicht zu sehen; hier geht es nur um die Eigenschaften
+        und die entsprechenden LTL-Formeln.
+        
+        \parI
+        Bedeutung der AV steht daneben.
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Beispiel-Spezifikationen als LTL-Formeln}
+
+        \Gmph{Beispiel Nebenläufigkeit} {\footnotesize (siehe Bild auf Folie \ref{fra:nebenlaeufigkeit})}
+        \begin{Itemize}
+          \item%[(c)]
+            Es kommt nie vor,\\
+            dass beide Teilprog.\ zugleich im kritischen Bereich sind.
+            \par\smallskip
+            $G\neg (p_{12} \land p_{22})$ \hfill {\footnotesize ($p_i \in \PROP$ stehen für "`Programmzähler in Zeile $i$"')}
+            \par\smallskip
+          \item<2->%[(d)]
+            Jedes Teilprog.\ kommt beliebig oft in seinen krit.\ Bereich.
+            \par\smallskip
+            $GF p_{12} \land GF p_{22}$
+        \end{Itemize}
+
+      \note{
+        \textbf{8:35}
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Model-Checking mit LTL-Formeln}
+
+      \Bmph{Zur Erinnerung:}
+      \begin{block}{Definition \ref{def:model-checking-problem}: Model-Checking-Problem \Bmph{MCP}}
+        Gegeben ein System $\calS$ und eine Spezifikation $E$,
+        \begin{Itemize}
+          \item
+            gilt $E$ für jeden Pfad in $\calS$\,?\\
+            \Bmph{(universelle Variante)}
+          \item
+            gibt es einen Pfad in $\calS$, der $E$ erfüllt?\\
+            \Bmph{(existenzielle Variante)}
+        \end{Itemize}
+      \end{block}
+
+      \note{
+        \textbf{8:37}
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Model-Checking mit LTL-Formeln}
+
+      \Bmph{Für LTL:}
+      \par\smallskip
+      (jedem Pfad $s_0s_1s_2\dots$ in einer Kripke-Struktur $\calS=(S,S_0,R,\ell)$
+      entspricht ein LTL-Pfad $\pi_0\pi_1\pi_2\dots$ mit $\pi_i=\ell(s_i)$)
+      
+      \par\bigskip
+      \begin{Definition}<2->[Model-Checking-Problem]
+        Gegeben Kripke-Struktur $\calS=(S,S_0,R,\ell)$ und LTL-Formel $\varphi$,
+        \begin{Itemize}
+          \item
+            gilt $\pi,0 \models \varphi$ für alle Pfade $\pi$, die in einem $s_0 \in S_0$ starten?\\
+            \Bmph{(universelle Variante)}
+          \item<3->
+            gibt es Pfad $\pi$, der in einem $\pi_0 \in S_0$ startet, mit $\pi,0 \models \varphi$\,?\\
+            \Bmph{(existenzielle Variante)}
+        \end{Itemize}
+      \end{Definition}
+      
+      \par\bigskip
+      \uncover<4->{%
+        \begin{Itemize}
+          \item[\YES]
+            Exakte Beschreibung des Model-Checking-Problems
+          \emphitem
+            Algorithmische Lösung?
+        \end{Itemize}
+      }
+      
+      \note{
+        \textbf{8:38}
+        
+        \parII
+        "`Algorithmische Lösung?"' -- Büchi-Automaten zu Hilfe! :)
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{MCP weiterhin mittels Büchi-Automaten lösen!}
+
+      \Bmph{Vorgehen wie gehabt:}
+      \par\smallskip
+      \begin{Itemize}
+        \item
+          Wandle Kripke-Struktur $\calS$ in NBA $\Aut{A}_{\calS}$ um
+          \par\smallskip
+          $\leadsto$ Pfade in $\calS$ sind erfolgreiche Runs von $\Aut{A}_{\calS}$
+          \par\bigskip
+        \item<2->
+          Wandeln LTL-Formel $\varphi_E$ in NBA $\Aut{A}_E$ um
+          \par\smallskip
+          $\leadsto$ $\Aut{A}_E$ beschreibt Pfade, die $E$ erfüllen
+          \par\bigskip
+        \item<3->[$\leadsto$]
+          Universelles MCP ~$=$~ "`$L(\Aut{A}_{\calS}) \subseteq L(\Aut{A}_E)$\,?"'
+          \par\smallskip
+          Existenzielles MCP ~$=$~ "`$L(\Aut{A}_{\calS}) \cap L(\Aut{A}_E) \neq \emptyset$\,?"'
+      \end{Itemize}
+      
+      \par\bigskip
+      \uncover<4->{%
+        \Emph{Noch zu klären:}~ Wie wandeln wir $\varphi_E$ in $\Aut{A}_E$ um?
+      }
+
+      \note{
+        \textbf{8:41}
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Umwandlung von LTL-Formeln in Automaten (Überblick)}
+      
+      Wandeln $\varphi_E$ in \Bmph{generalisierten Büchi-Automaten (GNBA)} um:
+       
+      \parI
+      \begin{Itemize}
+        \item
+          $\Aut{A}_{\varphi_E} = (Q,\Sigma,\Delta,I,\dred{\calF})$ mit $\calF \subseteq 2^Q$
+          \parI
+        \item
+          $r = q_0q_1q_2\ldots$ ist erfolgreich:~ $\Inf(r) \cap F \neq \emptyset$ \Emph{für alle} $F \in \calF$
+          \parI
+        \item
+          GNBAs und NBAs sind äquivalent\hfill {\footnotesize (nur quadratische Vergrößerung)}
+      \end{Itemize}
+
+%      \parI
+%      Im Folgenden grobe Vorgehensweise
+
+      \note{
+        \textbf{8:43}
+        
+        \parII
+        "`GNBAs und NBAs sind äquivalent"':~
+        
+        \parI
+        Richtung NBA $\to$ GNBA trivial.
+        
+        \parI
+        Richtung GNBA $\to$ NBA:~\\
+        Wenn $\Fmc = \{F_1,\dots,F_n\}$, erzeuge $n$ Kopien des GNBA. \\
+        Von jedem akzZ.\ der $i$-ten Kopie wechsle in $((i + 1) \bmod n)$-te Kopie. \\
+        Neue akzZ:~ die bisherigen akzZ.\ \emph{einer} beliebigen Kopie.
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Vorbetrachtungen}
+
+      Sei $\varphi_E$ eine LTL-Formel, in der o.\,B.\,d.\,A.\
+      \begin{Itemize}
+        \item
+          nur die Operatoren $\neg,\land,X,U$ vorkommen
+          \par\smallskip
+          \begin{small}
+            \qquad Die anderen kann man mit diesen ausdrücken:\\
+            \qquad $F\varphi \equiv (\lnot(p \land \lnot p)) \mathbin U \varphi$\qquad
+                    $G\varphi \equiv \lnot F \lnot \varphi$
+            \par
+          \end{small}
+          \par\smallskip
+        \item
+          keine doppelte Negation vorkommt
+          \par\smallskip
+          \begin{small}
+            \qquad natürlich gilt $\lnot\lnot\psi \equiv \psi$ für alle Teilformeln $\psi$
+            \par
+          \end{small}
+      \end{Itemize}
+      \begin{small}
+        (Hier steht ~$\alpha \equiv \beta$~ für ~$\forall \pi \forall i : \pi,i \models \alpha \text{ gdw.\ } \pi,i \models \beta$)
+        \par
+      \end{small}
+
+
+      \par\bigskip
+      \uncover<2->{%
+        \Bmph{Etwas Notation}
+        \begin{Itemize}
+          \item
+            $\Neg\psi = \begin{cases}
+                          \vartheta & \text{falls } \psi = \lnot\vartheta \\
+                          \lnot\psi & \text{sonst}
+                        \end{cases}$
+            \par\smallskip
+          \item
+            $\cl(\varphi_E) = \{\psi, \Neg\psi \mid \psi \text{ ist Teilformel von } \varphi_E\}$
+            \par\smallskip
+          \item
+            $\Sigma=2^\PROP$
+        \end{Itemize}
+      }
+
+      \note{
+        \textbf{8:45}
+        
+        \parI
+        Die Einschränkung der vorkommenden Operatoren \\
+        • ist o.\,B.\,d.\,A., wie wir an den Äquivalenzen sehen; \\
+        • macht die folgenden Definitionen deutlich übersichtlicher; \\
+        • führt aber dazu, dass Automaten schon für kleine F-/G-Formeln riesig werden. \\
+        Deshalb nur kurze Beispiele hier und in ÜS.
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Intuitionen}
+
+
+%       \par\bigskip
+%       \uncover<2->{%
+        \Bmph{Erweiterung von Pfaden}
+        
+        \begin{Itemize}
+          \item
+            Betrachten Pfade $\pi=s_0s_1s_2\ldots$ mit $s_i \subseteq \PROP$
+          \item
+            Erweitern jedes $s_i$ mit den $\psi \in \cl(\varphi_E)$, für die $\pi,i \models \psi$ gilt
+          \item
+            Resultat: Folge $\overline \pi = t_0t_1t_2\ldots$ mit $t_i \subseteq \cl(\varphi_E)$
+        \end{Itemize}
+%       }
+
+      \par\smallskip
+      \begin{small}
+        \hspace*{.6\textwidth}
+        \begin{tabular}{l}
+          $\searrow$\\
+          \uncover<2->{%
+            $\nearrow$%
+          }
+        \end{tabular}
+        Skizze: s.\ Tafel \Tafel
+        \par
+      \end{small}
+
+      \par\vspace*{-\baselineskip}
+      \uncover<2->{%
+        \Bmph{Bestandteile des GNBA $\Aut{A}_{\varphi_E}$}
+
+        \begin{Itemize}
+          \item
+            Zustände: $\approx$ alle $t_i$
+          \item
+            $\overline \pi = t_0t_1t_2\ldots$ wird ein Run von $\Aut{A}_{\varphi_E}$ für $s_0s_1s_2\ldots$ sein
+          \item
+            Run $\overline \pi$ wird erfolgreich sein gdw.\ $\pi,0\models \varphi_E$
+          \item
+            Kodieren Bedeutung der logischen Operatoren in
+            \begin{Itemize}
+              \item
+                Zustände ($\lnot$, $\land$, teilweise $U$)
+              \item
+                Überführungsrelation ($X$, teilweise $U$)
+              \item
+                Akzeptanzbedingung (teilweise $U$)
+            \end{Itemize}
+        \end{Itemize}
+      }
+
+      \note{
+        \textbf{8:48 bis 8:56}
+        
+%        \parI
+%        % TODO
+%        \textbf{TODO:}~ Lieber zusätzliche Bedingungen für $F,G$ bei Zuständen, Transitionen, Akzeptanzkomponente?
+%        (siehe T5.4 in Kap. 5) \\
+%        Dann sollte man später als Beispiel bequem $GFa$ machen können.
+%        --- Nein, dann werden die Def.s unübersichtlich!
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Zustandsmenge des GNBA $\Aut{A}_{\varphi_E}$}
+
+      $Q$ $=$ Menge aller elementaren Formelmengen, \\
+      wobei $t \subseteq \cl(\varphi_E)$ \Bmph{elementar} ist, wenn gilt:
+      \par\medskip
+      \begin{Enumerate}
+        \item
+          $t$ ist \Bmph{konsistent} bzgl.\ Aussagenlogik, d.\,h.\\
+          für alle $\psi_1 \land \psi_2 \in \cl(\varphi_E)$ und $\psi \in \cl(\varphi_E)$:
+          \begin{Itemize}
+            \item
+              $\psi_1 \land \psi_2 \in t$ gdw.\
+              $\psi_1 \in t$ und $\psi_2 \in t$
+            \item
+              wenn $\psi \in t$, dann $\Neg\psi \notin t$
+          \end{Itemize}
+          \par\medskip
+        \item<2->
+          $t$ ist \Bmph{lokal konsistent} bzgl.\ des $U$-Operators, d.\,h.\\
+          für alle $\psi_1 \mathbin{U} \psi_2 \in \cl(\varphi_E)$:
+          \begin{Itemize}
+            \item
+              wenn $\psi_2 \in t$, dann $\psi_1 \mathbin{U} \psi_2 \in t$
+            \item
+              wenn $\psi_1 \mathbin{U} \psi_2 \in t$ und $\psi_2 \notin t$,
+              dann $\psi_1 \in t$
+          \end{Itemize}
+          \par\medskip
+        \item<3->
+          $t$ ist \Bmph{maximal}, d.\,h.\ für alle $\psi \in \cl(\varphi_E)$:
+          \begin{Itemize}
+            \item[]
+              wenn $\psi \notin t$, dann $\Neg\psi \in t$
+          \end{Itemize}
+      \end{Enumerate}
+
+      \par\bigskip
+      \uncover<4->{%
+        \Gmph{Beispiel:} $a \mathbin{U} (\lnot a \land b)$, siehe Tafel \Tafel
+      }
+
+      \note{
+        \textbf{8:56 bis 9:10, 5min Pause}
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Überführungsrelation des GNBA $\Aut{A}_{\varphi_E}$}
+
+%         \item
+%           Zur Erinnerung: $\Sigma = 2^\PROP$
+%       Betrachten Tripel $(t,s,t')$\\
+% %           mit $t,t' \in Q$ (elem. FM) und $s \in \Sigma$ ($\Sigma = 2^\PROP$)
+% %           mit
+% %           \begin{tabular}[t]{@{}c@{}}
+% %             $t,t' \in Q$ \\
+% %             {\small (elementare Formelmengen)}
+% %           \end{tabular}
+% %           und
+% %           \begin{tabular}[t]{@{}c@{}}
+% %             $s \in \Sigma$ \\
+% %             {\small ($\Sigma = 2^\PROP$)}
+% %           \end{tabular}
+%       \qquad
+%       \begin{tabular}[t]{@{}l@{~}ll@{}}
+%         mit & $t,t' \in Q$   & {\small (elementare Formelmengen)}\\
+%         und & $s \in \Sigma$ & {\small ($\Sigma = 2^\PROP$)}
+%       \end{tabular}
+      Seien $t,t' \in Q$ (elementare Formelmengen) und $s \in \Sigma$ ($\Sigma = 2^\PROP$)
+
+      \par\bigskip\bigskip
+      $\Delta$ besteht aus allen Tripeln $(t,s,t')$ mit
+      \begin{Enumerate}
+        \item
+%               $s = \text{alle Aussagenvariablen und negierte AV in $t$}$
+          $s = t \cap \PROP$
+          \hfill
+          {\small (d.\,h.\ $s$ besteht aus allen Aussagevariablen in $t$)}
+          \par\smallskip
+        \item<2->
+          für alle $X\psi \in \cl(\varphi_E)$:\quad
+          $X\psi \in t$ gdw.\ $\psi \in t'$
+          \par\smallskip
+        \item<3->
+          für alle $\psi_1 \mathbin{U} \psi_2 \in \cl(\varphi_E)$:\\
+          $\psi_1 \mathbin{U} \psi_2 \in t$ ~gdw.~
+          $\psi_2 \in t$ oder ($\psi_1 \in t$ und $\psi_1 \mathbin{U} \psi_2 \in t'$)
+          \par\smallskip
+%           \uncover<5->{%
+            \hspace*{\fill}{\small \emph{("`Aufschieben"' von $\psi_1 \mathbin{U} \psi_2$)}} \Danger%
+%           }
+      \end{Enumerate}
+
+      \par\bigskip
+      \uncover<4->{%
+        Skizzen: siehe Tafel \Tafel
+      }
+%         
+%           Wenn $s \neq t \cap \PROP$, dann gibt es kein solches Tripel in $\Delta$
+%           \par\smallskip
+%         \item<3->
+%           Sonst $(t,s,t') \in \Delta$ für alle elementaren FM $t'$ mit:
+%           \begin{Itemize}
+%             \item
+%               für alle $X\psi \in \cl(\varphi_E)$:\quad
+%               $X\psi \in t$ gdw.\ $\psi \in t'$
+%             \item<4->
+%               für alle $\psi_1 \mathbin{U} \psi_2 \in \cl(\varphi_E)$:\\
+%               $\psi_1 \mathbin{U} \psi_2 \in t$ ~gdw.~
+%               $\psi_2 \in t$ oder ($\psi_1 \in t$ und $\psi_1 \mathbin{U} \psi_2 \in t'$)
+%           \end{Itemize}
+
+      \note{
+        \textbf{9:15 bis 9:26}
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Anfangszustände und Akzeptanzkomponente von $\Aut{A}_{\varphi_E}$}
+
+      \Bmph{Menge der Anfangszustände}
+      \par\smallskip
+      alle elementaren Formelmengen, die $\varphi_E$ enthalten
+
+      \par\medskip
+      \qquad $I = \{t \in Q \mid \varphi_E \in t\}$
+
+      \par\bigskip\smallskip
+      \uncover<2->{%
+        \Bmph{Menge der akzeptierenden Zustände}
+        \par\smallskip
+        stellen sicher, dass kein $\psi_1 \mathbin{U} \psi_2$ für immer ``aufgeschoben'' wird
+
+        \par\medskip
+        \qquad $\calF = \{M_{\psi_1 \mathbin{U} \psi_2} \mid \psi_1 \mathbin{U} \psi_2 \in \cl(\varphi_E)\}$ mit
+        \[
+          M_{\psi_1 \mathbin{U} \psi_2} = \{t \in Q \mid \psi_1 \mathbin{U} \psi_2 \notin t \text{ oder } \psi_2 \in t\}
+        \]
+      }
+
+%       \par\bigskip
+      \par\vspace*{-\baselineskip}
+      \uncover<3->{%
+        \begin{small}%
+%               \hspace*{\fill}\emph{(``jedes $\psi_1 \mathbin{U} \psi_2$ wird nur endlich lange aufgeschoben'')}\qquad~%
+          \qquad Intuition:~
+%           \par\smallskip
+          Ein $t \in M_{\psi_1 \mathbin{U} \psi_2}$ kommt unendlich oft vor
+%           \par
+          gdw.\
+          \par%\smallskip
+          \qquad $\psi_1 \mathbin{U} \psi_2$ immer nur höchstens endlich lange ``aufgeschoben'' wird
+          \par
+        \end{small}
+      }
+
+      \par\bigskip
+      \uncover<4->{%
+        \Gmph{Beispiel:} $Xa$, siehe Tafel \Tafel
+      }
+
+      \par\medskip
+      \uncover<4->{%
+        \Gmph{Beispiel:} $(\lnot a) \mathbin{U} b$, siehe Tafel \Tafel
+      }
+
+      \note{
+        \textbf{9:26 bis 9:58}
+        
+%        \parI
+%        % TODO
+%        \textbf{TODO:}~ Beispielformel $Xa$ ist zu einfach und demonstriert nicht die Akzeptanzbedingung. \\
+%        Stattdessen Beispielformel $a \mathbin{U} (Xb)$ machen: \\
+%        Dafür ist genug Zeit, denn T3.23 und T3.24 gehen deutlich schneller als geplant.
+%        Am 21.12.17 war ich vor T3.23 ca. 5min im Rückstand (und hatte Pause weggelassen),
+%        aber am Ende von T3.25 war \textbf{auch} noch Zeit für Bsp. $a \mathbin{U} b$.
+%        --- erledigt, beide Bsp.e werden vorgeführt; Kombi X+U ist in Übungsserie 5.
+%    
+%        \parI
+%        Außerdem kann man z.\,B.\ auch $GFa$ machen, wenn man $F,G$ nicht als Abkürzungen behandelt,
+%        sondern zusätzliche Bedingungen für Zustände, Transitionen, Akzeptanzkomponente einführt
+%        (siehe T5.4 in Kap. 5)
+%        --- nö, das ist zu viel technischer Kram, (s.a. Kommentar weiter oben)
+
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Abschließende Betrachtungen}
+
+      \begin{Itemize}
+        \item
+          $|Q|$ ist exponentiell in $|\varphi_E|$
+          \par\smallskip
+        \item
+          Dafür kann man jetzt beim universellen MCP auf Komplementierung $\Aut{A}_{\varphi_E}$ verzichten:\\
+          Wandle $\neg\varphi_E$ in Automaten um
+          \par\smallskip
+        \item[$\leadsto$]
+          beide MCP-Varianten in \PSPACE
+          \par\smallskip
+        \item
+          beide MCP-Varianten sind \PSPACE-vollständig\\
+          (aber für bestimmte LTL-Fragmente \NP- oder \NL-vollständig)
+          \par\medskip
+          \begin{footnotesize}
+            A. Prasad Sistla, Edmund M. Clarke:
+            \emph{The Complexity of Propositional Linear Temporal Logics}.
+            Journal of the ACM 32(3): 733-749 (1985)
+            \par\medskip
+            Michael Bauland, Martin Mundhenk, Thomas Schneider, Henning Schnoor, Ilka Schnoor, Heribert Vollmer:
+            \emph{The Tractability of Model Checking for LTL: the Good, the Bad, and the Ugly Fragments.}
+            ACM Trans. Comput. Log. 12(2): 13 (2011)
+            \par
+          \end{footnotesize}
+      \end{Itemize}
+
+      \note{
+        \textbf{9:58 bis Ende -- umblättern und evtl.\ Prüfungshinweise}
+        
+        \par
+      }
+    \end{frame}
+
+%   % ------------------------------------------------------------------------------------------
+%     \begin{frame}
+%       \frametitle{\dots}
+%       \dots
+%       \note{~}
+%     \end{frame}
+% 
+%   % ------------------------------------------------------------------------------------------
+%     \begin{frame}
+%       \frametitle{\dots}
+%       \dots
+%       \note{~}
+%     \end{frame}
+% 
+
+
+%   % ------------------------------------------------------------------------------------------
+%     \begin{frame}
+%       \frametitle{\dots}
+%       \dots
+%       \note{~}
+%     \end{frame}
+% 
+
+    
+

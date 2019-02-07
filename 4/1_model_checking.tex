@@ -1,0 +1,824 @@
+% ------------------------------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Erinnerung an LTL\hfill {\normalsize\emph{(Linear Temporal Logic)}}}
+
+  \begin{Itemize}
+    \item%<+->
+      System gegeben als Kripke-Struktur $\calS = (S,S_0,R,\ell)$
+      \par\smallskip
+    \item%<+->
+      LTL-Formel $\varphi_E$ beschreibt Pfade,
+      die Eigenschaft $E$ erfüllen
+      \par\smallskip
+%         \item<+->
+%           benutzt dafür Operatoren $F,G,X,U$ \hfill{\footnotesize (auch üblich: $\Diamond,\Box,\bigcirc,U$)}
+%           \par\smallskip
+    \item%<+->
+      Beispiel:\\
+      "`Wenn Fehler auftritt, ist er nach endlicher Zeit behoben."'
+      \par\smallskip
+      $G(e \to F \neg e)$ \hfill {\footnotesize ($e \in \PROP$ steht für "`Error"')}
+      \par\smallskip
+    \item%<+->
+      Umwandlung $\varphi_E$ in GNBA $\Aut{A}_E$,
+      der zulässige Pfade beschreibt
+      \par\smallskip
+    \item%<+->
+      lösen damit Model-Checking-Problem:
+      \begin{Itemize}
+        \item
+          Gilt $E$ für \emph{alle} Pfade ab $S_0$ in \calS\,?\\
+          \Bmph{(universelle Variante)}
+        \item
+          Gilt $E$ für \emph{mindestens einen} Pfad ab $S_0$ in \calS\,?\\
+          \Bmph{(existenzielle Variante)}
+      \end{Itemize}
+  \end{Itemize}
+
+  \par\bigskip
+%       \uncover<+->{%
+    \begin{footnotesize}
+      LTL 1977 eingeführt durch Amir Pnueli, 1941-2009, \\
+      israelischer Informatiker (Haifa, Weizmann-Inst., Stanford, Tel Aviv, New York)
+      \par
+    \end{footnotesize}
+
+%       }
+  \note{
+    \textbf{8:33}
+    
+    \par
+  }
+\end{frame}
+
+% ------------------------------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Grenzen von LTL}
+
+  "`LTL-Formel $\varphi_E$ beschreibt Pfade, die Eigenschaft $E$ erfüllen"'
+
+  \par\bigskip
+  \Bmph{Nicht ausdrückbar:}~ zu jedem Zeitpunkt ist es immer \emph{möglich},\\
+  die Berechnung auf eine gewisse Weise fortzusetzen
+
+  \par\bigskip
+%       \uncover<2->{%
+    \Bmph{Beispiel:}~~
+    "`Wenn ein Fehler auftritt,\\
+    ist es \emph{möglich}, ihn nach endlicher Zeit zu beheben."'
+    \par\smallskip
+    $G(e \to F \neg e)$ ~oder~ $GF\neg e$ ~sind
+    \begin{Itemize}
+      \item
+        zu stark in Verbindung mit universellem Model-Checking \Tafel
+      \item
+        zu schwach in Verbindung mit existenziellem MC \TafelForts
+    \end{Itemize}
+%       }
+
+  \note{
+    \textbf{8:34 bis 8:46}
+    
+    \par
+  }
+\end{frame}
+
+% ------------------------------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Ein Fall für CTL\hfill {\normalsize\emph{(Computation Tree Logic)}}}
+
+  \Bmph{Abhilfe:}~ Betrachten Berechnungsbäume statt Pfaden
+
+  \par\bigskip
+  Sei also $\calS = (S,S_0,R,\ell)$ eine Kripke-Struktur
+
+  \par\bigskip
+  \Bmph{Berechnungsbaum} für $s_0 \in S_0$
+  \begin{Itemize}
+    \item
+      entsteht durch "`Auf{}falten"' von \calS in $s_0$
+    \item
+      enthält \emph{alle unendlichen} Pfade, die in $s_0$ starten
+      \begin{Itemize}
+        \item[] d.\,h.:
+          jeder Zustand $s \in S$ hat als Kinder\\
+          alle seine Nachfolgerzustände aus \calS
+      \end{Itemize}
+  \end{Itemize}
+
+  \par\bigskip
+  $\calS$ ist eine endliche Repräsentation aller $\infty$ Berechnungsbäume
+
+%  \par\bigskip
+%  \Gmph{Beispiel:} siehe nächste Folie \& Tafel \Tafel
+%
+  \note{
+    \textbf{8:46}
+    
+    \par
+  }
+\end{frame}
+
+% ------------------------------------------------------------------------------------------
+\begin{frame}
+  \label{fra:bsp_mikrowelle}
+  \frametitle{Beispielstruktur Mikrowelle}
+
+  \begin{center}
+    \begin{minipage}[b]{.7\textwidth}
+      \includegraphics[angle=270,width=\linewidth]{img/mc_microwave.jpg}\\
+      {\footnotesize aus: E.\,M.\ Clarke et al., Model Checking, MIT Press 1999}
+    \end{minipage}
+  
+    \par\vspace*{-\baselineskip}
+    \Tafel
+  \end{center}
+
+  \note{
+    \textbf{8:47 bis 8:54}
+    
+    \par
+  }
+\end{frame}
+
+% ------------------------------------------------------------------------------------------
+\begin{frame}
+  \frametitle{CTL intuitiv}
+
+  CTL enthält \Bmph{Pfadquantoren $A$, $E$:}
+  \par\smallskip
+  Operatoren, die über \Bmph{alle} oder \Bmph{einige} Berechnungen sprechen, \\
+  die in einem bestimmten Zustand beginnen
+
+  \par\bigskip
+  \uncover<2->{%
+    \Bmph{Beispiel:}~ $AGEF\neg e$
+    \par\smallskip
+    \qquad Für alle Berechnungen, die hier starten ($A$), \\
+    \qquad gibt es zu jedem Zeitpunkt in der Zukunft ($G$) \\
+    \qquad eine Möglichkeit, die Berechnung fortzusetzen ($E$), \\
+    \qquad so dass irgendwann in der Zukunft ($F$) \\
+    \qquad kein Fehler auftritt ($\neg e$)
+  }
+
+  \par\bigskip
+  \uncover<3->{%
+    \begin{footnotesize}
+      CTL 1981 eingeführt durch\\
+      \quad Edmund M.\ Clarke, ${}^*$1945, Informatiker, Carnegie Mellon Univ. (Pittsburgh)\\
+      \quad E.\ Allen Emerson, ${}^*$1954, Informatiker, Univ.\ of Texas, Austin, USA\\
+      (beide Turing-Award-Träger 2007)
+      \par
+    \end{footnotesize}
+  }
+
+  \note{
+    \textbf{8:54}
+    
+    \par
+  }
+\end{frame}
+
+% ------------------------------------------------------------------------------------------
+\begin{frame}
+  \frametitle{CTL exakt}
+
+  Trennung von Zustands- und Pfadformeln:
+
+  \par\bigskip
+  \Bmph{Zustandsformeln} drücken Eigenschaften eines Zustandes aus
+  \[
+    \zeta ::= p \mid \zeta_1 \land \zeta_2 \mid \zeta_1 \lor \zeta_2 \mid \neg \zeta \mid E\psi \mid A\psi
+  \]
+  \begin{small}
+    \qquad
+    ($p$: Aussagenvariable;\hfill
+    $\zeta,\zeta_1,\zeta_2$: Zustandsformeln;\hfill
+    $\psi$: Pfadformel)
+    \par
+  \end{small}
+
+  \par\bigskip
+  \uncover<2->{%
+    \Bmph{Pfadformeln} drücken Eigenschaften eines Pfades aus
+    \[
+      \psi ::= F\zeta \mid G\zeta \mid X\zeta \mid \zeta_1 \mathbin{U} \zeta_2
+    \]
+    \begin{small}
+      \qquad
+      \hfill
+      ($\zeta,\zeta_1,\zeta_2$: Zustandsformeln)
+      \par
+    \end{small}
+  }
+
+  \par\bigskip
+  \uncover<3->{%
+    $\leadsto$ in \Bmph{zulässigen} CTL-Formeln muss
+    \begin{Itemize}
+      \item
+        \mbox{\scalebox{.96}[1]{jeder Pfadquantor von einem temporalen Operator gefolgt werden}\hspace*{-10mm}}
+      \item
+        jeder temporale Operator direkt einem Pfadquantor folgen
+    \end{Itemize}
+
+  }
+
+  \note{
+    \textbf{8:56}
+    
+    \par
+  }
+\end{frame}
+
+% ------------------------------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Quiz: zulässige Formeln}
+
+  Zur Erinnerung:
+  \begin{align*}
+    (ZF)\quad \zeta & ::= p \mid \zeta_1 \land \zeta_2 \mid \zeta_1 \lor \zeta_2 \mid \neg \zeta \mid E\psi \mid A\psi \\
+    (PF)\quad \psi  & ::= F\zeta \mid G\zeta \mid X\zeta \mid \zeta_1 \mathbin{U} \zeta_2
+  \end{align*}
+
+  \par\bigskip
+  \Emph{Quizfrage:} Welche der folgenden Formeln sind zulässig?
+%       \begin{Itemize}
+%         \item<+->
+%           $p \land q$
+% %           \uncover<+->{\YES}
+% %         \item<+->
+%           \quad
+%           $EFp$
+% %           \uncover<+->{\YES}
+% %         \item<+->
+%           \quad
+%           $AXp$
+%           \quad
+%           \uncover<+->{\YES}
+%         \item<+->
+%           $E(p \mathbin{U} q)$
+%           \quad
+%           \uncover<+->{\YES}
+%         \item<+->
+%           $A((p \lor \neg p) \mathbin{U} q)$
+%           \quad
+% %           \uncover<+->{\YES}
+% %           \quad
+% %           \uncover<+->{(äquivalent zu $AFq$)}
+%           \uncover<+->{%
+%             \YES
+%             \quad
+%             (äquivalent zu $AFq$)
+%           }
+%         \item<+->
+%           $E(p \lor AXq)$
+%           \quad
+%           \uncover<+->{\NO}
+%         \item<+->
+%           $EX(p \lor AXq)$
+%           \quad
+%           \uncover<+->{\YES}
+%         \item<+->
+%           $EF(p \mathbin{U} q)$
+%           \quad
+%           \uncover<+->{\NO}
+%         \item<+->
+%           $EFA(p \mathbin{U} q)$
+%           \quad
+%           \uncover<+->{\YES}
+%       \end{Itemize}
+  \begin{center}
+    \begin{tabular}{@{}lll@{}}
+      \uncover<+->{$p \land q$ \quad $EFp$ \quad $AXp$} & \uncover<+->{\YES} &                                    \\[2pt]
+      \uncover<1->{$E(p \mathbin{U} q)$}                & \uncover<+->{\YES} &                                    \\[2pt]
+      \uncover<1->{$A((p \lor \neg p) \mathbin{U} q)$}  & \uncover<+->{\YES  & (äquivalent zu $AFq$)}             \\[2pt]
+      \uncover<1->{$E(p \lor AXq)$}                     & \uncover<+->{\NO   & ($E$ nicht gefolgt von $F,G,X,U$)} \\[2pt]
+      \uncover<1->{$EX(p \lor AXq)$}                    & \uncover<+->{\YES} &                                    \\[2pt]
+      \uncover<1->{$EF(p \mathbin{U} q)$}               & \uncover<+->{\NO   & ($U$ folgt nicht $E$ oder $A$)}    \\[2pt]
+      \uncover<1->{$EFA(p \mathbin{U} q)$}              & \uncover<+->{\YES} &
+    \end{tabular}
+  \end{center}
+
+  \note{
+    \textbf{9:00}
+    
+    \textbf{Als Aufgabe, 2\,min Nachdenken, 2\,min Auf"|lösung $\leadsto$ bis 9:04}
+    
+    \par
+  }
+\end{frame}
+
+\newlength{\leftbox}
+\settowidth{\leftbox}{$\Paths(s):$}
+% ------------------------------------------------------------------------------------------
+\begin{frame}
+  \frametitle{CTL-Semantik}
+
+  CTL-Formeln werden über \Emph{Zuständen und Pfaden} von Kripke-Strukturen
+  $\calS = (S,S_0,R,\ell)$ interpretiert
+
+  \par\bigskip
+  \Bmph{Schreibweisen}
+  \begin{Itemize}
+    \item
+      $s \models \zeta$\quad für Zustände $s \in S$ und Zustandsformeln $\zeta$
+    \item
+      $\pi \models \psi$\quad für Pfade $\pi$ und Pfadformeln $\psi$
+  \end{Itemize}
+
+  \par\bigskip
+  \Bmph{Hilfsbegriffe}
+  \begin{Itemize}
+    \item
+      \parbox{\leftbox}{$\Paths(s)$:}\quad Menge aller Pfade, die in Zustand $s$ beginnen
+    \item
+      \parbox{\leftbox}{$\pi[i]$:}\quad $i$-ter Zustand auf dem Pfad $\pi$\\
+      \parbox{\leftbox}{~}\quad         d.\,h.\ wenn $\pi=s_0s_1s_2\dots$, dann $\pi[i] = s_i$
+  \end{Itemize}
+
+  \note{
+    \textbf{9:04}
+
+    \par
+  }
+\end{frame}
+
+% ------------------------------------------------------------------------------------------
+\begin{frame}
+  \frametitle{CTL-Semantik}
+
+  Sei $\calS = (S,S_0,R,\ell)$ eine Kripke-Struktur.
+
+  \begin{Definition}
+    \Bmph{Erfülltheit von Zustandsformeln} in Zuständen $s \in S$
+    \par\medskip
+    \begin{tabular}{@{\quad}lll@{}}
+        $s \models p$                     & falls & $p \in \ell(s)$, für alle $p \in \PROP$             \\[2pt]
+        $s \models \lnot\zeta$            & falls & $s \not\models \zeta$                               \\[2pt]
+        $s \models \zeta_1 \land \zeta_2$ & falls & $s \models \zeta_1$ und $s \models \zeta_2$
+                                                    \quad~\, {\small (analog für $\zeta_1 \lor \zeta_2$)} \\[2pt]
+        $s \models E\psi$                 & falls & $\pi \models \psi$ für ein $\pi \in \Paths(s)$      \\[2pt]
+        $s \models A\psi$                 & falls & $\pi \models \psi$ für alle $\pi \in \Paths(s)$
+    \end{tabular}
+
+    \par\medskip
+    \uncover<2->{%
+      \Bmph{Erfülltheit von Pfadformeln} in Pfaden $\pi$ in $\calS$
+      \par\medskip
+      \begin{tabular}{@{\quad}lll@{}}
+          $\pi \models X\zeta$              & falls & $\pi[1] \models \zeta$
+                                                    \qquad\qquad\, {\small (analog für $F\zeta$ und $G\zeta$)}                  \\[2pt]
+          $\pi \models \zeta_1\,U\,\zeta_2$ & falls & $\pi[\;\!j] \models \zeta_2$ für ein $j \geqslant 0$                  \\
+                                            &       & und $\pi[k] \models \zeta_1$ für alle $k$ mit $0 \leqslant k < j$
+      \end{tabular}
+    }
+  \end{Definition}
+
+  \par\smallskip
+  \uncover<3->{%
+%         (Die Fälle $\zeta_1\lor\zeta_2$, $F\zeta$, $G\zeta$ sind analog.)
+    Schreiben\quad $\calS \models \zeta$\quad falls\quad $s_0 \models \zeta$ für alle $s_0 \in S_0$
+  }
+
+  \note{
+    \textbf{9:06}
+    
+    \par
+  }
+\end{frame}
+
+% ------------------------------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Zurück zu unseren Beispielen: Spezifikationen in CTL}
+
+  \Bmph{Beispiel Nebenläufigkeit}
+  \begin{Itemize}
+    \item
+%           Es kommt nie vor,\\
+      Beide Teilprogramme sind nie zugleich im kritischen Bereich.
+      \par\smallskip
+      $AG\neg (p_{12} \land p_{22})$ \hfill {\footnotesize ($p_i \in \PROP$: "`Programmzähler in Zeile $i$"')}
+      \par\smallskip
+    \item<2->
+      Jedes Teilprog.\ kommt beliebig oft in seinen krit.\ Bereich.
+      \par\smallskip
+      $AGAF p_{12} \land AGAF p_{22}$
+      \par\smallskip
+    \item<3->
+      Jedes Teilprog.\ \emph{kann} beliebig oft in seinen kB kommen.
+      \par\smallskip
+      $AGEF p_{12} \land AGEF p_{22}$
+  \end{Itemize}
+
+  \par\bigskip
+  \uncover<4->{%
+    \Bmph{Liveness properties:}
+    \par\smallskip
+    $AG\zeta$ besagt: "`$\zeta$ ist in allen Berechnungen immer wahr"'
+    \par\smallskip
+    $AGAF\zeta$ besagt: "`$\zeta$ ist in allen Berechnungen $\infty$ oft wahr"'
+    \par\smallskip
+    $AGEF\zeta$ besagt: "`jede begonnene Berechnung kann so fortge-\\
+    \hspace*{28mm}setzt werden, dass $\zeta$ irgendwann wahr wird."'
+  }
+
+  \note{
+    \textbf{9:10}
+    
+    \par
+  }
+\end{frame}
+
+% ------------------------------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Zurück zu unseren Beispielen: Spezifikationen in CTL}
+
+  \Bmph{Beispiel Mikrowelle}
+  \begin{Itemize}
+    \item
+      "`Wenn Fehler auftritt, ist er nach endlicher Zeit behoben."'
+      \par\smallskip
+      $AG(e \to AF \neg e)$ \hfill {\footnotesize ($e \in \PROP$ steht für "`Error"')}
+      \par\smallskip
+    \item<2->
+      "`Wenn Fehler auftritt, \emph{kann} er nach endl.\ Z.\ behoben werden"'
+      \par\smallskip
+      $AG(e \to EF \neg e)$
+      \par\smallskip
+    \item<3->
+      "`Wenn die Mikrowelle gestartet wird, \\
+      beginnt sie nach endlicher Zeit zu heizen."'
+      \par\smallskip
+      $AG(s \to AF h)$ \hfill {\footnotesize ($s,h \in \PROP$ stehen für "`Start"' bzw.\ "`Heat"')}
+      \par\smallskip
+    \item<4->
+      "`Wenn die Mikrowelle gestartet wird, \\
+      \emph{ist es möglich}, dass sie nach endlicher Zeit zu heizen beginnt."'
+      \par\smallskip
+      $AG(s \to EF h)$
+      \par\bigskip
+%         \emphitem<5->
+%           $AG(\zeta_1 \to AF \zeta_2)$,~
+%           $AG(\zeta_1 \to EF \zeta_2)$:~
+%           \Bmph{progress properties}
+  \end{Itemize}
+
+  \par\medskip
+  \uncover<5->{%
+    \Bmph{Progress properties:}~
+    $AG(\zeta_1 \to AF \zeta_2)$,~
+    $AG(\zeta_1 \to EF \zeta_2)$~ bedeuten: \\
+    \par\smallskip
+    Wann immer $\zeta_1$ eintritt, ist nach endlicher Zeit $\zeta_2$ "`garantiert"'
+  }
+
+  \note{
+    \textbf{9:12}
+    
+    \par
+  }
+\end{frame}
+
+% ------------------------------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Ausdrucksstärke von CTL versus LTL}
+  
+  \begin{definition}
+    Seien $\zeta$ eine CTL-Zustandsformel und $\varphi$ eine LTL-Formel.
+    
+    \par\smallskip
+    $\zeta$ und $\varphi$ sind \Bmph{äquivalent,} geschrieben \Bmph{$\zeta \equiv \varphi$,}
+    wenn für alle Kripke-Strukturen $\Smc = (S,S_0,R,\ell)$ gilt:
+    \begin{center}
+      $\Smc \models \zeta$
+      \quad gdw.\quad
+      $\Smc \models \varphi$
+    \end{center}
+  \end{definition}
+
+  \par\medskip
+  \Bmph{Zur Erinnerung:}
+  %
+  \begin{Itemize}
+    \item
+      $\Smc \models \zeta$, wenn $s_0 \models \zeta$ für \Emph{alle} $s_0 \in S_0$
+    \item
+      $\Smc \models \varphi$, wenn $\pi,0 \models \varphi$ für \Emph{alle} $\pi \in \Paths(s_0)$ und \Emph{alle} $s_0 \in S_0$
+  \end{Itemize}
+  
+  \note{
+    \textbf{9:15: 5\,min Pause, dann 2\,min für Folie}
+    
+    \par
+  }
+\end{frame}
+
+% ------------------------------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Ausdrucksstärke von CTL versus LTL}
+
+  \begin{lemma}
+    $AFAGp \not\equiv FGp$
+    \label{lem:AFAGp_not_equiv_FGp}
+  \end{lemma}
+
+  \uncover<2->{%
+    \Bmph{Beweis.}~
+    Betrachte Kripke-Struktur $\calS$:
+%    \raisebox{-4pt}{\Fig0}%
+    \begin{tikzpicture}[%
+      node distance=12mm,>=Latex,baseline=-2pt,
+      initial text="", initial where=below left,
+      every state/.style={draw=black,thick,fill=none,inner sep=.8mm,minimum size=5mm},
+      accepting/.style={double distance=1.5pt, double=white},
+      every edge/.style={draw=black,thick}
+    ]
+      \node[state,initial] (s0)               {$s_0$};
+      \node[state]         (s1) [right of=s0] {$s_1$};
+      \node[state]         (s2) [right of=s1] {$s_2$};
+      
+      \path[->] (s0) edge              (s1)
+                (s1) edge              (s2)
+                (s0) edge [loop below] ()
+                (s2) edge [loop below] ();
+      
+      \node () [above right=-1mm and -1mm of s0] {$p$};
+      \node () [above right=-1mm and -1mm of s2] {$p$};
+    \end{tikzpicture}
+    
+    \begin{Itemize}
+      \item
+        alle Pfade $\pi \in \Paths(s_0)$ erfüllen $FGp$
+      \item<3->
+        aber $\calS \not\models AFAGp$:
+        \par\medskip
+        \begin{tabular}{@{\quad}ll@{\qquad}l@{}}
+          \uncover<4->{              & $s_0s_1s_2^\omega \not\models Gp$ & {\small wegen $p \notin \ell(s_1)$}              \\[1pt] }
+          \uncover<5->{$\Rightarrow$ & $s_0 \not\models AGp$             & {\small weil $s_0s_1s_2^\omega \in \Paths(s_0)$} \\[1pt] }
+          \uncover<6->{$\Rightarrow$ & $s_0^\omega \not\models FAGp$     & {\small weil $s_0^\omega$ nur aus $s_0$ besteht} \\[1pt] }
+          \uncover<7->{$\Rightarrow$ & $s_0 \not\models AFAGp$           & {\small weil $s_0^\omega \in \Paths(s_0)$}               }
+        \end{tabular}
+    \end{Itemize}
+    \uncover<8->{%
+      \qed
+    }
+  }
+
+  \note{
+    \textbf{9:22}
+    
+    \par
+  }
+\end{frame}
+
+% ------------------------------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Ausdrucksstärke von CTL versus LTL}
+  
+  \begin{lemma}
+    Sei $\zeta$ eine CTL-Zustandsformel und $\zeta'$ die LTL-Formel,
+    die man durch Entfernen aller Pfadquantoren aus $\zeta$ erhält.
+    Dann gilt:
+    %
+    \begin{center}
+      $\zeta \equiv \zeta'$ oder es gibt keine zu $\zeta$ äquivalente LTL-Formel.
+    \end{center}
+    \par\vspace*{-.4\baselineskip}
+    \label{lem:aequiv_LTL_Fmln}
+  \end{lemma}
+
+  \par
+  \Bmph{Ohne Beweis.} (Clarke, Draghicescu 1988)
+  
+  \parII
+  \uncover<2->{%
+    \begin{lemma}
+      \begin{Enumerate}
+        \item[\Bmph{(1)}]
+          Es gibt keine zu $AFAGp$ äquivalente LTL-Formel.
+        \item[\Bmph{(2)}]
+          Es gibt keine zu $FGp$ äquivalente CTL-Zustandsformel.
+      \end{Enumerate}
+    \end{lemma}
+  }
+  
+  \parI
+  \uncover<3->{%
+    \Bmph{Beweis.}
+    
+    \parI
+    \Bmph{(1)} folgt aus Lemmas~\ref{lem:AFAGp_not_equiv_FGp} und~\ref{lem:aequiv_LTL_Fmln}
+  }
+
+  \parI
+  \uncover<4->{%
+    \Bmph{(2)} siehe Tafel \Tafel~~~~~
+    \par\vspace*{-\baselineskip}\qed
+  }
+  
+  \note{
+    \textbf{9:26 bis 9:38}
+    
+    \par
+  }
+\end{frame}
+
+% ------------------------------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Ausdrucksstärke von CTL versus LTL}
+  
+  Auch \Bmph{progress properties} sind \Emph{nicht} in LTL ausdrückbar:
+  
+  \begin{lemma}
+    Sei $\zeta = AG(p \to EF p')$.
+    Es gibt keine zu $\zeta$ äquivalente LTL-Formel.
+  \end{lemma}
+
+  \parI
+  \uncover<2->{%
+    \Bmph{Beweis.}
+    Angenommen, es gebe LTL-Formel $\varphi \equiv \zeta$.
+    
+  }
+
+  \parII    
+  \uncover<3->{%
+    Betrachte Kripke-Strukturen
+
+    \par\vspace*{-.6\baselineskip}
+    \begin{center}    
+      $\Smc_1$
+      \begin{tikzpicture}[%
+        node distance=12mm,>=Latex,baseline=-2pt,
+        initial text="", initial where=below left,
+        every state/.style={draw=black,thick,fill=none,inner sep=.8mm,minimum size=5mm},
+        accepting/.style={double distance=1.5pt, double=white},
+        every edge/.style={draw=black,thick}
+      ]
+        \node[state,initial] (s0)               {$s_0$};
+        \node[state]         (s1) [right of=s0] {$s_1$};
+        
+        \path[->] (s0) edge              (s1)
+                  (s0) edge [loop below] ()
+                  (s1) edge [loop below] ();
+                  
+        \node () [above right=-1mm and -1mm of s0] {$p$};
+        \node () [above right=-1mm and -1mm of s1] {$p'$};
+      \end{tikzpicture}
+      \qquad
+      $\Smc_2$
+      \begin{tikzpicture}[%
+        node distance=12mm,>=Latex,baseline=-2pt,
+        initial text="", initial where=below left,
+        every state/.style={draw=black,thick,fill=none,inner sep=.8mm,minimum size=5mm},
+        accepting/.style={double distance=1.5pt, double=white},
+        every edge/.style={draw=black,thick}
+      ]
+        \node[state,initial] (s2)               {$s_2$};
+        
+        \path[->] (s2) edge [loop below] ();
+        
+        \node () [above right=-1mm and -1mm of s2] {$p$};
+      \end{tikzpicture}
+    \end{center}
+  }
+
+  \par\vspace*{-.6\baselineskip}
+  \uncover<4->{%
+    Dann gilt $\Smc_1 \models \zeta$.
+  }
+
+  \parII
+  \uncover<5->{%
+    Also auch $\Smc_1 \models \varphi$.
+  }
+    
+  \parII
+  \uncover<6->{%
+    Da $\Paths(s_2) \subseteq \Paths(s_0)$, gilt auch $\Smc_2 \models \varphi$.
+  }
+
+  \parII
+  \uncover<7->{%
+    Aber offensichtlich $\Smc_2 \not\models \zeta$.~ \lightning
+    \qed
+  }
+
+  \note{
+    \textbf{9:38}
+
+    \par
+  }
+\end{frame}
+  
+% ------------------------------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Ausdrucksstärke von CTL versus LTL}
+  
+  \par\bigskip
+  \uncover<+->{%
+    Erweiterung von LTL und CTL: \Bmph{CTL*}
+    \par\vspace*{-2pt}
+    {\footnotesize CTL*: 1986 von E.\ A.\ Emerson und J.\ Y.\ Halpern (${}^*$1953, Inform., Cornell)}
+  }
+
+  \note{
+    \textbf{9:42}
+    
+    \par
+  }
+\end{frame}
+
+% ------------------------------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Model-Checking für CTL (Skizze)}
+
+  \Bmph{Standard-Algorithmus} ("`bottom-up labelling"', ohne Automaten):
+
+  \par\bigskip
+  Eingabe: Kripke-Str.\ \calS, Zust.\ $s_0$, CTL-Zustandsformel $\zeta$
+  \par
+  Frage: $s_0 \models \zeta$\,?
+  
+  \par\bigskip
+  Vorgehen:
+  \begin{Itemize}
+    \item<2->
+      Stelle $\zeta$ als Baum dar\hspace*{\fill} (Bsp.\ siehe Tafel) \Tafel
+    \item<3->
+      Gehe Baum von unten nach oben durch\\
+      und markiere Zustände $s$ in $\calS$ mit der jeweiligen Teilformel,\\
+      wenn sie in $s$ erfüllt ist \TafelForts
+    \item<4->
+      Akzeptiere gdw.\ $s_0$ mit $\zeta$ markiert ist
+  \end{Itemize}
+
+  \par\bigskip
+  \uncover<5->{%
+    \Bmph{Komplexität:} \PT-vollständig \quad (LTL-MC: \PSPACE-vollständig)
+    
+    \parII
+    \scalebox{.98}[1]{Dafür ist CTL-SAT \EXP-vollständig\quad (LTL-SAT: \PSPACE-vollst.).}
+  }
+
+  \note{
+    \textbf{9:42 bis 9:53}
+    
+    \par
+  }
+\end{frame}
+
+% ------------------------------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Model-Checking für CTL mit Baumautomaten}
+
+  \Bmph{Automatenbasierte Entscheidungsprozedur für CTL}
+  \begin{Itemize}
+    \item[\dots]
+      basiert auf \Bmph{alternierenden Baumautomaten}\\[.4\baselineskip]
+      \begin{small}
+        (Erweiterung des Begriffs der nichtdeterminist.\ Baumautomaten; \\
+        siehe Teil 5 der Vorlesung)
+        \par
+      \end{small}
+%    \item
+%      voraussichtlich in Teil 5 der Vorlesung anreißen %\\
+%%           {\small (siehe V\,$+$\,Ü "`Verifikation unendlicher Systeme"', WS 13/14)}
+  \end{Itemize}
+
+  \par\bigskip
+  \uncover<2->{%
+    \Bmph{Verwandt:}
+    \par\smallskip
+    Automatenbasierte Entscheidungsprozedur für CTL*-\Emph{Erfüllbarkeit}
+    \begin{Itemize}
+      \item
+        basiert auf nichtdeterministischen Rabin-Baumautomaten
+      \item
+        technisch aufwändige Konstruktion
+      \item
+        hier nicht behandelt %\\
+    \end{Itemize}
+  }
+
+  \par\bigskip
+  \uncover<3->{%
+    \Bmph{Es folgt:}
+    \begin{Itemize}
+      \item[]
+        Überblick "`klassische"' nichdeterministische Baumautomaten
+    \end{Itemize}
+  }
+
+  \note{
+    \textbf{9:53 bis 9:55, 5\,min Reserve.}
+    
+    \parIII
+    CTL*-MC ist PSpace-vollst., CTL*-SAT 2ExpTime-vollst.\\
+    Siehe Baier \& Katoen S.\ 430.
+    
+    \par
+  }
+\end{frame}
+

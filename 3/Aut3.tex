@@ -1,0 +1,294 @@
+%\setbeamertemplate{navigation symbols}{}
+%\beamertemplatenavigationsymbolsempty
+
+\setcounter{part}{3}
+
+%%% \showfromto{5}{5}
+
+\begin{document}
+
+  % ------------------------------------------------------------------------------------------
+  \begin{frame}
+    \titlepage
+    \note{
+      \uzz{Di:~ S.\ 74\quad Mi:~ S.\ 111}{8:40}
+      
+      \parII
+      \textbf{TODO:} 
+      Es ist nicht günstig, die ganzen anderen Automatentypen \\
+      (Müller etc.) im Abschnitt "`Determinisierung"' zu haben.
+      
+      \parI
+      $\leadsto$ Kapitel neu aufteilen, Tafelanschriebe umordnen, Nummern+Verweise im Skript anpassen:
+      %
+      \par\vspace*{-4pt}
+      \begin{enumerate}
+        \item
+          Motivation
+          \par\vspace*{-4pt}
+        \item
+          Büchi-Automaten (mit Def. DBA am Ende)
+          \par\vspace*{-4pt}
+        \item 
+          Abschlusseig. und Chrakterisierungen (einschl. Charakt. DBAs und deren "`Schwäche"')
+          \par\vspace*{-4pt}
+        \item 
+          Alternative Akzeptanzbedingungen
+          \par\vspace*{-4pt}
+        \item 
+          Determinisierung
+          \par\vspace*{-4pt}
+        \item 
+          Entscheidungsprobleme
+          \par\vspace*{-4pt}
+        \item 
+          Model-Checking
+      \end{enumerate}
+      %
+      \textbf{Außerdem:}~ Safra-Konstruktion anders einführen/beweisen, s.\ TODO.txt
+      
+      \par
+    }
+  \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+  \begin{frame}
+    \frametitle{Überblick}
+    \tableofcontents
+    \note{
+      \uz{8:40}
+      
+      \par
+    }
+  \end{frame}
+
+  % ==============================================================================================
+  % ==============================================================================================
+  \section[Motiv.]{\protect\emph{Motivation}}
+  \input{1_motiv}
+  
+  % ==============================================================================================
+  % ==============================================================================================
+  \section[Büchi-Aut.]{Grundbegriffe und Büchi-Automaten}
+  \input{2_buechi}
+
+  % ==============================================================================================
+  % ==============================================================================================
+  \section[Abschlusseig.]{Abschlusseigenschaften}
+  \input{3_abschluss}
+  
+  % ==============================================================================================
+  % ==============================================================================================
+  \section[Charakt.]{Charakterisierung}
+  \input{4_charakt}
+
+  % ==============================================================================================
+  % ==============================================================================================
+  \section[Determinismus]{Deterministische Büchi-Automaten und Determinisierung}
+  \input{5_determ}
+
+  % ==============================================================================================
+  % ==============================================================================================
+  \section[Entscheidungsprobl.]{Entscheidungsprobleme}
+  \input{6_entscheid}
+
+  % ==============================================================================================
+  % ==============================================================================================
+  \section[\protect\emph{Model-Checking}]{\protect\emph{Anwendung: Model-Checking in Linearer Temporallogik (LTL)}}
+  \input{7_model_checking}
+
+    
+
+  \AtBeginSection{\relax}
+  % ==============================================================================================
+  % ==============================================================================================
+  \section*{}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Damit sind wir am Ende dieses Kapitels.}
+%       \par\bigskip
+      \uncover<1->{%
+        \begin{center}
+          \includegraphics[height=.5\textheight]{img/xkcd_1195_flowchart.png}
+          \par
+          \begin{footnotesize}
+            {\footnotesize \url{http://xkcd.com/1195} (CC BY-NC 2.5)}
+            \par
+          \end{footnotesize}
+          \par\bigskip\bigskip
+          \begin{Huge}
+            \Bmph{Vielen Dank.}
+          \end{Huge}
+        \end{center}
+      }
+      \note{~}
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Literatur für diesen Teil (1)}
+      \begin{small}
+        \begin{thebibliography}{99}
+          \bibitem{Tho90}
+            Wolfgang Thomas.
+            \newblock
+            Automata on Infinite Objects. 
+            \newblock
+            In J.\ van Leeuwen (Hrsg.):\\
+            Handbook of Theoretical Computer Science.\\
+            Volume B: Formal Models and Sematics.
+            \newblock
+            Elsevier, 1990, S. 133--192.
+            \newblock
+            SUB, Zentrale:
+            \texttt{a inf 400 ad/465-2}
+          \bibitem{Tho97}
+            Wolfgang Thomas.
+            \newblock
+            Languages, automata, and logic.
+            \newblock
+            In G. Rozenberg and A. Salomaa (Hrsg.:)\\
+            Handbook of Formal Languages. Volume 3: Beyond Words.
+            \newblock
+            Springer, 1997, S. 389--455.
+            \newblock
+            SUB, Zentrale:
+            \texttt{a inf 330/168-3}
+        \end{thebibliography}
+        \par
+      \end{small}
+      \note{~}
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Literatur für diesen Teil (2)}
+      \begin{small}
+        \begin{thebibliography}{99}
+          \bibitem{Rog02}
+            Markus Roggenbach.
+            \newblock
+            Determinization of Büchi Automata.
+            \newblock
+            In E.\ Grädel, W.\ Thomas, T.\ Wilke (Hrsg.):\\
+            Automata, Logics, and Infinite Games.
+            \newblock
+            LNCS 2500, Springer, 2002, S. 43--60.
+            \newblock
+            Erklärt anschaulich Safras Konstruktion.\\
+            \url{http://www.cs.tau.ac.il/~rabinoa/Lncs2500.zip}
+            \newblock
+            Auch erhältlich auf Anfrage in der BB Mathematik im MZH:\\
+            \texttt{19h inf 001 k/100-2500}
+          \bibitem{Bie09}
+            Meghyn Bienvenu.
+            \newblock
+            Automata on Infinite Words and Trees.
+            \newblock
+            Vorlesungsskript, Uni Bremen, WS 2009/10.\hfill Kapitel 2.
+            \newblock
+            \url{http://www.informatik.uni-bremen.de/tdki/lehre/ws09/automata/automata-notes.pdf}
+        \end{thebibliography}
+        \par
+      \end{small}
+      \note{~}
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Literatur für diesen Teil (3)}
+      \begin{small}
+        \begin{thebibliography}{99}
+          \bibitem{BK08}
+            Christel Baier, Joost-Pieter Katoen.
+            \newblock
+            Principles of Model Checking.
+            \newblock
+            MIT Press 2008.
+            \newblock
+            Abschnitt 4.3 "`Automata on Infinite Words"'\\
+            Abschnitt 5.2 "`Automata-Based LTL Model Checking"'
+            \newblock
+            SUB, Zentrale:
+            \texttt{a inf 440 ver/782},~ \texttt{a inf 440 ver/782a}
+          \bibitem{CGP99}
+            Edmund M.\ Clarke, Orna Grumberg, Doron A.\ Peled.
+            \newblock
+            Model Checking.
+            \newblock
+            MIT Press 1999.
+            \newblock
+            Abschnitt 2 "`Modeling Systems"' bis Mitte S.\ 14,\\
+            Abschnitt 2.2.3\,$+$2.3 "`Concurrent Programs"' und "`Example \dots"',\\
+            Abschnitt 3 "`Temporal Logics"',\\
+            Abschnitt 9.1 "`Automata on Finite and Infinite Words"'.%,\\
+%             Abschnitt 9.4 "`Translating LTL into Automata"'.
+            \newblock
+            SUB, Zentrale:
+            \texttt{a\hfill inf\hfill 440\hfill ver/780(6)},\hfill\hfill  \texttt{a\hfill inf\hfill 440\hfill ver/780(6)a}
+        \end{thebibliography}
+        \par
+      \end{small}
+      \note{~}
+    \end{frame}
+
+%   % ------------------------------------------------------------------------------------------
+%     \begin{frame}
+%       \frametitle{Literatur für diesen Teil (2)}
+%       \begin{small}
+%         \begin{thebibliography}{99}
+%           \bibitem{BW98}
+%             Anne Br{\"u}ggemann-Klein, Derick Wood.
+%             \newblock
+%             One-Unambiguous Regular Languages.
+%             \newblock
+%             Information and Computation, 142:1998, S.\ 182--206.
+%             \newblock
+%             \url{http://dx.doi.org/10.1006/inco.1997.2695}
+%             \newblock
+%             Grundlegende Resultate für deterministische reguläre Ausdrücke.          
+%         \end{thebibliography}
+%         \par
+%       \end{small}
+%       \note{~}
+%     \end{frame}
+% 
+% 
+%   \AtBeginSection{\frame{\frametitle{Und nun \dots}\tableofcontents[currentsection]\note{~}}}
+  
+
+%     % ------------------------------------------------------------------------------------------
+%     \begin{frame}
+%       \frametitle{Ausblick}
+% 
+%       \dots
+%       
+%       \par\bigskip
+%       \uncover<2>{%
+%         \begin{center}
+%           \begin{Huge}
+%             \dblu{\textbf{Thank you.}}
+%           \end{Huge}
+%         \end{center}
+%       }
+%       \note{~}
+%     \end{frame}
+
+  % ==============================================================================================
+  % ==============================================================================================
+  \appendix
+  \input{8_appendix}
+
+\mode<presentation>{
+  {   
+    \setbeamercolor{background canvas}{bg=black}
+    \begin{frame}<handout:0>[plain]{}
+      \note{~}
+    \end{frame}
+  }
+}
+
+
+
+\end{document}

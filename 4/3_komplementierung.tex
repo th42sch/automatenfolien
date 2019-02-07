@@ -1,0 +1,898 @@
+% ------------------------------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Überblick}
+
+  \Bmph{Ziel dieses Abschnitts:}
+  \par\smallskip
+  Lösen Komplementierung mit Hilfe eines bekannten Resultates
+  über Gewinnstrategien in einer bestimmten Art (abstrakter) Spiele
+
+  \par\medskip
+  \Bmph{Vorgehen:}
+  \begin{Itemize}
+    \item
+      \mbox{\scalebox{.98}[1]{Ordnen jedem N\Emph{P}BA \Aut{A} und Baum $t$
+      ein 2-Personen-Spiel \Game{A}{t} zu}\hspace*{-10mm}} \\
+%      \par\smallskip
+      {\small (Beschränkung auf N\Emph{P}BAs ist unerheblich, siehe Satz~\ref{thm:muller_vs_paritaet})}
+%           \par\smallskip
+    \item
+      Dann wird leicht zu sehen sein:
+      \par\smallskip
+      $\Aut{A}$ akzeptiert $t$ ~$\Leftrightarrow$~ Spielerin 1 hat Gewinnstrategie in \Game{A}{t}
+%           \par\smallskip
+    \item
+      Ein Resultat aus der Spieltheorie impliziert:
+      \par\smallskip
+      In \Game{A}{t} hat immer \Emph{genau eine Spielerin eine Gewinnstrategie,}\\
+      \Emph{die nicht vom bisherigen Spielverlauf abhängt}
+%           \par\smallskip
+    \item
+%           Konstruieren $\Aut{A}'$ anhand der Gewinnstrategie von Spielerin 2;\\
+%           zeigen: $L_\omega(\Aut{A}') = \overline{L_\omega(\Aut{A})}$
+      Konstruieren $\Aut{A}'$, so dass gilt:
+      \par\smallskip
+      $\Aut{A}'$ akzeptiert $t$ ~$\Leftrightarrow$~ \Emph{Spielerin 2 hat Gewinnstrategie in \Game{A}{t}}
+      \par\smallskip
+      Dann folgt $L_\omega(\Aut{A}') = \overline{L_\omega(\Aut{A})}$
+  \end{Itemize}
+  
+
+  \note{%
+    \textbf{16:00}
+    
+    \par
+  }
+\end{frame}
+
+% ------------------------------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Intuitive Beschreibung des Spiels \Game{A}{t}}
+  
+  Zwei Spielerinnen \AUT (Automat), \PF (Pfadfinderin)
+  \begin{Itemize}
+    \item
+      sind abwechselnd an der Reihe
+    \item
+      bewegen sich pro Runde 1 Schritt im Baum
+      durch Markieren von Positionen mit Zuständen; zu Beginn: $(\varepsilon,q_I)$,~ $q_I \in I$
+  \end{Itemize}
+
+  \par\bigskip
+  \uncover<2->{%
+    In jeder Runde wählt
+    \begin{Itemize}
+      \item
+        \mbox{\AUT eine Transition, die auf die markierte Position anwendbar ist\hspace*{-10mm}}
+      \item
+        \PF einen Kindknoten und verschiebt Markierung dorthin
+    \end{Itemize}
+  }
+
+  \par\bigskip
+  \uncover<3->{%
+    Spiel läuft $\infty$ lange, erzeugt $\infty$ Folge $r=q_0q_1q_2$ von Zuständen\\
+    (bestimmt durch die gewählten Transitionen)%
+  }
+
+  \par\bigskip
+  \uncover<4->{%
+    \AUT gewinnt, wenn $r$ der Akzeptanzbedingung von \Aut{A} entspricht;\\
+    sonst gewinnt \PF
+
+    \par%\smallskip
+    \begin{footnotesize}
+      \mbox{(d.\,h.\ \AUT versucht, \Aut{A} zum Akzeptieren zu bringen; \PF versucht das zu verhindern)\hspace*{-10mm}}
+      \par
+    \end{footnotesize}
+  }
+
+  \par\bigskip
+  \uncover<5->{%
+    Skizze: s.\ Tafel \Tafel
+  }
+
+  \note{%
+    \textbf{16:03 bis 16:12}
+    
+    \parI
+    $q_I$ bezeichne ab hier einen beliebigen Anfangszustand; \\
+    brauchen "`$q_0$"' später noch anderweitig.
+    
+    \parII
+    Es wird also ein Baumautomat mit \textbf{beliebiger Akzeptanzbedingung} (Büchi, Muller, whatever) zugrunde gelegt.
+    
+    \par
+  }
+\end{frame}
+
+% ------------------------------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Genaue Beschreibung des Spiels \Game{A}{t}}
+
+  Spiel ist ein unendlicher Graph
+  \begin{Itemize}
+    \item<+->
+      Knoten sind die \Bmph{Spielpositionen}:
+      \begin{Itemize}
+        \item
+          für \AUT: $\{(p,q) \mid p \in \{0,1\}^*,~ q \in Q\}$~ (Positionen im Baum)
+        \item
+          für \PF: $\{(q,t(p),q_0,q_1) \in \Delta \mid p \in \{0,1\}^*\}$\quad (Transitionen)
+      \end{Itemize}
+      \par\smallskip
+    \item<+->
+      Kanten sind die möglichen \Bmph{Spielzüge}:
+      \begin{Itemize}
+%        \item
+%%               für \AUT:
+%          $(p,q) \to (q',t(p'),q_0,q_1)$, wenn $p=p'$ und $q=q'$
+%        \item
+%%               für \PF:
+%          $(q,t(p),q_0,q_1) \to (p',q')$, wenn $q'=q_i$ und $p'=pi$ für ein $i$
+        \item
+          $(p,q) \to (q,t(p),q_0,q_1)$
+        \item
+          \begin{tabular}[t]{@{}l@{~}c@{~}l@{}}
+            $(q,t(p),q_0,q_1)$ & $\to$ & $(p0,q_0)$ \\
+                               & \hspace*{-12pt}\raisebox{4pt}{\turnbox{-25}{$\to$}} & $(p1,q_1)$
+          \end{tabular}
+      \end{Itemize}
+      \par\smallskip
+    \item<+->
+      Startknoten: $(\varepsilon,q_I)$ für $q_I \in I$\quad (o.\,B.\,d.\,A.\ $I=\{q_I\}$)
+  \end{Itemize}
+
+  \par\bigskip
+  \uncover<+->{%
+    Jede mögliche $\infty$ Folge von Spielzügen entspricht\\
+    einem $\infty$ Pfad im Spielbaum \Game{A}{t}
+  }
+
+  \par\bigskip
+  \uncover<+->{%
+    Knoten $v'$ \Bmph{erreichbar} von Knoten $v$:\\
+    es gibt endliche Folge von Spielzügen von $v$ nach $v'$
+  }
+
+  \note{
+    \textbf{16:12}
+    
+    \parII
+    \textbf{Achtung:}~ Ab jetzt bezeichnet $p$ Positionen im Baum, nicht mehr Zustände!
+    
+    \par
+  }
+\end{frame}
+
+% ------------------------------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Spielstrategien}
+
+  \Bmph{Strategie ab Spielposition $v$} für Spielerin $X \in \{\AUT,\PF\}$:
+  \par\smallskip
+  Funktion, die jeder Zugfolge $v\dots v'$ mit $v'$ Spielposition für $X$ \\
+  einen in $v'$ möglichen Zug zuweist
+  \par%\smallskip
+  \begin{footnotesize}
+    (legt fest, welchen Zug $X$ in jeder von $v$ aus erreichbaren Spielposition macht)
+    \par
+  \end{footnotesize}
+
+  \par\bigskip
+  \uncover<2->{%
+    \Bmph{Gewinnstrategie} für Spielerin $X \in \{\AUT,\PF\}$:
+    \par\smallskip
+    Strategie, die sicherstellt, dass $X$ gewinnt,\\
+    \emph{unabhängig} von den Zügen der Gegenspielerin \Tafel
+  }
+
+  \par\bigskip
+  \uncover<3->{%
+    \Bmph{gedächtnislose Strategie:}
+    \par\smallskip
+    Strategie, die nur von $v'$ abhängt, nicht von den vorigen Positionen
+  }
+
+  \note{
+    \textbf{16:17 bis 16:26}
+    
+    \par
+  }
+\end{frame}
+
+% ------------------------------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Akzeptanz mittels Gewinnstrategien}
+
+  \begin{Lemma}
+    Seien $\Aut{A} = (Q,\Sigma,\Delta,\{q_I\},c)$ ein NPBA und $t$ ein $\Sigma$-Baum.\\ Dann gilt:
+    \par\smallskip
+    $t \in L_\omega(\Aut{A})$ ~$\Leftrightarrow$~ \AUT hat Gewinnstrategie in $\Game{A}{t}$ ab Position $(\varepsilon,q_I)$%
+    \label{lem:akzeptanz_vs_gewinnstrategien}%
+%         \par\vspace*{-.4\baselineskip}
+  \end{Lemma}
+
+  \par\bigskip
+  \uncover<2->{%
+    \Bmph{Beweis:} 
+
+    \par\smallskip
+    Konstruiere Gewinnstrategie direkt aus einem erfolgreichen Run\\
+    und umgekehrt
+
+%    \par\medskip
+%    Details: s.\ Tafel \Tafel~~~~
+%    \par\vspace*{-.95\baselineskip}\qed
+  }
+
+  \note{
+    \textbf{16:26}
+    
+%    \parII
+%    Nach wie vor beliebige Akzeptanzbedingung (deshalb N\textbf{x}BA)
+    
+    \par
+  }
+\end{frame}
+
+% ------------------------------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Akzeptanz mittels Gewinnstrategien}
+  
+  \begin{block}{}
+    \Bmph{"`$t \in L_\omega(\Aut{A})$ ~$\Rightarrow$~ \AUT hat Gewinnstrategie in $\Game{A}{t}$ ab Position $(\varepsilon,q_I)$"'}
+  \end{block}
+  
+  \parII
+  Gelte $t \in L_\omega(\Aut{A})$ und sei $r$ erfolgreicher Run von $\Aut{A}$ auf $t$.
+  
+  \par
+  Konstruiere Gewinnstrategie für \AUT wie folgt aus $r$.
+  %
+  \begin{Itemize}
+    \item<2->
+      in Startposition $(\varepsilon,q_I)$ wähle
+      $(r(\varepsilon),t(\varepsilon),r(0),r(1))$
+    \item<3->
+      in allen anderen Spielpos.\ $(p,q)$ wähle
+      $(q,t(p),r(p0),r(p1))$
+  \end{Itemize}
+  
+  \parI
+  \uncover<4->{%
+    Wenn \AUT diese Strategie befolgt,
+    dann entspricht die im Spiel erzeugte Zustandsmenge
+    einem Pfad in $r$.
+  }
+
+  \parII
+  \uncover<5->{%
+    Da $r$ erfolgreich, gewinnt \AUT nach Definition von $G_{\Aut{A},t}$\,.
+  }
+
+  \parII
+  \uncover<6->{%
+    \begin{block}{}
+      \Bmph{"`\AUT hat Gewinnstrategie in $\Game{A}{t}$ ab Position $(\varepsilon,q_I)$ ~$\Rightarrow$~ $t \in L_\omega(\Aut{A})$"'}
+    \end{block}
+    \Tafel~~~~
+    \par\vspace*{-.95\baselineskip}\qed
+  }
+  
+  \note{
+    \textbf{16:28 bis 16:38}
+    
+    \par
+  }
+\end{frame}
+
+% ------------------------------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Determiniertheit von Paritätsspielen}
+
+  Klassisches Resultat aus der Spieltheorie, hier nicht bewiesen:
+
+  \begin{Satz}[Emerson \& Jutla 1991, Mostowski 1991]
+    Alle Paritätsspiele sind \Bmph{gedächtnislos determiniert}:\\
+    genau eine der Spielerinnen hat eine \textup{gedächtnislose} Gewinnstrategie.%
+    \label{thm:gedaechtnislos_determiniert}
+  \end{Satz}
+
+%       \begin{footnotesize}
+%         E.\ A.\ Emerson und C.\ S.\ Jutla 1991,\quad A.\ Mostowski 1991 %\\
+%         (ohne "`gedächtnislos"': D.\ A.\ Martin 1975)
+%         \par
+%       \end{footnotesize}
+
+  \par\bigskip
+  "`Paritätsspiel"' bezeichnet dabei 2-Personen-Spiele, die
+  %
+  \begin{Itemize}
+    \item
+      auf Graphen gespielt werden, \\
+      deren Knoten mit natürlichen Zahlen markiert sind;
+    \item
+      als Gewinnbedingung für unendliche Spielverläufe \\
+      die Paritätsbedingung verwenden.
+  \end{Itemize}
+  %
+  \parI
+  Für alle $\Aut{A}$ und $t$ ist $\Game{A}{t}$ ein Paritätsspiel.
+  
+  \note{
+    \textbf{16:38}
+    
+    \par
+  }
+\end{frame}
+
+% ------------------------------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Determiniertheit von Paritätsspielen}
+
+  Folgerung aus Satz~\ref{thm:gedaechtnislos_determiniert}:
+
+  \begin{Folgerung}
+    Seien $\Aut{A} = (Q,\Sigma,\Delta,\{q_I\},c)$ ein NPBA und $t$ ein $\Sigma$-Baum.
+    \par\smallskip
+%           Dann gibt es für jede Spielposition $v$ in \Game{A}{t}
+%           eine gedächtnislose Gewinnstrategie für \AUT oder \PF.
+%           \par\smallskip
+%           Insbesondere gibt es ab $(\varepsilon,q_I)$
+%           eine solche.
+    Dann gibt es für jede Spielposition $v$ in \Game{A}{t}
+    --- und insbesondere für $(\varepsilon,q_I)$ ---
+    eine gedächtnislose Gewinnstrategie für \AUT oder \PF.%
+    \label{cor:gedaechtnislose_determiniertheit}%
+%           \par\vspace*{-.4\baselineskip}
+  \end{Folgerung}
+
+  \par\bigskip
+  \uncover<2->{%
+%         Das heißt (mit Lemma \ref{lem:akzeptanz_vs_gewinnstrategien}):
+%         \par\smallskip
+%         $t \in \overline{L_\omega(\Aut{A})}$ ~$\Leftrightarrow$~ \PF hat gedächtnislose GS ab $(\varepsilon,q_I)$ in $\Game{A}{t}$
+% 
+%         \par\bigskip
+%         Benutzen diese nun, um einen NPBA für $\overline{L_\omega(\Aut{A})}$ zu konstruieren
+    \begin{Folgerung}[aus Lemma \ref{lem:akzeptanz_vs_gewinnstrategien} und Folgerung \ref{cor:gedaechtnislose_determiniertheit}]
+      $t \in \overline{L_\omega(\Aut{A})}$ ~$\Leftrightarrow$~ \PF hat gedächtnislose GS ab $(\varepsilon,q_I)$ in $\Game{A}{t}$
+      \label{cor:gedaechtnislose_GS_fuer_PF}%
+%           \par\vspace*{-.4\baselineskip}
+    \end{Folgerung}
+
+    \par%\bigskip
+    \Emph{Ziel:} konstruieren NPBA, um deren Existenz zu testen
+  }
+
+  \note{
+    \textbf{16:39 bis 16:41, 5min Pause}
+    
+    \par
+  }
+\end{frame}
+
+% ------------------------------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Gewinnbäume}
+
+  Betrachten gedächtnislose Gewinnstrategien für \PF
+  als Menge von Funktionen
+  \[
+    f_p : \Delta \to \{0,1\}\qquad \text{für jede Baumposition~} p \in \{0,1\}^*
+  \]
+  \Bmph{Idee:} $f_p$ weist jeder Transition, die \AUT in Baumposition $p$ wählt,
+  einen Spielzug (Richtung 0/1) zu
+
+  \par\bigskip
+  \uncover<2->{%
+    \begin{Itemize}
+      \item
+        Sei $F$ die Menge dieser Funktionen
+      \item
+        Ordnen die $f_p$ in einem \Bmph{$F$-Baum} $s$ an\quad (Strategiebaum)
+    \end{Itemize}
+  }
+
+  \par\bigskip\vspace*{-.6pt}
+  \uncover<3->{%
+    \Bmph{PF-Gewinnbaum} für $t$:\\
+    ein $F$-Baum, der eine Gewinnstrategie für \PF in \Game{A}{t} kodiert
+  }
+
+  \par\medskip
+  \uncover<4->{%
+    \begin{Folgerung}[aus Folgerung \ref{cor:gedaechtnislose_GS_fuer_PF}]
+      $t \in \overline{L_\omega(\Aut{A})}$ ~$\Leftrightarrow$~ es gibt einen \PF-Gewinnbaum für $t$%
+      \label{cor:Gewinnbaum_fuer_PF}%
+%           \par\vspace*{-.4\baselineskip}
+    \end{Folgerung}
+
+    \par%\bigskip
+    \mbox{\Emph{Neues Ziel:} bauen NPBA, um Existenz \PF-Gewinnbaum zu testen\hspace*{-10mm}}
+  }
+
+  \note{
+    \textbf{16:46 bis 16:49}
+    
+    \par
+  }
+\end{frame}
+
+% ------------------------------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Existenz von PF-Gewinnbäumen (\PF-GB)}
+
+  Sei $\Aut{A} = (Q,\Sigma,\Delta,\{q_I\},c)$ ein NPBA und $t$ ein $\Sigma$-Baum
+  \par\smallskip
+  \Emph{Zwischenziel:} Prüfen, ob gegebener $F$-Baum $s$ \Emph{kein} \PF-GB ist
+
+  \par\medskip
+  \uncover<2->{%
+    \Bmph{Idee:}
+    \begin{Itemize}
+      \item
+        Benutzen NPA $\Aut{A}'$\qquad \Emph{($\omega$-Wortautomat)}
+      \item
+        $\Aut{A}'$ prüft für jeden Pfad $\pi$ in t und jeden möglichen Spielzug von \AUT
+        separat, ob Akzeptanzbedingung von \Aut{A} erfüllt ist
+      \item[$\leadsto$]
+        $\Aut{A}'$ akzeptiert $\geqslant 1$ Pfad ~$\Leftrightarrow$~ $s$ ist kein \PF-Gewinnbaum für $t$ 
+    \end{Itemize}
+  }
+
+  \par\bigskip
+  \uncover<3->{%
+    Sei $\pi \in \{0,1\}^\omega$ ein Pfad mit $\pi=\pi_1\pi_2\pi_3\dots$
+    
+    \parI
+    $\Aut{A}'$ arbeitet auf Wörtern der folgenden Form:
+    \[
+%           \Big(s(\varepsilon), t(\varepsilon), \pi[1]\Big),~
+%           \Big(s(\pi[1]), t(\pi[1]), \pi[2]\Big),~
+%           \dots
+      \Big\auf s(\varepsilon), t(\varepsilon), \pi_1\Big\zu~~
+      \Big\auf s(\pi_1), t(\pi_1), \pi_2\Big\zu~~
+      \Big\auf s(\pi_1\pi_2), t(\pi_1\pi_2), \pi_3\Big\zu~~
+      \dots
+    \]
+    Sei \Bmph{\Lst} die Sprache aller dieser Wörter
+  }
+
+  \par\medskip
+  \uncover<4->{%
+    Beispiel: s.\ Tafel \Tafel
+  }
+
+  \note{
+    \textbf{16:49 bis 16:58}
+    
+    \par
+  }
+\end{frame}
+
+% ------------------------------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Konstruktion des Wortautomaten für Gewinnbäume}
+
+  Sei $\Aut{A} = (Q,\Sigma,\Delta,\{q_I\},c)$ ein NPBA und $t$ ein $\Sigma$-Baum
+  \par\smallskip
+  Konstruieren NPA $\Aut{A}' = (Q,\Sigma',\Delta',\{q_I\},c)$ wie folgt:
+  \begin{Itemize}
+    \item<2->
+      $\Sigma' = \Big\{\auf f,a,i\zu ~\Big|~ f \in F,~ a \in \Sigma,~ i \in \{0,1\}\Big\}$
+      \par\smallskip
+    \item<3->
+      $Q,c$ wie in \Aut{A}\quad {\footnotesize (wollen Akzeptanz von \Aut{A} prüfen)}
+      \par\smallskip
+    \item<4->
+      $\Delta' = \Big\{\Big(q,~\auf f,a,i\zu,~q_i'\Big) ~\Big|~ \auf f,a,i\zu \in \Sigma',~ i \in \{0,1\},~$\\
+      \hspace*{\fill} es gibt $\delta = (q,a,q_0',q_1') \in \Delta$ mit $f(\delta)=i\Big\}$
+  \end{Itemize}
+
+  \par\medskip
+  \uncover<5->{%
+    $\Aut{A}'$ prüft für \emph{jeden möglichen} Zug von \AUT,
+    ob \AUT gewinnen kann
+  }
+
+  \par\medskip
+  \uncover<6->{%
+    \begin{lemma}
+      $s$ ist ein \PF-Gewinnbaum für $t$
+      ~$\Leftrightarrow$~
+      $\Lst \cap L_\omega(\Aut{A}') = \emptyset$
+      \label{lem:Gewinnbaum_mittels_Wortautomat}%
+    \end{lemma}
+  }
+
+  \par\smallskip
+  \uncover<7->{%
+    \Bmph{Beweis:} s.\ Tafel \Tafel~~~
+    \par\vspace*{-.95\baselineskip}\qed
+  }
+
+  \note{
+    \textbf{16:58 $\to$ mit Beweis bis 17:30}
+        
+    \parII
+    \textbf{Achtung:} $f \in F$ bedeutet "`Funktion aus der Menge aller Funktionen (Gewinnstrategien)"',
+    nicht "`akzeptierender Zustand"'!
+    
+    \par
+  }
+\end{frame}
+
+
+{
+%   \setbeamertemplate{background}{{\Huge\Rewind\Rewind}}%
+\usebackgroundtemplate{{\Huge\Rewind\Rewind}}%
+%   \def\insertframenumber{\@arabic\c@framenumber}%
+\def\insertframenumber{\relax}%
+%   \AtBeginFrame{\addtocounter{framenumber}{-1}}%
+%   \usebackgroundtemplate{{\Huge\Rewind\Rewind}}%
+% ------------------------------------------------------------------------------------------
+  \begin{frame}<handout:0>
+    \frametitle{Komplementierung:~ Was bisher geschah \hfill \Rewind\Rewind}
+    \addtocounter{framenumber}{-1}%
+
+    \begin{Itemize}
+      \item
+        Gegeben: \Bmph{NPBA $\Autb{A}$} $= (Q,\Sigma,\Delta,\{q_I\},c)$
+      \item
+        Ordnen \Aut{A} und jedem \Bmph{Eingabebaum $t$} ein 2-Pers.-Spiel \Bmph{\Gameb{A}{t}} zu
+      \item
+        Spielerin \AUT wählt Transition für aktuelle Position in $t$;\\
+        \PF wählt Kindsposition\quad ($\leadsto$ gibt schrittweise Pfad vor)
+      \item
+        \AUT gewinnt, wenn gespielter Pfad $c$ entspricht
+    \end{Itemize}
+
+    \begin{block}{Lemma~\ref{lem:akzeptanz_vs_gewinnstrategien}}
+      $t \in L_\omega(\Aut{A})$ ~$\Leftrightarrow$~ \AUT hat Gewinnstrategie in $\Game{A}{t}$ ab Position $(\varepsilon,q_I)$%
+    \end{block}
+
+    \par\bigskip
+    Mittels Resultat aus der Spieltheorie folgt:
+
+    \begin{block}{Folgerung~\ref{cor:gedaechtnislose_GS_fuer_PF}}
+      $t \in \overline{L_\omega(\Aut{A})}$ ~$\Leftrightarrow$~ \PF hat \Emph{gedächtnislose} GS ab $(\varepsilon,q_I)$ in $\Game{A}{t}$
+    \end{block}
+
+    \note{%
+      \textbf{8:30}
+      
+      \par
+    }
+  \end{frame}
+
+% ------------------------------------------------------------------------------------------
+  \begin{frame}<handout:0>
+    \frametitle{Komplementierung:~ Was bisher geschah \hfill \Rewind\Rewind}
+    \addtocounter{framenumber}{-1}%
+
+    \begin{Itemize}
+      \item
+        Betrachten gedächtnislose Gewinnstrategie für \PF als Menge $F$ von Funktionen
+        \[
+          f_p : \Delta \to \{0,1\}\qquad \text{für jede Baumposition~} p \in \{0,1\}^*
+        \]
+      \item
+        Ordnen die $f_p$ in \Bmph{$F$-Baum $s$} an %(Strategiebaum)
+        
+        
+%        \hfill ($F$ $\hat=$ alle $f_p$)
+      \item
+        \Bmph{\PF-Gewinnbaum:} $F$-Baum für eine Gewinnstrategie von \PF
+    \end{Itemize}
+
+    \par\bigskip
+    Dann folgt sofort:
+
+    \begin{block}{Folgerung~\ref{cor:Gewinnbaum_fuer_PF}}
+      $t \in \overline{L_\omega(\Aut{A})}$ ~$\Leftrightarrow$~ es gibt einen \PF-Gewinnbaum für $t$%
+    \end{block}
+
+    \note{%
+      \textbf{8:32}
+      
+      \parII
+      $F$-Baum auch "`Strategiebaum"'; \\
+      $F$ $\hat=$ alle $f_p$
+
+      \par
+    }
+  \end{frame}
+
+% ------------------------------------------------------------------------------------------
+  \begin{frame}<handout:0>
+    \frametitle{Komplementierung:~ Was bisher geschah \hfill \Rewind\Rewind}
+    \addtocounter{framenumber}{-1}%
+
+    Konstruieren NPA $\Aut{A}'$ ($\omega$-Wortautomat!), um \PF-Gewinnbäume zu erkennen:
+    \begin{Itemize}
+      \item
+        Eingabewörter haben die Form
+        \[
+          \Big\auf s(\varepsilon), t(\varepsilon), \pi_1\Big\zu~~
+          \Big\auf s(\pi_1), t(\pi_1), \pi_2\Big\zu~~
+          \Big\auf s(\pi_1\pi_2), t(\pi_1\pi_2), \pi_3\Big\zu~~
+          \dots
+        \]
+      \item
+        Sei \Bmph{\Lst} die Menge aller solcher Wörter
+    \end{Itemize}
+
+    \par\bigskip
+    Konstruktion von $\Aut{A}'$ stellt sicher:
+%    \begin{center}
+%      $s$ ist ein Gewinnbaum für $t$
+%      ~$\Leftrightarrow$~
+%      $\Lst \cap L_\omega(\Aut{A}') = \emptyset$
+%    \end{center}
+    \begin{block}{Lemma~\ref{lem:Gewinnbaum_mittels_Wortautomat}}
+      $s$ ist ein \PF-Gewinnbaum für $t$
+      ~$\Leftrightarrow$~
+      $\Lst \cap L_\omega(\Aut{A}') = \emptyset$
+    \end{block}
+    
+    \note{%
+      \textbf{8:34}
+      
+      \par
+    }
+  \end{frame}
+}
+
+
+
+% ------------------------------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Konstruktion des Komplementautomaten für \Aut{A}}
+
+%       \begin{alertblock}{Gesucht {\small (siehe Folgerung \ref{cor:Gewinnbaum_fuer_PF})}}
+%         NPBA $\Aut{B}$, der $t$ akzeptiert gdw.\ es einen Gewinnbaum für $t$ gibt 
+%       \end{alertblock}
+  \begin{alertblock}{}
+    \Emph{Gesucht:}~ {\small (siehe Folgerung \ref{cor:Gewinnbaum_fuer_PF})}
+    \par\smallskip
+    NPBA $\Aut{B}$, der $t$ akzeptiert gdw.\ es einen \PF-Gewinnbaum für $t$ gibt 
+  \end{alertblock}
+
+  \par\smallskip
+  \uncover<2->{%
+    Wegen Lemma~\ref{lem:Gewinnbaum_mittels_Wortautomat} muss \Aut{B} akzeptieren ~gdw.~
+    $
+      \Lst \subseteq \overline{L_\omega(\Aut{A}')}
+    $
+  }
+
+  \par\bigskip\smallskip
+  \uncover<3->{%
+    Konstruktion von \Aut{B} in 2 Schritten:
+    
+    \par\smallskip
+    \Bmph{Schritt 1}
+    \begin{Itemize}
+      \item
+        \mbox{Sei $\Aut{A}'' = (Q'', \Sigma', \Delta'', q_I'', c'')$ der \Emph{D}PA mit $L_\omega(\Aut{A}'') = \overline{L_\omega(\Aut{A}')}$\hspace*{-10mm}}
+      \item
+        $\Aut{A}''$ ist \Emph{deterministisch:}~ Safra-Konstruktion\\
+        ($+$ Umwandlung zwischen den Automatentypen)
+    \end{Itemize}
+  }
+
+  \par\medskip
+  \uncover<4->{%
+    \Bmph{Schritt 2}
+    \par\smallskip
+    \Aut{B} soll auf jedem Pfad von $t$
+    \begin{Itemize}
+      \item
+        $\Aut{A}''$ laufen lassen
+      \item
+        und "`parallel"' dazu eine Strategie für \PF raten
+    \end{Itemize}
+  }
+
+  \note{%
+    \textbf{8:36 bis 8:40}
+      
+    \parII
+    "`$\Lst \subseteq \overline{L_\omega(\Aut{A}')}$"':~
+    ist äquivalent zu "`$\Lst \cap L_\omega(\Aut{A}') = \emptyset"'$ aus L.~\ref{lem:Gewinnbaum_mittels_Wortautomat}
+    
+    \parIII
+    \textbf{Zu Schritt 1:} \\
+    NPA $\to$ NMA $\to^*$ NBA ---Safra$\to^*$ DRA $\to$ DMA $\to^*$ DPA \\
+    ${}^*$Resultate aus Vorlesung, exp. Blowup \\
+    Es gibt effizientere direkte Konstruktion NPA $\to$ DPA (sage am Ende was dazu).
+    
+    \parIII
+    \textbf{Zu Schritt 2:} \\
+    $\Aut{A}''$ braucht ja als Eingabe Tripel, 1.\ Komponente $s(\cdot)$ aus Strategie. \\
+    Diese Info wird schrittweise geraten.
+    
+    \par
+  }
+\end{frame}
+
+% ------------------------------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Konstruktion des Komplementautomaten für \Aut{A}}
+  
+  \Bmph{Idee:}~
+  NPBA $\Bmc$ soll $\Amc''$ auf \Emph{jedem} Pfad simulieren, indem $\Bmc$
+  %
+  \begin{itemize}
+    \item
+      $s$ rät\quad (also pro Position $p$ ein $f_p$)
+    \item
+      sich ansonsten wie $\Amc''$ verhält, \\
+      (also pro Position die Folgezustände $q_0,q_1$ gemäß $\Delta''$ setzt)
+  \end{itemize}
+  %
+  $\Amc''$ deterministisch $\Rightarrow$ Zustand pro Position $p$ eindeutig bestimmt
+  
+  \parIII
+  \uncover<2->{%
+    \Bmph{Konstruktion von $\Autb{B} = (Q'', \Sigma, \Delta^{\text{neu}}, q_I'', c'')$:}
+    \begin{Itemize}
+      \item
+        $Q'',q_I'',c''$ werden von $\Aut{A}''$ übernommen
+      \item
+        $\Delta^{\text{neu}} = \Big\{ (q,a,q_0,q_1) ~\Big|~ \text{es gibt } f \in F \text{ mit }$\\
+        \hspace*{\fill}$\Big(q, \auf f,a,i\zu, q_i\Big) \in \Delta'' \text{ für } i=0,1\Big\}$
+    \end{Itemize}
+  }
+
+  \par\vspace*{-.2\baselineskip}
+  \uncover<3->{%
+%    \Bmph{Es bleibt zu zeigen:}
+
+%    \par\smallskip
+    \begin{lemma}
+      $t \in L_\omega(\Aut{B})$ ~gdw.~ es gibt $F$-Baum $s$ mit $\Lst \subseteq L_\omega(\Amc'')$
+%      $L_\omega(\Aut{B}) = \overline{L_\omega(\Aut{A})}$
+      \label{lem:Korrektheit_Komplementautomat}%
+    \end{lemma}
+  }
+
+%  \parI
+  %\vspace*{-\baselineskip}
+  \uncover<4->{%
+    \Bmph{Beweis:}~ siehe Tafel \Tafel~~~~
+    \par\vspace*{-.95\baselineskip}\qed
+  }
+  
+  \note{%
+    \textbf{8:40 $\to$ bis 9:10}
+    
+    \parI
+    DPA $\Amc''$ "`bezeugt"', dass $s$ \emph{kein} \PF-Gewinnbaum für $t$ ist
+    
+    \parII
+    "`$\Aut{A}''$ deterministisch \dots"':~
+    obwohl $\infty$ viele Pfade durch $p$ gehen!
+
+    \parIII
+    \uncover<2->{%
+      $f \in F$:~
+      Für \emph{jede mögliche} Funktion $f : \Delta \to \{0,1\}$~ ("`\dots\ $s$ rät"'!) \\
+      und zugehörigen Übergang in $\Delta''$, ein neuer Übergang%
+    }
+    
+    \parIII
+    \uncover<3->{%
+      Lemma ankündigen mit: "`es bleibt zu zeigen \dots"'%
+    }
+    
+    \par
+  }
+\end{frame}
+
+% ------------------------------------------------------------------------------------------
+\begin{frame}
+%       \frametitle{\dots}
+  \begin{center}
+    \begin{Large}
+      \Gmph{\dots\ Es darf aufgeatmet werden \dots} \quad \dgre{\smiley}
+    \end{Large}
+  \end{center}
+    
+  \note{%
+    \textbf{9:10}
+    
+    \parII
+    Jetzt haben wir alles Technische geschafft und können das Hauptresultat sehr einfach beweisen.
+    
+    \parII
+    Danach haben wir uns eine Pause verdient. :)
+    
+    \par
+  }
+\end{frame}
+
+% ------------------------------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Das Resultat}
+
+  \begin{Satz}[Rabin 1969]
+    Für jeden NPBA \Aut{A} gibt es einen NPBA \Aut{B}
+    mit $L_\omega(\Aut{B}) = \overline{L_\omega(\Aut{A})}$.
+  \end{Satz}
+
+  \par\smallskip
+  \uncover<2->{%
+    \Bmph{Beweis:}
+    \par\smallskip
+    Für den bisher konstruierten NPBA \Aut{B} gilt:
+%    Direkte Konsequenz aus Folg.~\ref{cor:Gewinnbaum_fuer_PF} und Lemmas~\ref{lem:Gewinnbaum_mittels_Wortautomat}, \ref{lem:Korrektheit_Komplementautomat} \qed
+    \par\vspace*{-1.4\baselineskip}
+    \begin{alignat*}{2}
+      \Emph{$t \in L_\omega(\Autb{B})$} & ~~\text{gdw.}~~ \exists s \,.\, \Lst \subseteq L_\omega(\Amc'')           &\qquad  & \text{(Lemma~\ref{lem:Korrektheit_Komplementautomat})}\\
+                                        & ~~\text{gdw.}~~ \exists s \,.\, \Lst \subseteq \overline{L_\omega(\Amc')} &        & \text{(Konstr.~$\Aut{A}''$)} \\
+                                        & ~~\text{gdw.}~~ \exists s \,.\, \Lst \cap L_\omega(\Amc') = \emptyset     &        & \text{(Mengenlehre)} \\
+                                        & ~~\text{gdw.}~~ \exists\, \text{\PF-Gewinnbaum $s$ für $t$}               &        & \text{(Lemma~\ref{lem:Gewinnbaum_mittels_Wortautomat})} \\
+                                        & ~~\text{gdw.}~~ \Emph{$t \in \overline{L_\omega(\Autb{A})}$}              &        & \text{(Folg.~\ref{cor:Gewinnbaum_fuer_PF})}
+    \end{alignat*}
+    \qed
+  }
+
+  \note{%
+    \textbf{9:10 bis 9:13}
+    
+    \parII
+    Jetzt müssen wir nur noch alle Lemmas zusammentun und erhalten das Hauptresultat.
+    
+    \parII
+    "`Konstr.~$\Aut{A}''$"':~ ist Komplementärautomat zu $\Aut{A}'$
+    
+    \parII
+    \textbf{TODO:}~ Wenn Zeit ist, Beispiel für die Konstruktion vorführen \\
+    (siehe Notizen in Sammlung nach T4.15, zweites$=$einfacheres Bsp.)
+    
+    \par
+  }
+\end{frame}
+
+% ------------------------------------------------------------------------------------------
+\begin{frame}
+  \frametitle{Bemerkungen zur Komplexität der Konstruktion}
+
+    Sei $n=|Q|$\quad (Anzahl der Zustände des NBPA \Aut{A}).
+    
+    \parI
+    Dann hat der NPA $\Aut{A}'$ dieselben $n$ Zustände.
+    
+    \parI
+    DPA $\Aut{A}''$ kann so konstruiert werden, dass $|Q''| \in O(2^{n \log n})$.
+    
+    \parI
+    $\leadsto$ NBPA $\Aut{B}$ hat $O(2^{n \log n})$ Zustände.
+
+  \note{%
+    \textbf{9:13; auf Literatur verweisen, dann fertig? Oder noch Alternierung beginnen?}
+    
+    \parII
+    Punkt 3 folgt \textbf{nicht} aus den Resultaten dieser Vorlesung.
+    
+    \parI
+    Naives Vorgehen: \\
+    NPA $\to$ NMA $\to^*$ NBA ---Safra$\to^*$ DRA $\to$ DMA $\to^*$ DPA \\
+    ${}^*$Resultate aus Vorlesung, exp. Blowup \\
+    Es gibt offenbar eine effizientere direkte Konstruktion NPA $\to$ DPA
+    
+    
+    \par
+  }
+\end{frame}
+
+%   % ------------------------------------------------------------------------------------------
+%     \begin{frame}
+%       \frametitle{\dots}
+%       \dots
+%       \note{~}
+%     \end{frame}
+% 

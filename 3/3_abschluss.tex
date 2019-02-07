@@ -1,0 +1,277 @@
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Operationen auf $\omega$-Sprachen}
+
+      Zur Erinnerung: die Menge der Büchi-erkennbaren Sprachen heißt\\
+      abgeschlossen unter
+      \begin{Itemize}
+        \item
+          \Bmph{Vereinigung}, wenn gilt:
+          \par\smallskip
+          Falls $L_1,L_2$ Büchi-erkennbar, so auch $L_1 \cup L_2$.
+        \item
+          \Bmph{Schnitt}, wenn gilt:
+          \par\smallskip
+          Falls $L_1,L_2$ Büchi-erkennbar, so auch $L_1 \cap L_2$.
+        \item
+          \Bmph{Komplement}, wenn gilt: \hfill
+%           \par\smallskip
+          Falls $L$ Büchi-erkennbar, so auch $\overline{L}$.
+      \end{Itemize}
+
+      \par\smallskip
+      \begin{alertblock}<2->{Quiz}
+%       \uncover<2->{%
+%         \Bmph{Quiz:}
+        Unter welchen Operationen sind die Büchi-erkennbaren Sprachen abgeschlossen,
+        und wie leicht ist das zu zeigen?
+        \begin{center}
+          \begin{tabular}{lll}
+            Vereinigung? & \uncover<3->{\YES} & \uncover<3->{{\small (leicht)}} \\
+            Schnitt?     & \uncover<4->{\YES} & \uncover<4->{{\small (mittel)}} \\
+            Komplement?  & \uncover<5->{\YES} & \uncover<5->{{\small (schwer)}}
+          \end{tabular}
+        \end{center}
+      \end{alertblock}
+%       }
+      \note{
+        \uz{9:21}
+        
+        \par
+      }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Abgeschlossenheit}
+
+      \begin{Satz}
+        Die Menge der Büchi-erkennbaren Sprachen ist abgeschlossen unter den Operationen
+        $\cup$ und $\cap$.
+        \label{thm:abgeschlossenheit_v+d}
+      \end{Satz}
+
+      \par\medskip
+      Direkte Konsequenz aus den folgenden Lemmata.
+      
+      \par\bigskip
+      Abgeschlossenheit unter $\overline{\phantom{o}}$ : siehe Abschnitt "`Determinisierung"'
+
+      \note{
+        \uz{9:23}
+        
+        \par
+      }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Abgeschlossenheit unter Vereinigung}
+      
+      \begin{Lemma}
+        Seien $\Aut{A}_1,\Aut{A}_2$ NBAs über $\Sigma$.\\
+        Dann gibt es einen NBA $\Aut{A}_3$ mit $L_\omega(\Aut{A}_3) = L_\omega(\Aut{A}_1) \cup L_\omega(\Aut{A}_2)$.
+        \label{lem:abgeschlossenheit_vereinigung}%
+      \end{Lemma}
+      
+      \par\medskip
+      \uncover<2->{
+        \Bmph{Beweis.}~ analog zu NEAs und NEBAs:
+        \par\medskip
+        Seien $\Aut{A}_i = (Q_i, \Sigma, \Delta_i, I_i, F_i)$ für $i=1,2$.
+        \par
+        O.\,B.\,d.\,A.\ gelte $Q_1 \cap Q_2 = \emptyset$.
+        \par\medskip
+        Konstruieren $\Aut{A}_3 = (Q_3, \Sigma, \Delta_3, I_3, F_3)$ wie folgt.%
+      }
+      %
+      \uncover<3->{
+        \begin{Itemize}
+          \item
+            $Q_3 = Q_1 \cup Q_2$
+          \item
+            $\Delta_3 = \Delta_1 \cup \Delta_2$
+          \item
+            $I_3 = I_1 \cup I_2$
+          \item
+            $F_3 = F_1 \cup F_2$
+        \end{Itemize}
+      }
+      
+      \par\smallskip
+      \uncover<4->{
+        Dann gilt:~ $L_\omega(\Aut{A}_3) = L_\omega(\Aut{A}_1) \cup L_\omega(\Aut{A}_2)$
+        \qed%
+      }
+
+      \note{
+        \uz{9:24}
+        
+        \par
+      }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Abgeschlossenheit unter Schnitt}
+      
+      \Bmph{Für NEAs: Produktautomat}
+      
+      \par\smallskip
+      Idee: lasse $\Aut{A}_1$ und $\Aut{A}_2$ "`gleichzeitig"' auf Eingabewort laufen.
+      
+      \par\smallskip
+      Gegeben $\Aut{A}_1,\Aut{A}_2$,
+      konstruiere $\Aut{A}_3$ mit $L(\Aut{A}_3) = L(\Aut{A}_1) \cap L(\Aut{A}_2)$:
+      \begin{Itemize}
+        \item
+          $Q_3 = Q_1 \times Q_2$
+        \item
+          $\Delta_3 = \{((p,p'),a,(q,q')) \mid (p,a,q) \!\in\! \Delta_1 ~\&~ (p',a,q') \!\in\! \Delta_2\}$
+        \item
+          $I_3 = I_1 \times I_2$
+        \item
+          $F_3 = F_1 \times F_2$
+          \Tafel
+      \end{Itemize}
+      
+      \par\bigskip
+      \uncover<2->{%
+        \Bmph{Funktioniert das auch für Büchi-Automaten?}
+      }
+      
+      \par\bigskip
+      \uncover<3->{%
+        \begin{tabular}[b]{@{}l@{~}l@{}}
+          \Emph{Nein.} & $\Aut{A}_1$ und $\Aut{A}_2$ besuchen ihre akzeptierenden Zustände\\
+                       & möglicherweise nicht synchron! %\\[4pt]
+%                       & Beispiel siehe Tafel.
+                         \TafelForts
+        \end{tabular}
+%        \Tafel
+      }
+
+      \note{
+        \uz{9:25 bis 9:35?}
+        
+        \par
+      }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Abgeschlossenheit unter Schnitt}
+      
+      \Gmph{Neue Idee} für Schnitt-Automat $\Aut{A}$\,:
+      %
+      \begin{Itemize}
+        \item
+          $\Aut{A}$ simuliert $\Aut{A}_1,\Aut{A}_2$ nach wie vor parallel,
+          aber mit \Bmph{2 Modi $1,2$}
+          \par\smallskip
+        \item
+          Modus $i$ bedeutet:~ warte auf einen akz.\ Zustand $f$ von $\Aut{A}_i$
+          \par\smallskip
+        \item
+          Sobald so ein $f$ erreicht ist, wechsle den Modus.
+          \par\smallskip
+        \item
+          Run von $\Aut{A}$ ist erfolgreich, wenn er $\infty$ oft den Modus wechselt.
+          \par\smallskip
+        \item[$\leadsto$]
+          Es werden genau die Wörter akzeptiert,\\
+          für die $\Aut{A}_1,\Aut{A}_2$ jeweils einen erfolgreichen Run haben.
+      \end{Itemize}
+    
+      \note{
+        \uz{9:35}
+        
+        \par
+      }
+    \end{frame}
+
+    \newcommand{\ONE}{\text{\Emph{1}}}
+    \newcommand{\TWO}{\text{\Emph{2}}}
+    \newcommand{\IN}[2]{\text{\Emph{$p#1\!\in\!F_{#2}$}}}
+    \newcommand{\NIN}[2]{\text{\Emph{$p#1\!\notin\!F_{#2}$}}}
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Abgeschlossenheit unter Schnitt}
+      
+      \begin{Lemma}
+        Seien $\Aut{A}_1,\Aut{A}_2$ NBAs über $\Sigma$.\\
+        Dann gibt es einen NBA $\Aut{A}$ mit $L_\omega(\Aut{A}) = L_\omega(\Aut{A}_1) \cap L_\omega(\Aut{A}_2)$.
+      \end{Lemma}
+      
+      \par\smallskip
+      \uncover<2->{%
+        \Bmph{Beweis:}~
+        Seien $\Aut{A}_i = (Q_i, \Sigma, \Delta_i, I_i, F_i)$ NBAs für $i=1,2$.
+
+        \par\smallskip
+        Konstruieren $\Aut{A} = (Q, \Sigma, \Delta, I, F)$ wie folgt.
+        %
+        \begin{align*}
+          Q      & = Q_1 \times Q_2 \times \{1,2\} \\
+          \Delta & = \{((p,\!\!\;p'\!,\!\!\;\ONE),a,(q,\!\!\;q'\!,\!\!\;\ONE)) \mid \NIN{}{1} ~\&~ (p,\!\!\;a,\!\!\;q) \!\in\! \Delta_1 ~\&~ (p'\!,\!\!\;a,\!\!\;q') \!\in\! \Delta_2\} \\
+          \uncover<3->{%
+                 & \:\cup\!\!\: \{((p,\!\!\;p'\!,\!\!\;\ONE),a,(q,\!\!\;q'\!,\!\!\;\TWO)) \mid \IN{}{1} ~\&~ (p,\!\!\;a,\!\!\;q) \!\in\! \Delta_1 ~\&~ (p'\!,\!\!\;a,\!\!\;q') \!\in\! \Delta_2\} \\
+          }%
+          \uncover<4->{%
+                 & \:\cup\!\!\: \{((p,\!\!\;p'\!,\!\!\;\TWO),a,(q,\!\!\;q'\!,\!\!\;\TWO)) \mid \NIN{'}{2} ~\&~ (p,\!\!\;a,\!\!\;q) \!\in\! \Delta_1 ~\&~ (p'\!,\!\!\;a,\!\!\;q') \!\in\! \Delta_2\} \\
+          }%
+          \uncover<5->{%
+                 & \:\cup\!\!\: \{((p,\!\!\;p'\!,\!\!\;\TWO),a,(q,\!\!\;q'\!,\!\!\;\ONE)) \mid \IN{'}{2} ~\&~ (p,\!\!\;a,\!\!\;q) \!\in\! \Delta_1 ~\&~ (p'\!,\!\!\;a,\!\!\;q') \!\in\! \Delta_2\} \\
+          }%
+          \uncover<6->{%
+            I    & = I_1 \times I_2 \times \{1\} \\
+            F    & = Q_1 \times F_2 \times \{2\}
+          }%
+        \end{align*}
+      }
+      \par\vspace*{-2.4\baselineskip}
+      \uncover<6->{%
+        \Tafel
+      }
+
+      \par\medskip
+      \uncover<7->{%
+        Dann gilt $L_\omega(\Aut{A}) = L_\omega(\Aut{A}_1) \cap L_\omega(\Aut{A}_2)$. \hfill\hfill\TafelForts \qed%
+      }
+
+      \note{
+        \uzz{16:00}{9:37 bis 9:59?}
+        
+        \parII
+        Kurze Wdhlg.: haben Büchi-Automaten eingeführt, Abschlusseigenschaften behandelt.
+        
+        \parI
+        Vereinigung war einfach; Schnitt ist komplizierter: \\
+        2 Kopien des "`alten"' Produktaut., weil akz.\ Zust.\ asynchron auftreten können
+
+        \parI
+        Konstruktion auf Folie; jetzt noch 2.\ Richtung des Korrektheitsbeweises
+        
+        \parII
+        \textbf{Beweis bis 16:20}
+        
+        \par
+      }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Abgeschlossenheit unter Komplement}
+
+      \dots\ siehe Abschnitt\\
+      "`Deterministische Büchi-Automaten und Determinisierung"'
+
+      \note{
+        \uzz{16:20}{9:59--10:00, Ende}
+
+        \par
+      }
+    \end{frame}
+
+

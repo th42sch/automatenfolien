@@ -1,0 +1,241 @@
+%\setbeamertemplate{navigation symbols}{}
+%\beamertemplatenavigationsymbolsempty
+
+\setcounter{part}{4}
+
+%%% \showfromto{5}{5}
+
+\begin{document}
+
+  % ------------------------------------------------------------------------------------------
+  \begin{frame}
+    \titlepage
+    \note{
+      \uzz{8:30}{11.1.\ $\to$ Folie 23}
+      
+      \parII
+      \textbf{TODO:}~ siehe Verbesserungsvorschläge in TODO.txt
+      
+      \par
+    }
+  \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+  \begin{frame}
+    \frametitle{Überblick}
+
+    \Bmph{Computation Tree Logic (CTL)}
+    \begin{Itemize}
+      \item
+        Grenzen von LTL:~
+        kann nicht über Pfade quantifizieren
+        \par\smallskip
+      \item
+        Berechnungsbäume und CTL
+        \par\smallskip
+      \item
+        Ausdrucksvermögen von LTL und CTL im Vergleich
+        \par\smallskip
+      \item
+        Model-Checking mit CTL
+    \end{Itemize}
+
+    \par\bigskip
+    \Bmph{Büchi-Automaten auf unendlichen Bäumen}
+    \begin{Itemize}
+      \item
+        Definitionen und Beispiele
+        \par\smallskip
+      \item
+        äquivalente Automatenmodelle:~ Muller-, Paritätsautomaten
+        \par\smallskip
+      \item
+        Abschlusseigenschaften;\\
+        Komplementierung von Muller-Automaten~~\Danger
+    \end{Itemize}
+
+    \note{
+      \textbf{8:30}
+      
+      \par
+    }
+  \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+  \begin{frame}
+  \frametitle{Überblick}
+    \tableofcontents
+    \note{
+      \textbf{8:32}
+      
+      \par
+    }
+  \end{frame}
+  
+  % ==============================================================================================
+  % ==============================================================================================
+  \section[\protect\emph{Model-Checking CTL}]{\protect\emph{Model-Checking mit CTL}}
+  \input{1_model_checking}
+
+  % ==============================================================================================
+  % ==============================================================================================
+  \section[Baumautomaten]{Automaten auf unendlichen Bäumen}
+  \input{2_baumautomaten}
+
+  % ==============================================================================================
+  % ==============================================================================================
+  \section[Komplementierung]{Komplementierung} % von Automaten auf unendlichen Bäumen}
+  \input{3_komplementierung}
+
+  \AtBeginSection{\relax}
+%  % ==============================================================================================
+%  % ==============================================================================================
+%  \section*{Schlussbemerkungen}
+%  \input{4_schluss}
+
+%   % ------------------------------------------------------------------------------------------
+%     \begin{frame}
+%       \frametitle{\dots}
+%       \dots
+%       \note{~}
+%     \end{frame}
+% 
+%   % ------------------------------------------------------------------------------------------
+%     \begin{frame}
+%       \frametitle{\dots}
+%       \dots
+%       \note{~}
+%     \end{frame}
+ 
+
+
+  % ==============================================================================================
+  % ==============================================================================================
+  \section*{}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Literatur für diesen Teil (Basis, 1)}
+      \begin{small}
+        \begin{thebibliography}{99}
+          \bibitem{Rog02}
+            E.\ Grädel, W.\ Thomas, T.\ Wilke (Hrsg.).
+            \newblock
+            Automata, Logics, and Infinite Games.
+            \newblock
+            LNCS 2500, Springer, 2002, S. 43--60.
+            \newblock
+            Kapitel 6--9 über Paritätsspiele und Baumautomaten.\\
+            \url{http://www.cs.tau.ac.il/~rabinoa/Lncs2500.zip}
+            \newblock
+            Auch erhältlich auf Anfrage in der BB Mathematik im MZH:\\
+            \texttt{19h inf 001 k/100-2500}
+          \bibitem{Bie09}
+            Meghyn Bienvenu.
+            \newblock
+            Automata on Infinite Words and Trees.
+            \newblock
+            Vorlesungsskript, Uni Bremen, WS 2009/10.\\
+            Kapitel 4.
+            \newblock
+            \url{http://www.informatik.uni-bremen.de/tdki/lehre/ws09/automata/automata-notes.pdf}
+        \end{thebibliography}
+        \par
+      \end{small}
+      \note{~}
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Literatur für diesen Teil (Basis, 2)}
+      \begin{small}
+        \begin{thebibliography}{99}
+          \bibitem{BK08}
+            Christel Baier, Joost-Pieter Katoen.
+            \newblock
+            Principles of Model Checking.
+            \newblock
+            MIT Press 2008.
+            \newblock
+            Abschnitt 6 "`Computation Tree Logic"'.
+            \newblock
+            SUB, Zentrale:
+            \texttt{a inf 440 ver/782},~ \texttt{a inf 440 ver/782a}
+          \bibitem{CGP99}
+            Edmund M.\ Clarke, Orna Grumberg, Doron A.\ Peled.
+            \newblock
+            Model Checking.
+            \newblock
+            MIT Press 1999.
+            \newblock
+            Abschnitt 3 "`Temporal Logics"',\\
+            Abschnitt 4 "`Model Checking"'.
+%             Abschnitt 9.4 "`Translating LTL into Automata"'.
+            \newblock
+            SUB, Zentrale:
+            \texttt{a\hfill inf\hfill 440\hfill ver/780(6)},\hfill\hfill  \texttt{a\hfill inf\hfill 440\hfill ver/780(6)a}
+        \end{thebibliography}
+        \par
+      \end{small}
+      \note{~}
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Literatur für diesen Teil (weiterführend)}
+      \begin{small}
+        \begin{thebibliography}{99}
+          \bibitem{CD88}
+            Edmund M.\ Clarke, I. A. Draghicescu
+            \newblock
+            Expressibility Results for Linear-Time and Branching-Time Logics
+            \newblock
+            REX Workshop 1988, S.\ 428--437.
+            \newblock
+            \url{https://doi.org/10.1007/BFb0013029}
+        \end{thebibliography}
+        \par
+      \end{small}
+      \note{~}
+    \end{frame}
+
+
+%   \AtBeginSection{\frame{\frametitle{Und nun \dots}\tableofcontents[currentsection]}}
+  
+
+%     % ------------------------------------------------------------------------------------------
+%     \begin{frame}
+%       \frametitle{Ausblick}
+% 
+%       \dots
+%       
+%       \par\bigskip
+%       \uncover<2>{%
+%         \begin{center}
+%           \begin{Huge}
+%             \dblu{\textbf{Thank you.}}
+%           \end{Huge}
+%         \end{center}
+%       }
+%     \end{frame}
+
+%   % ==============================================================================================
+%   % ==============================================================================================
+%   \appendix
+%   
+%     % ------------------------------------------------------------------------------------------
+%     \begin{frame}
+%       \frametitle{\dots}
+%       \dots
+%     \end{frame}
+
+\mode<presentation>{
+  {   
+    \setbeamercolor{background canvas}{bg=black}
+    \begin{frame}<handout:0>[plain]{}
+      \note{~}
+    \end{frame}
+  }
+}
+
+\end{document}

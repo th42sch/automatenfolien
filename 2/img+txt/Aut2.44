@@ -1,0 +1,45 @@
+%!PS
+%%BoundingBox: -70 -64 115 10 
+%%HiResBoundingBox: -69.66585 -63.39977 114.11328 9.48534 
+%%Creator: MetaPost 1.504
+%%CreationDate: 2014.05.15:1111
+%%Pages: 1
+%*Font: ectt1000 9.96265 9.96265 22:8009fc03900a6805fb7ef08
+%%BeginProlog
+%%EndProlog
+%%Page: 1 1
+ 0 0 0 setrgbcolor
+0 0 moveto
+(conference) ectt1000 9.96265 fshow
+-66.26733 -19.84248 moveto
+(breakfast) ectt1000 9.96265 fshow
+-9.88783 -19.84248 moveto
+(lunch) ectt1000 9.96265 fshow
+33.41882 -19.84248 moveto
+(coffee) ectt1000 9.96265 fshow
+79.34007 -19.84248 moveto
+(dinner) ectt1000 9.96265 fshow
+38.64796 -38.71637 moveto
+(cake) ectt1000 9.96265 fshow
+25.57516 -59.05365 moveto
+(more_cake) ectt1000 9.96265 fshow
+ 0 0.79701 dtransform truncate idtransform setlinewidth pop [] 0 setdash
+ 1 setlinecap 1 setlinejoin 10 setmiterlimit
+newpath 5.16652 -2.99992 moveto
+-21.7569 -10.75563 lineto stroke
+newpath 19.15253 -2.99992 moveto
+10.17807 -10.75563 lineto stroke
+newpath 33.13858 -2.99992 moveto
+42.11304 -10.75563 lineto stroke
+newpath 47.12459 -2.99992 moveto
+76.34023 -11.41595 lineto stroke
+ 0.79701 0 dtransform exch truncate exch idtransform pop setlinewidth
+newpath 49.10617 -22.8424 moveto
+49.10617 -29.62953 lineto stroke
+newpath 49.10617 -43.65344 moveto
+49.10617 -49.96674 lineto stroke
+ 0.6 0 0 setrgbcolor 0 0.79701 dtransform truncate idtransform setlinewidth pop
+newpath 113.71477 9.08682 moveto
+-69.26733 -63.00125 lineto stroke
+showpage
+%%EOF

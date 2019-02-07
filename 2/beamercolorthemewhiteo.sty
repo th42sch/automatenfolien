@@ -1,0 +1,39 @@
+% Copyright 2007 by Till Tantau
+%
+% This file may be distributed and/or modified
+%
+% 1. under the LaTeX Project Public License and/or
+% 2. under the GNU Public License.
+%
+% See the file doc/licenses/LICENSE for more details.
+
+\ProvidesPackageRCS $Header: /home/vedranm/bitbucket/beamer/base/themes/color/beamercolorthemewhiteo.sty,v d02a7cf4d8ae 2010/06/17 09:11:41 rivanvx $
+
+
+\mode<presentation>
+
+\definecolor{beamer@greyblue}{rgb}{0.2,0.2,0.4} % use structure theme to change
+\setbeamercolor{alerted text}{fg=red!30!black}
+\setbeamercolor{example text}{fg=green!15!black}
+
+\setbeamercolor{structure}{fg=beamer@greyblue}
+
+\setbeamercolor*{palette primary}{use=structure,fg=structure.fg!60!black,bg=structure.fg!20!white}
+\setbeamercolor*{palette secondary}{use=structure,fg=structure.fg!50!black,bg=structure.fg!25!white}
+\setbeamercolor*{palette tertiary}{use=structure,fg=structure.fg!50!black,bg=structure.fg!30!white}
+\setbeamercolor*{palette quaternary}{fg=structure,bg=white}
+
+\setbeamercolor*{sidebar}{use=structure,bg=structure.fg}
+  
+\setbeamercolor*{palette sidebar primary}{use=structure,fg=structure.fg!10}
+\setbeamercolor*{palette sidebar secondary}{fg=white}
+\setbeamercolor*{palette sidebar tertiary}{use=structure,fg=structure.fg!50}
+\setbeamercolor*{palette sidebar quaternary}{fg=white}
+
+\setbeamercolor*{titlelike}{parent=palette primary}
+
+\setbeamercolor*{separation line}{}
+\setbeamercolor*{fine separation line}{}
+
+\mode
+<all>

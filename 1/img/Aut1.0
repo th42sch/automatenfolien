@@ -1,0 +1,25 @@
+%!PS
+%%BoundingBox: -6 -7 15 13 
+%%HiResBoundingBox: -5.40334 -6.85783 14.28993 12.83543 
+%%Creator: MetaPost 1.902
+%%CreationDate: 2015.04.20:2211
+%%Pages: 1
+%*Font: ec-lmsso10 10.9091 9.96265 71:8
+%*Font: ec-lmsso8 7.97011 7.97011 69:8
+%%BeginProlog
+%%EndProlog
+%%Page: 1 1
+ 0 0 0 setrgbcolor
+0 0 moveto
+(q) ec-lmsso10 10.9091 fshow
+5.6364 -1.6364 moveto
+(i) ec-lmsso8 7.97011 fshow
+ 0 0.79701 dtransform truncate idtransform setlinewidth pop [] 0 setdash
+ 1 setlinejoin 10 setmiterlimit
+newpath 13.89142 2.9888 moveto
+13.89142 8.20685 9.66135 12.43692 4.4433 12.43692 curveto
+-0.77475 12.43692 -5.00482 8.20685 -5.00482 2.9888 curveto
+-5.00482 -2.22925 -0.77475 -6.45932 4.4433 -6.45932 curveto
+9.66135 -6.45932 13.89142 -2.22925 13.89142 2.9888 curveto closepath stroke
+showpage
+%%EOF

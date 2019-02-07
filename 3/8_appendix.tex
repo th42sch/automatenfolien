@@ -1,0 +1,90 @@
+  
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \label{fra:anhang_bsp2}
+      \frametitle{Anhang: Beispiel Konsument-Produzent-Problem}
+
+      \begin{exampleblock}{}
+        \begin{Itemize}
+          \item
+            $P$ erzeugt Produkte und legt sie einzeln in einem Lager ab
+          \item
+            $K$ entnimmt Produkte einzeln dem Lager
+          \item
+            Lager fasst maximal 3 Stück
+        \end{Itemize}
+      \end{exampleblock}
+
+      \par\bigskip
+      \uncover<2->{%
+        \Bmph{Modellierung durch endliches Transitionssystem}
+        \begin{Itemize}
+          \item
+            Zustände $0,1,2,3,\text{Ü},\text{U}$
+            \begin{Itemize}
+              \item
+                0,1,2,3: im Lager liegen 0,1,2,3 Stück
+              \item
+                \emph{Ü}\/berschuss: $P$ will ein Stück im vollen Lager ablegen
+              \item
+                \emph{U}\/nterversorgung: $K$ will ein Stück aus leerem Lager nehmen
+            \end{Itemize}
+          \item
+            Aktionen $P,K$ ($P$ legt ab oder $K$ entnimmt)
+        \end{Itemize}
+      }
+
+      \note{~}
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Das Transitionssystem}
+
+      \begin{center}
+        \Fig{20}
+      \end{center}
+
+      \uncover<2->{%
+        \begin{tabular}[t]{@{}l@{~~}l@{}}
+          \Bmph{Eingaben in das System:} & unendliche Zeichenketten über $\Sigma = \{p,k\}$ \\
+                                         & \Bmph{(Läufe)}
+        \end{tabular}
+      }
+
+      \par\bigskip
+      \uncover<3->{%
+        \Bmph{Zufriedenheit:} $P$ ($K$) möchte \dots
+        \begin{Itemize}
+          \item
+            beliebig oft Produkte produzieren (konsumieren)
+          \item
+            nur endlich oft \emph{Ü}\/berschuss (\emph{U}\/nterversorgung) erleiden
+        \end{Itemize}
+      }
+
+      \par\bigskip
+      \uncover<4->{%
+        \Bmph{Lauf, der $P$ und $K$ zufrieden stellt:}\\%
+      }
+      \uncover<5->{%
+        $p^3k^3p^3k^3\dots$\quad oder\quad $ppkpkpk\dots$\quad oder\quad $\dots$
+      }
+      
+      \par\bigskip
+      \uncover<6->{%
+        \Bmph{Lauf, der weder $P$ noch $K$ zufrieden stellt:}%
+      }
+      \uncover<7->{%
+        $p^4k^4p^4k^4\dots$
+      }
+      \note{~}
+    \end{frame}
+
+%     % ------------------------------------------------------------------------------------------
+%     \begin{frame}
+%       \frametitle{\dots}
+%       \dots
+%       \note{~}
+%     \end{frame}
+

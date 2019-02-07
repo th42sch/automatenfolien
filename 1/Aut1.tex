@@ -1,0 +1,2522 @@
+%\setbeamertemplate{navigation symbols}{}
+%\beamertemplatenavigationsymbolsempty
+
+\setcounter{part}{1}
+
+%%% \showfromto{5}{5}
+
+\begin{document}
+
+  \defverbatim{\RAi}{\begin{verbatim}    straße|str\.|weg|gasse\end{verbatim}}
+  \defverbatim{\RAii}{\begin{verbatim}    [A-Z][a-z]*(straße|str\.|weg|gasse) [0-9]*\end{verbatim}}
+  \defverbatim{\RAiii}{\begin{verbatim}    [A-Z][a-z]*(straße|str\.|weg|gasse)\end{verbatim}}
+  \defverbatim{\RAiv}{\begin{verbatim}                    ([0-9]*[A-Za-z]?-)?[0-9]*[A-Za-z]?\end{verbatim}}
+
+  \defverbatim{\lexbsp}{%
+         \begin{verbatim}
+else
+  {return(ELSE);}
+  
+[A-Za-z][A-za-z0-9]*
+  {<Trage gefundenen Bezeichner in Symboltabelle ein>;
+  return(ID);}
+  
+>=
+  {return(GE);}
+  
+=
+  {return(EQ);}
+        \end{verbatim}%
+  }
+
+
+  % ------------------------------------------------------------------------------------------
+  \begin{frame}
+    \titlepage
+    \note{
+%      \textbf{{\boldmath $\to$ F.\,40 (Wdhlg.\ bis einschl.\ F.\,44)}}
+%            
+%      \par
+      \textbf{8:55}
+      
+      \par
+    }
+  \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+  \begin{frame}
+    \frametitle{Vorlesungsübersicht}
+    
+    \Bmph{Kapitel 1:~ endliche Automaten auf endlichen Wörtern}
+    \par\smallskip
+    Kapitel 2:~ endliche Automaten auf endlichen Bäumen
+    \par\smallskip
+    Kapitel 3:~ endliche Automaten auf unendlichen Wörtern
+    \par\smallskip
+    Kapitel 4:~ endliche Automaten auf unendlichen Bäumen
+  
+    \note{
+      \textbf{8:55}
+
+      \par\medskip
+      Hier nochmal die 4 Kapitel \text{(kurz!)}
+    }
+  \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+  \begin{frame}
+    \frametitle{Ziel dieses Kapitels}
+    
+    \begin{Itemize}
+      \item
+        Wiederholung der Definitionen \& Resultate zu endlichen Automaten
+        aus "`Theoretische Informatik 1"'
+        
+        \par\bigskip
+      \item
+        Kennenlernen zweier Anwendungen endlicher Automaten
+    \end{Itemize}
+  
+    \note{
+      \textbf{8:55}
+
+      \par\medskip
+      Das wird ein kurzer, leichter Teil.~
+      Ca.\ 2 Sitzungen.
+      
+      \par\bigskip
+      (1) Wdhlg.\ mache ich knapp; wenn Euch auf"|fällt, 
+      was Ihr nicht mehr parat habt, dann schlagt es im Skript nach.
+      
+      \par\medskip
+      (2) Die Anwendungen sind (hoffentlich) neu für Euch.
+    }
+  \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+  \begin{frame}
+    \frametitle{Überblick}
+    \tableofcontents
+    \note{
+      \textbf{8:56}
+
+      \par\medskip
+    }
+  \end{frame}
+
+  % ==============================================================================================
+  % ==============================================================================================
+  \section{Grundbegriffe}
+  
+%%%  \mysectioncontent{%
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Wörter, Sprachen, \dots}
+      
+      \begin{Itemize}
+        \item
+          \Bmph{Symbole} $a,b,\dots$
+        \item
+          \Bmph{Alphabet} $\Sigma$: endliche nichtleere Menge von Symbolen
+        \item
+          \Bmph{(endliches) Wort} $w$ über $\Sigma$:\\
+          endliche Folge $w = a_1a_2\dots a_n$ von Symbolen $a_i \in \Sigma$
+        \item
+          \Bmph{leeres Wort} $\varepsilon$
+        \item
+          \Bmph{Wortlänge} $|a_1a_2\dots a_n| = n$,\quad $|\varepsilon| = 0$
+        \item
+          \Bmph{Menge aller Wörter} über $\Sigma$:~ $\Sigma^*$
+        \item
+          \Bmph{Sprache} $L$ über $\Sigma$: Teilmenge $L \subseteq \Sigma^*$ von Wörtern
+        \item
+          \Bmph{Sprachklasse} $\mathcalreg{L}$: Menge von Sprachen
+      \end{Itemize}
+
+      \note{
+      \textbf{8:56}
+
+      \par\medskip
+      }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Endliche Automaten}
+      
+      \begin{Definition}
+        Ein \Bmph{nichtdeterministischer endlicher Automat (NEA)}
+        über einem Alphabet $\Sigma$ ist ein 5-$\!$Tupel
+        $\Aut{A} = (Q, \Sigma, \Delta, I, F)$, wobei
+        \begin{Itemize}
+          \item
+            $Q$ eine endliche nichtleere \Bmph{Zustandsmenge} ist,
+          \item
+            $\Sigma$ ein Alphabet ist,
+          \item
+            $\Delta \subseteq Q \times \Sigma \times Q$ die \Bmph{Überführungsrelation} ist,\qquad $(*)$
+          \item
+            $I \subseteq Q$ die Menge der \Bmph{Anfangszustände} ist,
+          \item
+            $F \subseteq Q$ die Menge der \Bmph{akzeptierenden Zustände} ist.
+        \end{Itemize}
+      \end{Definition}
+
+      \begin{Itemize}
+        \item<2->
+          $(*)$ bedeutet: \\ 
+          $\Delta$ besteht aus Tripeln $(q,a,q')$ mit $q,q'\in Q$ und $a \in \Sigma$
+        \item<2->
+          $(q,a,q') \in \Delta$ bedeutet intuitiv: \\
+          ist $\Aut{A}$ in Zustand $q$ und liest ein $a$,
+          geht er in Zustand $q'$ über.
+      \end{Itemize}
+      \note{%
+        \textbf{8:57}
+
+        \par\medskip
+        Einziger Unterschied zur Def.\ aus Theorie 1:~
+        mehrere Anfangszustände \\
+        (lassen sich aber immer auf 1 reduzieren)
+        
+        \par\bigskip
+        Außerdem steht $\Delta$ vor $I$ -- das ist aber nur Festlegungssache.
+        
+        \par\bigskip
+        Akz.\ Zustände werden oft Endzustände genannt (en: final states $\leadsto$ $F$). \\
+        Das kann aber für Verwirrung sorgen, denn die Berechnung muss beim Erreichen
+        eines solchen Zustandes noch nicht enden. \\
+        Deshalb benutze ich "`akz.\ Zustände"'.
+      }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Beispiel und graphische Repräsentation von NEAs}
+      
+      \begin{exampleblock}{}
+        Betrachte $\Aut{A} =$\\
+        \scalebox{.98}[1]{$(\{q_0,q_1\},~ \{a,b\},~ \{(q_0,a,q_0), (q_0,b,q_1), (q_1,b,q_1)\},~ \{q_0\}, \{q_1\})$}
+      \end{exampleblock}
+
+      
+      \begin{Itemize}
+        \item
+          Zustände: $q_0, q_1$
+          \hfill
+          \uncover<2->{\raisebox{-2mm}{\Fig{0}}}%
+          \vspace*{1.4mm}%
+        \item
+          Alphabet $\{a,b\}$
+          \vspace*{-6mm}
+        \item
+          Übergänge: von $q_0$ mittels $a$ zu $q_0$, \dots
+          \hfill
+          \uncover<2->{\raisebox{-2mm}{\Fig{1}}}
+        \item
+          Anfangszustand $q_0$
+          \hfill
+          \uncover<2->{\raisebox{-2mm}{\Fig{2}}}%
+          \vspace*{-1mm}%
+        \item
+          einziger akzeptierender Zustand $q_1$
+          \hfill
+          \uncover<2->{\raisebox{-2mm}{\Fig{3}}}
+      \end{Itemize}
+
+      \vspace*{-4mm}
+      \begin{center}
+        \uncover<2->{\Aut{A}: \raisebox{-3mm}{\Fig{4}}}
+      \end{center}
+
+      \note{
+        \textbf{9:00}
+
+        \par\medskip
+      }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Berechnungen und Akzeptanz}
+      
+      \begin{Definition}
+        Sei $\Aut{A} = (Q,\Sigma,\Delta,I,F)$ ein NEA.
+        \begin{Itemize}
+          \item
+            Ein \Bmph{Run} von \Aut{A} auf $w = a_1a_2\dots a_n$
+            ist eine Folge
+%            \vspace*{-.2\baselineskip}
+            \[
+              r = q_0q_1q_2\dots q_{n},
+            \]
+%            \vspace*{-.4\baselineskip}%
+            so dass für alle $i=0,\dots,n-1$ gilt: $(q_i,a_{i+1},q_{i+1}) \in \Delta$.
+            \par
+            Man sagt/schreibt: $w$ \Bmph{überführt} $q_0$ in $q_n$,~ $q_0 \vdash^{w}_{\!\Aut{A}} q_n$
+            \parI
+          \item<2->
+            Ein Run $r = q_0q_1q_2\dots q_{n}$ von \Aut{A} auf $w$ ist \Bmph{erfolgreich,} \\
+            wenn $q_0 \in I$ und $q_n \in F$.
+            \parI
+          \item<3->
+            \Aut{A} \Bmph{akzeptiert} $w$, wenn es einen erfolgreichen Run von \Aut{A} auf $w$ gibt.
+            \parI
+          \item<4->
+            Die von \Aut{A} \Bmph{erkannte Sprache} ist
+            $\ddblu{L(\Aut{A})} = \{w \in \Sigma^* \mid \text{\Aut{A} akzeptiert $w$}\}$.
+        \end{Itemize}
+      \end{Definition}
+
+      \note{%
+        \textbf{9:02}
+
+        \par\medskip
+        $\vdash^w_{\!{A}}$ ~war in Theorie~1~ $\stackrel{w}{\Longrightarrow}_{\!\Aut{A}}$
+      }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Beispiele}
+      \label{frame:automatenbsp}
+      
+      \begin{exampleblock}{}
+%         \begin{tabular}{ll}
+%           \hspace*{12mm} \Aut{A}                  & $L(\Aut{A})$                                                              \\
+%           \raisebox{-3mm}{\Fig{4}}                & \uncover<2->{$\{a^nb^m \mid n \geqslant 0, m \geqslant 1\}$}              \\[4mm]
+%           \uncover<3->{\raisebox{-3mm}{\Fig{10}}} & \uncover<4->{$\{w \in \{a,b\}^* \mid \text{$w$ enthält Teilwort $ab$}\}$}
+%         \end{tabular}
+        $\Aut{A}_1$:\quad \raisebox{-3mm}{\Fig{4}} 
+        \hfill
+        $L(\Aut{A}_1) = \uncover<2->{\{a^nb^m \mid n \geqslant 0, m \geqslant 1\}}$
+
+        \par\bigskip
+        \uncover<3->{$\Aut{A}_2$: \raisebox{-3mm}{\Fig{10}}}
+        \par\bigskip
+        $\uncover<3->{L(\Aut{A}_2) = }\uncover<4->{\{w \in \{a,b\}^* \mid \text{$w$ enthält Teilwort $ab$}\}}$
+
+        \par\bigskip
+        \uncover<5->{$\Aut{A}_3$: \raisebox{-3mm}{\Fig{11}}}
+        \par\bigskip
+        $\uncover<5->{L(\Aut{A}_3) = }\uncover<6->{\{w \in \{a,b\}^* \mid \text{$w$ endet auf $ab$}\}}$
+      \end{exampleblock}
+
+    \note{
+        \textbf{9:04}
+
+        \par\medskip
+    }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Erkennbare Sprache}
+      
+      \begin{Definition}
+        Eine Sprache $L \subseteq \Sigma^*$ ist \Bmph{(NEA-)erkennbar}, \\
+        wenn es einen NEA \Aut{A} gibt mit $L = L(\Aut{A})$.
+      \end{Definition}
+
+    \note{
+      \textbf{9:08}
+
+      \par\medskip
+    }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Determinismus}
+      
+      \begin{Definition}
+        Sei $\Aut{A} = (Q,\Sigma,\Delta,I,F)$ ein NEA.
+        \par\smallskip
+        Enthält $\Delta$ für jedes $q \in Q$ u.\ jedes $a \in \Sigma$
+        \Emph{genau 1} Tripel $(q,a,q')$
+        \par
+        und enthält $I$ \Emph{genau 1} Zustand,
+        \par\smallskip
+        dann ist \Aut{A} ein \Bmph{deterministischer endlicher Automat (DEA)}.
+      \end{Definition}
+      
+      \begin{Itemize}
+        \item<2->[$\leadsto$]
+          Nachfolgezustand für jedes Paar $(q,a)$ eindeutig bestimmt
+          \par\bigskip
+        \item<3->
+          Jeder DEA ist ein NEA,\\
+          aber nicht umgekehrt %\\
+%           \hspace*{38.5mm} 
+          {\small (z.\,B.\ $\Aut{A}_1, \Aut{A}_3$ auf Folie \ref{frame:automatenbsp})}.
+        \par\smallskip
+        \item<4->
+          Auf Folie \ref{frame:automatenbsp} ist nur $\Aut{A}_2$ ein DEA;\\
+          $\Aut{A}_1$ kann mittels \emph{Papierkorbzustand} zum DEA werden;  \Tafel \\
+          bei $\Aut{A}_3$ genügt auch das nicht.
+      \end{Itemize}
+
+%       \vspace*{-1.2pt}
+%       \uncover<3->{%
+%         \begin{alertblock}{Frage}
+%           Sind DEAs und NEAs gleichmächtig? \Tafel
+%         \end{alertblock}
+% % 
+% %         (Was bedeutet diese Frage genau?) \Tafel%
+%       }
+    \note{
+      \textbf{9:08}
+
+      \par\medskip
+      Tafelanschrieb: nur Bsp.\ \textbf{ganz kurz}
+    }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Potenzmengenkonstruktion}
+
+%       \begin{exampleblock}{Antwort}
+%         Ja, DEAs und NEAs sind gleichmächtig.
+%       \end{exampleblock}
+
+      \Emph{Frage:}
+      \parbox[t]{.9\textwidth}{%
+        Sind DEAs und NEAs gleichmächtig? % \\
+%        {\small D.\,h.: $\{L \mid L \text{ ist DEA-erkennbar}\} = \{L \mid L \text{ ist NEA-erkennbar}\}$\,?}%
+      }
+
+      \par\medskip
+      \uncover<2->{%
+        \Gmph{Antwort:} Ja!
+      }
+
+      \par\bigskip
+      \uncover<3->{%
+        \begin{Satz}[Rabin, Scott 1959]
+          Für jeden NEA \Aut{A} gibt es einen DEA $\Aut{A}^d$ mit $L(\Aut{A}^d) = L(\Aut{A})$.
+          \label{thm:potenzmengenkonstruktion}%
+        \end{Satz}
+      }
+    
+      \uncover<4->{%
+        \par\smallskip
+        \Bmph{Beweisskizze:}~
+        Sei $\Aut{A} = (Q,\Sigma,\Delta,I,F)$.
+        \par\smallskip
+        Wir konstruieren $\Aut{A}^d = (Q^d,\Sigma,\Delta^d,I^d,F^d)$ wie folgt.
+        
+        \begin{Itemize}
+          \item
+            $Q^d = 2^Q$\qquad (Potenzmenge der Zustandsmenge)
+          \item
+            $I^d = \{I\}$
+          \item
+            $(S,a,S') \in \Delta^d$ \quad gdw.\quad
+            $S' = \{q' \mid \exists q \in S : (q,a,q') \in \Delta\}$
+          \item
+            $F^d = \{S \subseteq Q \mid S \cap F \neq \emptyset\}$
+            \Tafel
+        \end{Itemize}
+      }
+
+      \par\bigskip
+      \uncover<5->{%
+        Im schlimmsten Fall kann $\Aut{A}^d$ im Vergleich zu $\Aut{A}$\\
+        exponentiell viele Zustände haben {\small (s.\ Hopcroft et al.\ 2001, S. 65)}.%
+      }
+
+    \note{
+      \textbf{9:11}
+
+      \par\medskip
+      Klären:~ was heißt "`gleichmächtig"'? \\
+      ($L$ DEA-erkennbar ~gdw.~ $L$ NEA-erkennbar. Hinrichtung trivial.)
+      
+      \par\bigskip
+      Hier nur \textbf{kurz} die Konstruktion und ein Beispiel. \\
+      Vollständiger Beweis siehe Theorie 1. \\
+      (Wir werden fast dieselbe Konstruktion später an Baumautomaten genauer ausführen.)
+    }
+    \end{frame}
+%%%  }
+
+  % ==============================================================================================
+  % ==============================================================================================
+  \section[\protect\emph{Textsuche}]{\protect\emph{Anwendung: Textsuche}}
+
+%%%  \mysectioncontent{%
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Stichwortsuche}
+      
+      \begin{exampleblock}{Typisches Problem aus dem Internetzeitalter}
+        Gegeben sind \Gmph{Stichwörter $w_1,\dots,w_n \in \Sigma^*$} \\
+        und \Gmph{Dokumente} $D_1,\dots,D_M \in \Sigma^*$.
+        \par\smallskip
+        Finde alle $j$, so dass $D_j$ mindestens ein (alle) $w_i$ als Teilwort hat.
+      \end{exampleblock}
+    
+      \begin{Itemize}
+        \item
+          relevant z.B. für \Bmph{Suchmaschinen}
+        \item
+          übliche Technologie: \Bmph{invertierter Index}
+          \par\smallskip
+          speichert für jedes im Internet auftretende $w_i$ \\
+          eine Liste aller Dokumente $D_j$, die $w_i$ enthalten
+        \item
+          invertierte Indizes sind zeitaufwändig zu erstellen\\
+          und setzen voraus, dass die $D_j$ sich nur langsam ändern
+      \end{Itemize}
+    \note{
+      \textbf{9:15}
+
+      \par\medskip
+    }
+    \end{frame}
+
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Stichwortsuche ohne invertierte Indizes?}
+      
+      \Emph{Invertierte Indizes versagen, wenn}
+      \begin{Itemize}
+        \item
+          die (relevanten) Dokumente sich schnell ändern:
+          \begin{Itemize}
+            \item
+              Suche in tagesaktuellen Nachrichtenartikeln
+            \item
+              Einkaufshelfer sucht nach bestimmten Artikeln \\
+              in aktuellen Seiten von Online-Shops
+          \end{Itemize}
+        \item
+          die Dokumente nicht katalogisiert werden können:
+          \begin{Itemize}
+            \item
+              Online-Shops wie Amazon generieren oft Seiten für ihre Artikel
+              nur auf Anfragen hin.
+          \end{Itemize}
+      \end{Itemize}
+      %
+      $\leadsto$ Wie kann man dennoch Stichwortsuche implementieren?
+
+    \note{
+      \textbf{9:17}
+
+      \par\medskip
+    }
+    \end{frame}
+
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Ein Fall für endliche Automaten!}
+      
+%      \begin{exampleblock}{Wdhlg.: Typisches Problem aus dem Internetzeitalter}
+      \begin{exampleblock}{}
+        Gegeben sind \Gmph{Stichwörter $w_1,\dots,w_n \in \Sigma^*$} \\
+        und \Gmph{Dokumente} $D_1,\dots,D_M \in \Sigma^*$.
+        \par\smallskip
+        Finde alle $j$, so dass $D_j$ mindestens ein $w_i$ als Teilwort hat.
+      \end{exampleblock}
+      
+      \bigskip
+      \Emph{Ziel:} konstruiere NEA \Aut{A}, der
+      \begin{Itemize}
+        \item
+          ein $D_j$ zeichenweise liest und
+        \item
+          in einen Endzustand geht ~gdw.~ er eins der $w_i$ findet
+      \end{Itemize}
+    
+      Der Einfachheit halber legen wir fest, dass $\Aut{A}$ ein Wort $w$ akzeptiert, \\
+      \scalebox{.95}[1]{wenn $\Aut{A}$ bereits nach Lesen eines \emph{Teilworts} einen akz.\ Zustand erreicht.}
+      
+      \medskip
+      \uncover<2->{%
+        \label{frame:web_ebay_example}%
+        \begin{Beispiel}
+%          Seien 
+          $w_1 = \texttt{web}$ und $w_2 = \texttt{ebay}$
+%          \par\smallskip
+%          Wie muss \Aut{A} aussehen?
+        \end{Beispiel}%
+      
+        \Tafel
+      }
+
+
+    \note{
+      \textbf{9:18}
+
+      \par\medskip
+    }
+    \end{frame}
+
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Implementation des NEAs \Aut{A}}
+      
+      \uncover<1->{%
+        \Bmph{Eine Möglichkeit:}
+        \begin{Enumerate}
+          \item
+            Determinisierung (Potenzmengenkonstruktion)
+          \item
+            Simulation des resultierenden DEA $\Aut{A}^d$
+        \end{Enumerate}
+
+        \par\bigskip
+        \Emph{Wird $\Aut{A}^d$ nicht zu groß?}\\
+        {\small ($2^{27} > 134$\,Mio.\ Zustände bei Stichw.\ "`Binomialkoeffizient"', "`Polynom"')}
+      }
+      
+      \par\bigskip
+      \uncover<2->{%
+        \label{frame:web_ebay_example_2}%
+        \Gmph{Nein,}
+        \begin{Itemize}
+          \item
+            mit der leicht geänderten Definition von Akzeptanz
+          \item
+            und unserer Variante der Potenzmengenkonstruktion
+        \end{Itemize}
+        wird $\Aut{A}^d$ genauso viele Zustände haben wie $\Aut{A}$\,!
+        
+%        \par\bigskip
+%        Beispiel: siehe Tafel 
+        \Tafel
+      }
+    \note{
+      \textbf{9:22 bis 9:30}
+
+      \par\medskip
+    }
+    \end{frame}
+
+%    % ------------------------------------------------------------------------------------------
+%    \begin{frame}
+%      \frametitle{Zum Nachdenken}
+%      
+%      \Bmph{Übung:}
+%      \begin{Itemize}
+%        \item
+%          Konstruiere den DEA $\Aut{A}^d$ für \Aut{A} von Folie \ref{frame:web_ebay_example}.
+%        \item
+%          Beschreibe die Konstruktion von $\Aut{A}^d$ allgemein, \\
+%          wenn $w_1,\dots,w_n$ gegeben sind, \\
+%          mit $w_i = a_{i1}\dots a_{i\ell_i}$ für jedes $i=1,\dots,n$.
+%      \end{Itemize}
+%    \note{~}
+%    \end{frame}
+%%%  }
+
+  % ==============================================================================================
+  % ==============================================================================================
+  \section[Abschlusseig.]{Abschlusseigenschaften}
+
+  \newlength{\leftbox}
+  \settowidth{\leftbox}{\textbf{Konkatenation}}
+
+%%%  \mysectioncontent{%
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Operationen auf Sprachen sind Operationen auf Mengen}
+      
+      \begin{alertblock}{}
+        Wie können (NEA-erkennbare) Sprachen kombiniert werden?
+      \end{alertblock}
+
+      \begin{Itemize}
+        \item<2->
+          Boolesche Operationen
+          \begin{Itemize}
+            \item[]
+              \parbox{\leftbox}{\Bmph{Vereinigung}}
+              $L_1 \cup L_2 = \{w \mid w \in L_1 \text{~oder~} w \in L_2\}$
+%               \par\medskip
+            \item[]
+              \parbox{\leftbox}{\Bmph{Schnitt}}
+              $L_1 \cap L_2 = \{w \mid w \in L_1 \text{~und~} w \in L_2\}$
+%               \par\medskip
+            \item[]
+              \parbox{\leftbox}{\Bmph{Komplement}}
+              $\overline{L} = \{w \in \Sigma^* \mid w \notin L\}$
+          \end{Itemize}
+          \par\medskip
+        \item<3->
+          Wortoperationen
+          \begin{Itemize}
+            \item[]
+              \parbox{\leftbox}{\Bmph{Konkatenation}}
+              $L_1 \cdot L_2 = \{vw \mid v \in L_1 \text{~und~} w \in L_2\}$
+%               \par\medskip
+            \item[]
+              \parbox{\leftbox}{\Bmph{Kleene-Hülle}}
+              $L^* = \displaystyle\bigcup_{i \geqslant 0} L^i$,
+              \par\smallskip
+              \hspace*{\fill}%
+              wobei
+              $L^0 = \{\varepsilon\}$ und $L^{i+1} = L^i \cdot L$ für alle $i \geqslant 0$
+          \end{Itemize}
+      \end{Itemize}
+
+      \note{
+        \uz{9:30}
+        
+        \par
+      }
+    \end{frame}
+
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Abgeschlossenheit}
+      
+      Die Menge der erkennbaren Sprachen heißt
+      \Bmph{abgeschlossen unter} \dots
+      %
+      \begin{Itemize}
+        \item
+          \Bmph{Vereinigung}, falls gilt:
+          \par\smallskip
+          Falls $L_1,L_2$ erkennbar, so auch $L_1 \cup L_2$.
+        \item
+          \Bmph{Komplement}, falls gilt:
+          \par\smallskip
+          Falls $L$ erkennbar, so auch $\overline{L}$.
+        \item
+          \Bmph{Schnitt}, falls gilt:
+          \par\smallskip
+          Falls $L_1,L_2$ erkennbar, so auch $L_1 \cap L_2$.
+        \item
+          \Bmph{Konkatenation}, falls gilt:
+          \par\smallskip
+          Falls $L_1,L_2$ erkennbar, so auch $L_1 \cdot L_2$.
+        \item
+          \Bmph{Kleene-Stern}, falls gilt:
+          \par\smallskip
+          Falls $L$ erkennbar, so auch $L^*$.
+      \end{Itemize}
+
+      \uncover<2->{%      
+        \Emph{Unter welchen Op.\ sind die NEA-erkennbaren Sprachen abgeschlossen?}
+      }
+
+      \note{
+        \uz{9:32}
+  
+        \par\medskip
+        \textbf{Fragen:}~ Wer weiß es noch?
+          
+        \par\medskip
+        Gemeinsam durchgehen \& rekapitulieren:
+        %
+        \begin{itemize}
+          \item
+            Vereinigungsautomat
+          \item
+            Produktautomat
+          \item
+            Det.+Vertauschen aZ/nicht-aZ
+          \item
+            Hintereinanderhängen
+          \item
+            Schleife aZ$\to$AZ
+        \end{itemize}
+        
+        \par
+      }
+    \end{frame}
+
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Abgeschlossenheit}
+      
+      \begin{Satz}
+        Die Menge der NEA-erkennbaren Sprachen ist abgeschlossen unter den Operationen
+        $\cup,\cap,\overline{\phantom{o}},\cdot,{}^\ast$.
+%        \par\smallskip
+%        Das heißt:
+%        \par\smallskip
+%        Wenn $L,L_1,L_2$ NEA-erkennbar sind, dann sind auch 
+%        \begin{Itemize}
+%          \item
+%            $L_1 \cup L_2$
+%          \item
+%            $L_1 \cap L_2$
+%          \item
+%            $\overline{L}$
+%          \item
+%            $L_1 \cdot L_2$
+%          \item
+%            $L^*$
+%        \end{Itemize}
+%        NEA-erkennbar.
+        \label{thm:abgeschlossenheit}
+      \end{Satz}
+
+      \par\medskip
+      \Bmph{Beweis:}
+      Siehe ThI\,1.%
+
+      \note{
+        \uz{9:36}
+        
+        \par
+      }
+    \end{frame}
+
+%    % ------------------------------------------------------------------------------------------
+%    \begin{frame}[t]
+%      \frametitle{Abgeschlossenheit unter Vereinigung}
+%      
+%      \begin{Lemma}
+%        Seien $\Aut{A}_1,\Aut{A}_2$ NEAs über $\Sigma$.\\
+%        Dann gibt es einen NEA $\Aut{A}_3$ mit $L(\Aut{A}_3) = L(\Aut{A}_1) \cup L(\Aut{A}_2)$.
+%        \label{lem:abgeschlossenheit_vereinigung}%
+%      \end{Lemma}
+%      
+%      \par\bigskip
+%      \uncover<2->{
+%        \Bmph{Beweis:}~
+%        Seien $\Aut{A}_i = (Q_i, \Sigma, \Delta_i, I_i, F_i)$ für $i=1,2$.
+%        \par
+%        O.\,B.\,d.\,A.\ gelte $Q_1 \cap Q_2 = \emptyset$.
+%        \par\smallskip
+%        Konstruieren $\Aut{A}_3 = (Q_3, \Sigma, \Delta_3, I_3, F_3)$ wie folgt.
+%        \uncover<3->{%
+%          \begin{Itemize}
+%            \emphitem
+%              \emph{Idee: vereinige $\Aut{A}_1$ und $\Aut{A}_2$.}
+%            \item
+%              $Q_3 = Q_1 \cup Q_2$
+%            \item
+%              $\Delta_3 = \Delta_1 \cup \Delta_2$
+%            \item
+%              $I_3 = I_1 \cup I_2$
+%            \item
+%              $F_3 = F_1 \cup F_2$ \hfill (Beispiel siehe Tafel) \Tafel~~~~~
+%          \end{Itemize}
+%          \par\smallskip
+%          Dann gilt $L(\Aut{A}_3) = L(\Aut{A}_1) \cup L(\Aut{A}_2)$.\quad (Tafel) \Tafel~~~~
+%          \par\vspace*{-\baselineskip}
+%          \qed
+%          \par\vspace*{-7pt}~
+%        }
+%      }
+%
+%    \note{~}
+%    \end{frame}
+%
+%%     % ------------------------------------------------------------------------------------------
+%%     \begin{frame}[t]
+%%       \frametitle{Abgeschlossenheit unter Schnitt}
+%%       
+%%       \begin{Lemma}
+%%         Seien $\Aut{A}_1,\Aut{A}_2$ NEAs über $\Sigma$.\\
+%%         Dann gibt es einen NEA $\Aut{A}_3$ mit $L(\Aut{A}_3) = L(\Aut{A}_1) \cap L(\Aut{A}_2)$.
+%%       \end{Lemma}
+%%       
+%%       \par\bigskip
+%%       \uncover<2->{
+%%         \Bmph{Beweis:}~
+%%         Seien $\Aut{A}_i = (Q_i, \Sigma, \Delta_i, I_i, F_i)$ für $i=1,2$.
+%%         \par\smallskip
+%%         Konstruieren $\Aut{A}_3 = (Q_3, \Sigma, \Delta_3, I_3, F_3)$ wie folgt.
+%%         \begin{Itemize}
+%%           \emphitem
+%%             \emph{Idee: lasse $\Aut{A}_1$ und $\Aut{A}_2$ "`gleichzeitig"' auf Eingabewort laufen.}
+%%           \item
+%%             $Q_3 = Q_1 \times Q_2$
+%%           \item
+%%             $\Delta_3 = \{((p,p'),a,(q,q')) \mid (p,a,q) \!\in\! \Delta_1 ~\&~ (p',a,q') \!\in\! \Delta_2\}$
+%%           \item
+%%             $I_3 = I_1 \times I_2$
+%%           \item
+%%             $F_3 = F_1 \times F_2$ \hfill (Beispiel siehe Tafel) \Tafel
+%%         \end{Itemize}
+%%         \par\smallskip
+%%         Dann gilt $L(\Aut{A}_3) = L(\Aut{A}_1) \cap L(\Aut{A}_2)$.\quad (Übung)\qed%
+%%       }
+%% 
+%%     \end{frame}
+%
+%    % ------------------------------------------------------------------------------------------
+%    \begin{frame}[t]
+%      \frametitle{Abgeschlossenheit unter Komplement}
+%      
+%      \begin{Lemma}
+%        Sei $\Aut{A}$ ein NEA über $\Sigma$.\\
+%        Dann gibt es einen NEA $\Aut{A}^c$ mit $L(\Aut{A}^c) = \overline{L(\Aut{A})}$.
+%      \end{Lemma}
+%      
+%      \par\bigskip
+%      \uncover<2->{
+%        \Bmph{Beweis:}
+%        \begin{Itemize}
+%          \emphitem
+%            \emph{Idee:} Vertausche End- und Nicht-Endzustände (im DEA!)
+%        \end{Itemize}
+%
+%        \par\smallskip
+%        O.\,B.\,d.\,A.\ sei $\Aut{A} = (Q, \Sigma, \Delta, I, F)$ ein DEA (Satz \ref{thm:potenzmengenkonstruktion}).
+%        \par\smallskip
+%        Dann erkennt $\Aut{A} = (Q, \Sigma, \Delta, I, Q\setminus F)$ die Sprache $\overline{L(\Aut{A})}$.\qed%
+%      }
+%
+%%       \par\bigskip
+%%       \uncover<3->{%
+%%         \centerline{$
+%%           \left(
+%%             \begin{array}{@{}l@{}}
+%%               \text{Jetzt erhält man Abgeschlossenheit unter $\cap$ auch mittels} \\
+%%               L_1 \cap L_2 = \overline{\overline{L_1} \cup \overline{L_2}}).
+%%             \end{array}
+%%           \right)
+%%         $}
+%%       }
+%
+%
+%      \par\bigskip
+%      \uncover<3->{%
+%        \begin{Folgerung}
+%          Seien $\Aut{A}_1,\Aut{A}_2$ NEAs über $\Sigma$.\\
+%          Dann gibt es einen NEA $\Aut{A}_3$ mit $L(\Aut{A}_3) = L(\Aut{A}_1) \cap L(\Aut{A}_2)$.
+%        \end{Folgerung}
+%
+%        \par\smallskip
+%        Gilt wegen $L_1 \cap L_2 = \overline{\overline{L_1} \cup \overline{L_2}}$.
+%      }
+%
+%    \note{~}
+%    \end{frame}
+%
+%    % ------------------------------------------------------------------------------------------
+%    \begin{frame}[t]
+%      \frametitle{Abgeschlossenheit unter Verkettung}
+%      
+%      \begin{Lemma}
+%        Seien $\Aut{A}_1,\Aut{A}_2$ NEAs über $\Sigma$.\\
+%        Dann gibt es einen NEA $\Aut{A}_3$ mit $L(\Aut{A}_3) = L(\Aut{A}_1) \cdot L(\Aut{A}_2)$.
+%        \label{lem:abgeschlossenheit_verkettung}%
+%      \end{Lemma}
+%      
+%      \par\bigskip
+%      \uncover<2->{
+%        \Bmph{Beweis:}~
+%        Seien $\Aut{A}_i = (Q_i, \Sigma, \Delta_i, I_i, F_i)$ für $i=1,2$.
+%        \par
+%        O.\,B.\,d.\,A.\ gelte $Q_1 \cap Q_2 = \emptyset$ und $I_i = \{q_{0i}\}$.
+%        \par\smallskip
+%        Konstruieren $\Aut{A}_3 = (Q_3, \Sigma, \Delta_3, I_3, F_3)$ wie folgt.
+%        \begin{Itemize}
+%          \emphitem
+%            \emph{Idee:} "`Hintereinanderhängen"' von $\Aut{A}_1$ und $\Aut{A}_2$. \Tafel
+%%           \item
+%%             $Q_3 = Q_1 \cup Q_2$
+%%           \item
+%%             $\Delta_3 = \Delta_1 \cup \Delta_2 \cup \{(q,a,q') \mid q \in F_1 \text{~und~} (q_{02},a,q') \in \Delta_2\}$
+%%           \item
+%%             $I_3 = I_1$,\quad
+%% %           \item
+%%             $F_3 = 
+%%             \begin{cases}
+%%               F_2 \cup F_1 & \text{falls~} q_{02} \in F_2 \\
+%%               F_2          & \text{sonst} 
+%%             \end{cases}$
+%%             \hfill (Bsp.\ s.\ Tafel) \Tafel
+%        \end{Itemize}
+%        \par\smallskip
+%%         Dann gilt $L(\Aut{A}_3) = L(\Aut{A}_1) \cdot L(\Aut{A}_2)$.\quad (Übung)\qed%
+%        (Details siehe ThI1 -- nicht wichtig für diese Vorlesung)\qed%
+%      }
+%
+%    \note{~}
+%    \end{frame}
+%
+%    % ------------------------------------------------------------------------------------------
+%    \begin{frame}[t]
+%      \frametitle{Abgeschlossenheit unter Kleene-Hülle}
+%      
+%      \begin{Lemma}
+%        Sei $\Aut{A}$ ein NEA über $\Sigma$.\\
+%        Dann gibt es einen NEA $\Aut{A}^k$ mit $L(\Aut{A}^k) = {L(\Aut{A})}^*$.
+%        \label{lem:abgeschlossenheit_kleene}%
+%      \end{Lemma}
+%      
+%      \par\bigskip
+%      \uncover<2->{
+%        \Bmph{Beweis:}~
+%        Sei $\Aut{A} = (Q, \Sigma, \Delta, I, F)$.
+%        Konstruieren $\Aut{A}^k = (Q^k, \Sigma, \Delta^k, I^k, F^k)$ wie folgt.
+%        \begin{Itemize}
+%          \emphitem
+%            \emph{Idee:} Lege "`Schleife"' um $\Aut{A}$;\\
+%            Löse $\varepsilon$-Kanten auf wie im $\cdot$\,-Fall \Tafel
+%%           \item
+%%             $Q^k = Q \cup \{q_0\}$\quad (für ein $q_0 \notin Q$)
+%%           \item
+%%             $\Delta^k = \Delta \cup \{(q_0,\varepsilon,q) \mid q \in I\}
+%%                                \cup \{(q,\varepsilon,q_0) \mid q \in F\}$
+%%             \par\smallskip
+%%             \hspace*{20mm}{\small ($\varepsilon$-Kanten werden aufgelöst wie im $\cdot$\,-Fall.)}
+%%           \item
+%%             $I^k = F^k = \{q_0\}$ \hfill (Beispiel siehe Tafel) \Tafel
+%        \end{Itemize}
+%        \par\smallskip
+%%         Dann gilt $L(\Aut{A}^k) = L(\Aut{A})^*$.\quad (Übung)\qed%
+%        (Details siehe ThI1 -- nicht wichtig für diese Vorlesung)\qed%
+%      }
+%
+%    \note{~}
+%    \end{frame}
+%%%  }
+
+  % ==============================================================================================
+  % ==============================================================================================
+  \section[Reguläre Ausdrücke]{Reguläre Ausdrücke und \protect\emph{Anwendungen}}
+
+%%%  \mysectioncontent{%
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Reguläre Ausdrücke und Anwendungen}
+      
+      Reguläre Ausdrücke sind \dots
+      
+      \begin{Itemize}
+        \item
+          bequeme Charakterisierung NEA-erkennbarer Sprachen
+        \item
+          besonders praktisch für Anwendungen
+      \end{Itemize}
+      
+      \note{
+        \uz{9:37}
+  
+        \par
+      }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Reguläre Sprachen}
+      
+      \begin{Definition}
+        Eine Sprache $L \subseteq \Sigma^*$ ist \Bmph{regulär}, falls gilt:
+        \begin{Itemize}
+          \item
+            $L=\emptyset$\quad oder
+          \item
+            $L=\{\varepsilon\}$\quad oder
+          \item
+            $L=\{a\}$, $a \in \Sigma$,\quad oder
+          \item
+            $L$ lässt sich durch (endlichmaliges) Anwenden der Operatoren
+            $\cup,\cdot,{}^*$ aus den vorangehenden Fällen konstruieren.
+            \label{def:reg_sprache}%
+        \end{Itemize}
+        
+      \end{Definition}
+
+      \par\bigskip
+      \uncover<2->{%
+        \Gmph{Beispiele:}
+        \begin{Itemize}
+          \item[]
+            $(\{a\} \cup \{b\})^* \cdot \{a\} \cdot \{b\}$\quad (siehe $\Aut{A}_3$ auf Folie \ref{frame:automatenbsp})
+          \item[]
+            $\{b\}^* \cdot \{a\} \cdot \{a\}^* \cdot \{b\} \cdot (\{a\} \cup \{b\})^*$\quad (s. $\Aut{A}_2$ auf Folie \ref{frame:automatenbsp})
+        \end{Itemize}
+      }
+
+      \note{
+        \uz{9:37}
+  
+        \par
+      }
+    \end{frame}
+
+    \settowidth{\leftbox}{$r = a$, für $a \in \Sigma$,}
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Reguläre Ausdrücke}
+      
+      \begin{Definition}%
+        Ein \Bmph{regulärer Ausdruck (RA)} $r$ über $\Sigma$
+        und die \Bmph{zugehörige Sprache} $\Bmph{$L(r)$} \subseteq \Sigma^*$
+        werden induktiv wie folgt definiert.
+        \begin{Itemize}
+          \item
+            \parbox{\leftbox}{$r = \emptyset$}
+            ~ist ein RA mit~ $L(r) = \emptyset$
+          \item
+            \parbox{\leftbox}{$r = \varepsilon$}
+            ~ist ein RA mit~ $L(r) = \{\varepsilon\}$
+          \item
+            \parbox{\leftbox}{$r = a$, für $a \in \Sigma$,}
+            ~ist ein RA mit~ $L(r) = \{a\}$
+          \item
+            \parbox{\leftbox}{$r = (r_1 + r_2)$}
+            ~ist ein RA mit~ $L(r) = L(r_1) \cup L(r_2)$
+          \item
+            \parbox{\leftbox}{$r = (r_1r_2)$}
+            ~ist ein RA mit~ $L(r) = L(r_1) \cdot L(r_2)$
+          \item
+            \parbox{\leftbox}{$r = (r_1)^*$}
+            ~ist ein RA mit~ $L(r^*) = (L(r))^*$
+            \label{def:reg_ausdruck}%
+        \end{Itemize}
+      \end{Definition}
+
+      \par\bigskip
+      \uncover<2->{%
+        \Gmph{Beispiele:}\quad (wir lassen Klammern weg soweit eindeutig)
+        \begin{Itemize}
+          \item[]
+            $(a+b)^*ab$\quad (siehe $\Aut{A}_3$ auf Folie \ref{frame:automatenbsp})
+          \item[]
+            $b^*aa^*b(a+b)^*$\quad (siehe $\Aut{A}_2$ auf Folie \ref{frame:automatenbsp})
+        \end{Itemize}%
+      }
+
+      \note{
+        \uz{9:39}
+  
+        \par
+      }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Reguläre und NEA-erkennbare Sprachen}
+      
+      \begin{Satz}[Kleene 1956]
+        Sei $L \subseteq \Sigma^*$ eine Sprache.
+        \begin{Enumerate}
+          \item
+            $L$ ist regulär gdw.\ es einen RA $r$ gibt mit $L=L(r)$.
+          \item
+            $L$ ist regulär gdw.\ $L$ NEA-erkennbar ist.
+        \end{Enumerate}
+      \end{Satz}
+      
+      \par\bigskip
+      \uncover<2->{%
+        \Bmph{Beweis.}
+        \begin{Enumerate}
+          \item
+            Folgt offensichtlich aus Def.\ \ref{def:reg_sprache}, \ref{def:reg_ausdruck}.
+          \item
+            Benutze Punkt 1.
+            \begin{Itemize}
+              \item["`$\Rightarrow$"':]
+                Induktion über Aufbau von $r$.
+                \par\smallskip
+                IA: gib Automaten an, die $\emptyset, \{\varepsilon\}, \{a\}$ erkennen.
+                \par
+                IS: benutze Abschlusseigenschaften
+%                -- Lemmas \ref{lem:abgeschlossenheit_vereinigung}, \ref{lem:abgeschlossenheit_verkettung}, \ref{lem:abgeschlossenheit_kleene}
+                (Satz~\ref{thm:abgeschlossenheit})
+              \item["`$\Leftarrow$"':]
+%                 siehe Tafel.\Tafel
+                siehe Theoretische Informatik 1.
+                \qed%
+            \end{Itemize}
+        \end{Enumerate}
+      }
+
+      \note{
+        \uz{9:41}
+  
+        \par
+      }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Anwendungen regulärer Ausdrücke}
+      
+      \begin{Itemize}
+        \item
+          RAs werden verwendet, um "`Muster"' von zu suchendem Text zu beschreiben.
+          \begin{Itemize}
+            \item[]
+              z.\,B.: suche alle Vorkommen von "`PLZ Ort"':\\
+              $(0+\dots+9)^5\texttt{\textvisiblespace}(A+\dots+Z)(a+\dots+z)^*$
+          \end{Itemize}
+          \par\medskip
+        \item
+          Programme zum Suchen von Mustern im Text\\
+          übersetzen RAs in NEAs/DEAs und simulieren diese.  
+          \par\medskip
+        \item
+          wichtige Klassen von Anwendungen:\\
+          \Bmph{lexikalische Analyse}, \Bmph{Textsuche}
+      \end{Itemize}
+
+      \note{
+        \uzz{8:30}{9:43 bis 9:44, 1\,min Reserve}
+        
+        $\uparrow$ Zeitplanung ist Quatsch; die Sitzung war von 12:15 bis 13:45.
+        
+        \parIII
+        \textbf{Ankündigen:}~ Terminfindung (Mo. 12--14 klappt bei 2 TN nicht). In Pause.
+  
+        \par
+      }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Komfortablere Syntax regulärer Ausdrücke}
+      
+      \begin{Itemize}
+        \item
+          UNIX und andere Anwendungen erweitern Syntax von RAs
+        \item
+          Hier: nur "`syntaktischer Zucker"' -- die Erweiterungen,\\
+          die nicht aus den regulären Sprachen herausführen
+      \end{Itemize}
+      
+      \par\bigskip
+      \begin{Itemize}
+        \item<2->
+          Alphabet $\Sigma$: alle ASCII-Zeichen
+        \item<2->
+          RA \texttt{.} mit $L(\texttt{.}) = \Sigma$
+        \item<2->
+          RA \texttt{[}$a_1a_2\dots a_k$\texttt{]}, Abkürzung für $a_1 + a_2 + \dots + a_k$
+        \item<2->
+          RAs für Bereiche:
+          z.\,B. \texttt{[a-z0-9]}, Abkü.\ für \texttt{[ab$\dots$z01$\dots$9]}
+        \item<2->
+          Operator \texttt{|} anstelle $+$
+        \item<2->
+          Operator \texttt{?}: $r\texttt{?}$ steht für $\varepsilon + r$
+        \item<2->
+          Operator \texttt{+}: $r\texttt{+}$ steht für $rr^*$
+        \item<2->
+          Operator $\{n\}$: $r\{5\}$ steht für $rrrrr$
+        \item<2->
+          Klammern und $*$ wie gehabt
+      \end{Itemize}
+      
+      \vspace*{-3\baselineskip}%
+      \hspace*{.655\textwidth}%
+      \begin{minipage}{.345\textwidth}
+        \begin{exampleblock}<3->{}
+          \begin{small}
+            PLZ-Ort-Beispiel: \\
+            \texttt{[0-9]$\{$5$\}$\textvisiblespace[A-Z][a-z]*}
+            \par
+          \end{small}
+         \end{exampleblock}
+     \end{minipage}
+      \note{
+        \uz{8:32}
+
+        \par
+      }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Anwendung: lexikalische Analyse}
+      
+      \begin{Itemize}
+        \item
+          \Bmph{Lexer} (auch: Tokenizer) durchsucht Quellcode nach \Bmph{Token}:
+          \par%\smallskip
+          {\small zusammengehörende Zeichenfolgen, z.\,B.\ Kennwörter, Bezeichner}
+          \par\smallskip
+        \item
+          Ausgabe des Lexers: Token-Liste,\\
+          wird an Parser weitergegeben
+          \par\smallskip
+        \item
+          Mit RAs: Lexer leicht programmier- und modifizierbar
+          \par\smallskip
+        \item<2->
+          UNIX-Kommandos \texttt{lex} und \texttt{flex} generieren Lexer
+          \begin{Itemize}
+            \item
+              Eingabe: Liste von Einträgen RA\,$+$\,Code
+            \item
+              Code beschreibt Ausgabe des Lexers für das jeweilige Token
+            \item
+              generierter Lexer wandelt alle RAs in \Emph{einen DEA} um,\\
+              um Vorkommen der Tokens zu finden (siehe Folie \ref{frame:web_ebay_example})
+            \item
+              anhand des Zustands des DEAs lässt sich bestimmen,\\
+              \emph{welches} Token gefunden wurde
+          \end{Itemize}
+      \end{Itemize}
+
+      \note{
+        \uz{8:35}
+        
+        \par\medskip
+        \textbf{Lexer:~}~ kurz für "`lexikalischer Scanner"', auch Tokenizer
+        
+        \par\medskip
+        \textbf{Lex:}~ a computer program that generates lexical analyzers"' [Wikipedia]
+        
+        \par\medskip
+        \textbf{Flex:}~ ``fast lexical analyzer generator'', ``a free and open-source software alternative to lex'' [Wikipedia]
+
+        \par
+      }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}[containsverbatim]
+      \frametitle{Beispieleingabe für \texttt{lex}}
+      
+      \begin{exampleblock}{}
+        \vspace*{-4mm}
+        \lexbsp
+        \vspace*{-8mm}
+      \end{exampleblock}
+
+      (Lexer-Generator muss Prioritäten beachten:\\
+      \texttt{else} wird auch vom 2. RA erkannt, ist aber reserviert)
+
+      \note{
+        \uz{8:37}
+
+        \par\medskip
+        \textbf{ZF:}~ Der Lexer-Generator dient dazu, Lexer zu erzeugen. \\
+        Diese Tabelle hier gibt an, wie das passiert. \\
+        Der Vorteil ist die leichte Änderbarkeit, wenn sich mal 
+        ein Token oder dessen Beschreibung (RA!) ändert.
+        
+        \par
+      }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Anwendung: Finden von Mustern im Text}
+      
+      \Gmph{Beispiel:} Suchen von Adressen (Str.\ $+$ Hausnr.) in Webseiten
+      \par\smallskip
+      Solche Angaben sollen gefunden werden:
+%       \begin{center}
+%         \begin{ttfamily}
+%           Parkstraße 5\\
+%           Enrique-Schmdt-Straße 12a \\
+%           Breitenweg 12--14 \\
+%           Knochenhauergasse 42
+%         \end{ttfamily}
+%       \end{center}
+      \begin{itemize}
+        \item[]
+          \texttt{Parkstraße 5}
+          \par\vspace{-1mm}
+        \item[]
+          \texttt{Enrique-Schmidt-Straße 12a}
+          \par\vspace{-1mm}
+        \item[]
+          \texttt{Breitenweg 24A}
+          \par\vspace{-1mm}
+        \item[]
+          \texttt{Knochenhauergasse 30--32}
+      \end{itemize}
+      \uncover<2->{%
+        aber auch solche:
+  %       \begin{center}
+  %         \begin{ttfamily}
+  %           Straße des 17.\ Juni 17\\
+  %           ...boulevard, ...allee, ... \\
+  %           Postfach 330 440 \\
+  %           Am Wall 8
+  %         \end{ttfamily}
+  %       \end{center}
+        \begin{itemize}
+          \item[]
+            \texttt{Straße des 17.\ Juni 17}
+            \par\vspace{-1mm}
+          \item[]
+            \dots\texttt{boulevard}, \dots\texttt{allee}, \dots\texttt{platz}, \dots
+            \par\vspace{-1mm}
+          \item[]
+            \texttt{Postfach 330 440}
+            \par\vspace{-1mm}
+          \item[]
+            \texttt{Am Wall 8}
+        \end{itemize}%
+      }
+      \par\bigskip
+      \uncover<3->{%
+        \begin{Itemize}
+          \item[$\leadsto$]
+            Ausmaß der Variationen erst während der Suche deutlich
+          \item[$\leadsto$]
+            Gesucht: einfach modifizierbare Beschreibung der Muster
+        \end{Itemize}%
+      }
+      \note{
+        \uz{8:40}
+  
+        \par
+      }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Mustersuche mit regulären Ausdrücken}
+      
+      Mögliches Vorgehen:
+      \begin{Enumerate}
+        \item[\Bmph{(1)}]
+          Beschreibung des Musters mit einem einfachen RA
+        \item[\Bmph{(2)}]
+          Umwandlung des RA in einen NEA
+        \item[\Bmph{(3)}]
+          Implementation des DEA wie auf Folie \ref{frame:web_ebay_example}+\ref{frame:web_ebay_example_2}
+        \item[\Bmph{(4)}]
+          Test
+        \item[\Bmph{(5)}]
+          Wenn nötig, RA erweitern/ändern und Sprung zu Schritt 2
+      \end{Enumerate}
+
+      \note{
+        \uz{8:42}
+
+        \par\medskip
+        Dies ist ein ganz banales, heuristisches Vorgehen. \\
+        Keine tiefgründigen Techniken. \\
+        Dient nur zur Demonstration der einfachen Erweiterbarkeit, \\
+        wenn man RAs benutzt.
+        
+        \par
+      }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    % RAi - RAiv sind oben definiert
+    \begin{frame}
+      \frametitle{Adresssuche mit regulären Ausdrücken}
+      
+      So kann sich der RA entwickeln:
+      \begin{Itemize}
+        \item
+          Vorkommen von "`straße"' etc.:\footnote{%
+            Weil der UNIX-RA \texttt{.} für $\Sigma$ reserviert ist,
+            steht \texttt{\textbackslash.} für $\{.\}$%
+          }
+          \par\vspace*{-2mm}
+          \RAi
+          \par\vspace*{-2mm}
+        \item<2->
+          Plus Name der Straße und Hausnummer:
+          \par\vspace*{-1mm}
+          \uncover<3->{%
+            \RAii
+          }
+          \par\vspace*{-2mm}
+        \item<4->
+          Hausnummern mit Buchstaben (12a), -bereiche (30--32):
+          \par\vspace*{-2mm}
+          \uncover<5->{%
+            \RAiii
+            \par\vspace*{-6mm}
+            \RAiv
+          }
+          \par\vspace*{-6mm}
+        \item<6->
+          und mehr:
+          \begin{itemize}
+            \item
+              Straßennamen mit Bindestrichen
+            \item
+              "`Straße"' etc.\ am Anfang
+            \item
+              Plätze, Boulevards, Alleen etc.
+            \item
+              Postfächer
+            \item
+              \dots
+          \end{itemize}          
+      \end{Itemize}
+
+      \note{
+        \uz{8:43 bis 8:46}
+
+        \par
+      }
+    \end{frame}
+%%%  }
+
+  % ==============================================================================================
+  % ==============================================================================================
+  \section{Charakterisierungen}
+
+%%%  \mysectioncontent{%
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Pumping-Lemma}
+      
+      Wie zeigt man, dass $L$ \Emph{nicht} NEA-erkennbar (regulär) ist?
+      
+      \par\bigskip
+      \uncover<2->{%
+        \begin{Satz}[Pumping-Lemma]
+          Sei $L$ eine NEA-erkennbare Sprache.
+          \par\smallskip
+          Dann gibt es eine Konstante $p \geqslant 0$,
+          \par
+          so dass für alle Wörter $w \in L$ mit $|w| \geqslant p$ gilt:
+          \par\smallskip
+          Es gibt eine Zerlegung $w=xyz$ mit $y \neq \varepsilon$ und $|xy| \leqslant p$,\\
+          \par
+          so dass $xy^iz \in L$ für alle $i \geqslant 0$.
+          \label{thm:pumping_lemma}
+        \end{Satz}
+%      }
+
+      \par\bigskip
+%      \uncover<3->{%
+        \Bmph{Beweis:}~ siehe ThI\,1. % \Tafel \par~\qed%
+      }
+
+      \note{
+        \textbf{8:46}
+
+        \par\medskip
+        \textbf{Fragen:}~ Wer kann sich an die 2 Werkzeuge aus ThI\,1 erinnern?
+        
+        \par\medskip
+        Am Ende:~ \textbf{Fragebogen F.\,2a}
+      }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Anwendung des Pumping-Lemmas}
+      
+      Benutzen Kontraposition:
+
+      \par\bigskip
+      \begin{block}{}
+        \Emph{Wenn} es \Emph{für alle} Konstanten $p \geqslant 0$
+        \par
+        \quad ein Wort $w \in L$ mit $|w| \geqslant p$ \Emph{gibt}, so dass es
+        \par\smallskip
+        \quad \Emph{für alle} Zerlegungen $w=xyz$ mit $y \neq \varepsilon$ und $|xy| \leqslant p$\\
+        \par
+        \quad ein $i \geqslant 0$ \Emph{gibt} mit $xy^iz \mathbin{\ddred{\notin}} L$,
+        \par\smallskip
+        \Emph{dann} ist $L$ \Emph{keine} NEA-erkennbare Sprache.
+      \end{block}
+
+      \par\bigskip
+%      \uncover<2->{%
+%        \ddgre{$\blacktriangleleft\!$~ Bsp.: s.\ Tafel}
+        \Tafel
+%      }
+
+      \note{
+        \uz{8:48 bis 8:55}
+
+        \par
+      }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Bemerkungen zum Pumping-Lemma}
+      
+      Die Bedingung in Satz \ref{thm:pumping_lemma} ist \dots
+      
+      \begin{Itemize}
+        \item
+          \Emph{notwendig} dafür, dass $L$ NEA-erkennbar ist
+          \par\smallskip
+        \item
+          \Emph{nicht hinreichend} \\
+          Bsp.:~ $\{a^nb^kc^k \mid n,k \geqslant 1\} \cup \{b^nc^k \mid n,k \geqslant 0\}$
+      \end{Itemize}
+
+      \par\medskip
+      $\leadsto$
+      Pumping-L.\ nur zum \Emph{Widerlegen} von Erkennbarkeit verwendbar,\\
+      nicht zum Beweisen, dass $L$ regulär ist
+
+      \par\bigskip
+      (Notwendige und hinreichende Variante: Jaffes Pumping-Lemma)
+
+      \note{
+        \textbf{8:55}
+
+        \par\medskip
+      }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Der Satz von Myhill-Nerode}
+      
+      \Bmph{Ziel:} notwendige \Emph{und} hinreichende Bedingung für Erkennbarkeit
+      
+      \par\medskip
+      \begin{Definition}
+        Sei $L \subseteq \Sigma^*$ eine Sprache.
+        \par\smallskip
+        Zwei Wörter $u,v \in \Sigma^*$ sind \Bmph{$L$-äquivalent}
+        (Schreibweise: $u \sim_L v$),
+        \par
+        wenn für alle $w \in \Sigma^*$ gilt:
+        \[
+          uw \in L \quad\text{genau dann, wenn}\quad vw \in L
+        \]
+      \end{Definition}
+
+      \par\bigskip
+      \uncover<2->{%
+        $\sim_L$ heißt \Bmph{Nerode-Rechtskongruenz} und ist Äquivalenzrelation \\
+        (Reflexivität, Symmetrie, Transitivität sind offensichtlich)%
+%      }
+      \par\bigskip
+%      \uncover<3->{%
+        \Bmph{Index} von $\sim_L$: Anzahl der Äquivalenzklassen%
+      }
+
+      \note{
+        \textbf{8:57}
+
+        \par\medskip
+        Satz von Myhill-Nerode liefert eine "`echte"' Charakterisierung der erkennbaren Sprachen
+        (und eine weitere nützliche Information)
+        
+        \par
+      }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Der Satz von Myhill-Nerode}
+    
+      \begin{Satz}[Myhill-Nerode]
+        $L \subseteq \Sigma^*$ is NEA-erkennbar gdw.\ $\sim_L$ endlichen Index hat.
+      \end{Satz}
+
+      \par\bigskip
+      \Bmph{Beweis:}~ siehe ThI\,1. \Tafel
+      
+      \par\bigskip\bigskip
+      \uncover<2->{%
+        Interessantes \Bmph{"`Nebenprodukt"'} des Beweises:
+        \par\smallskip
+        Endlicher Index $n$ von $\sim_L$ \\
+        $=$ minimale Anzahl von Zuständen in einem DEA, der $L$ erkennt.
+      }
+      \note{
+        \textbf{8:59}
+
+        \par\medskip
+        {\textgray\textbf{Fragebogen F.\,2b}}
+        
+        \par\medskip
+        \textbf{13\,min Pause: Terminfindung $\leadsto$ 9:15}
+        
+        (Ist aber eigentlich zu zeitig für Pause)
+        
+        \par
+      }
+    \end{frame}
+%%%  }
+
+  % ==============================================================================================
+  % ==============================================================================================
+  \section[Entscheidungsprobleme]{Entscheidungsprobleme}
+
+%%%  \mysectioncontent{%
+%     % ------------------------------------------------------------------------------------------
+%     \begin{frame}[t]
+%       \frametitle{Grundbegriffe}
+%       
+%       \Bmph{(Entscheidungs-)Problem}
+%       \begin{Itemize}
+%         \item
+%           \dots\ ist eine Teilmenge $P \subseteq M$
+%         \item
+%           Beispiele:
+%           \begin{Itemize}
+%             \item
+%               $P = \text{Menge aller Primzahlen}$, $M = \mathbb{N}$
+%             \item
+%               $\,P = \text{Menge aller NEAs \Aut{A} mit $L(\Aut{A}) \neq \emptyset$}$, \\
+%               $M = \text{Menge aller NEAs}$
+%           \end{Itemize}
+%         \item
+%           man stelle sich eine Blackbox vor mit
+%           \begin{Itemize}
+%             \item
+%               Eingabe $m \in M$
+%             \item
+%               Ausgabe \emph{ja}, falls $m \in P$, \emph{nein} sonst\quad (jede Berech.\ terminiert)
+%           \end{Itemize}
+%       \end{Itemize}
+% 
+%       \par\bigskip
+%       \uncover<2->{%
+%         \Bmph{Entscheidbarkeit:} $P$ ist entscheidbar,\\
+%         wenn es einen Algorithmus $A$ gibt, der die Blackbox implementiert.
+%         \[
+%           \left(
+%             \begin{array}{@{}l@{}}
+%               \text{Programmiersprache u.\ Rechnermodell sind relativ unerheblich:} \\
+%               \text{erweiterte Churchsche These}
+%             \end{array}
+%           \right)
+%         \]
+%       }      
+%       \note{~}
+%    \end{frame}
+% 
+%     % ------------------------------------------------------------------------------------------
+%     \begin{frame}[t]
+%       \frametitle{Komplexität}
+%       
+%       \Bmph{(Entscheidungs-)Problem}
+%       \begin{Itemize}
+%         \item
+%           \dots\ ist eine Teilmenge $P \subseteq M$
+%         \item
+%           man stelle sich eine Blackbox vor mit
+%           \par
+%           \begin{minipage}{.3\textwidth}
+%             \begin{Itemize}
+%               \item
+%                 Eingabe $m \in M$
+%             \end{Itemize}%
+%           \end{minipage}
+%           \begin{minipage}{.6\textwidth}
+%             \begin{Itemize}
+%               \item
+%                 Ausgabe \emph{ja}, falls $m \in P$, \emph{nein} sonst
+%             \end{Itemize}%
+%           \end{minipage}
+%       \end{Itemize}
+% 
+%       \par\medskip
+%       \Bmph{Entscheidbarkeit:}
+%       gibt es Alg.\ $A$, der die Blackbox implementiert?
+% 
+%       \par\bigskip
+%       \uncover<2->{%
+%         \Bmph{Komplexität}:\\
+%         zusätzliche Anforderungen an Zeit-/Speicherplatzbedarf von $A$%
+%         \begin{Itemize}
+%           \item
+%             \Bmph{Polynomialzeit:}
+%             Anzahl Rechenschritte von $A$ ist $\leqslant pol(|m|)$,\\
+%             $|m|:$ Länge der Eingabe;\quad $pol$ ist ein festes \Bmph{Polynom}
+%         \end{Itemize}
+%       }
+%     \end{frame}
+% 
+%     % ------------------------------------------------------------------------------------------
+%     \begin{frame}[t]
+%       \frametitle{Reduktion}
+%       
+%       \Bmph{(Entscheidungs-)Problem}
+%       \begin{Itemize}
+%         \item
+%           \dots\ ist eine Teilmenge $P \subseteq M$
+%         \item
+%           man stelle sich eine Blackbox vor mit
+%           \par
+%           \begin{minipage}{.3\textwidth}
+%             \begin{Itemize}
+%               \item
+%                 Eingabe $m \in M$
+%             \end{Itemize}%
+%           \end{minipage}
+%           \begin{minipage}{.6\textwidth}
+%             \begin{Itemize}
+%               \item
+%                 Ausgabe \emph{ja}, falls $m \in P$, \emph{nein} sonst
+%             \end{Itemize}%
+%           \end{minipage}
+%       \end{Itemize}
+% 
+%       \par\medskip
+% %       \Bmph{Entscheidbarkeit:}
+% %       gibt es Alg.\ $A$, der die Blackbox implementiert?
+% % 
+% %       \par\bigskip
+%       \Bmph{Polynomialzeit:}
+%       Anzahl der Rechenschritte ist $\leqslant pol(|m|)$,\\
+%       \quad $|m|:$ Länge der Eingabe;\quad $pol$ ist ein festes \Bmph{Polynom}
+%       
+%       \par\bigskip
+%       \uncover<2->{%
+%         \Bmph{(Polynomielle) Reduktion} von $P \subseteq M$ nach $P' \subseteq M'$ \\
+%         ist eine (in Polynomialzeit berechenbare) Funktion $\pi$ mit 
+%         \begin{Itemize}
+%           \item
+%             $\pi : M \to M'$
+%           \item
+%             $m \in P$ gdw.\ $\pi(m) \in P'$
+%           \item
+%             Skizze/Bsp.: siehe Tafel \Tafel
+%         \end{Itemize}
+%       }
+%       
+%       \par\medskip
+%       \uncover<3->{%
+%         Wenn $P$ zu $P'$ reduzierbar, dann ist $P$ \Bmph{höchstens so schwer} wie $P'$.
+%       }
+%     \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}[t]
+      \frametitle{Entscheidbarkeit}
+      
+      \Bmph{(Entscheidungs-)Problem}
+      \begin{Itemize}
+        \item
+          \dots\ ist eine Teilmenge $X \subseteq M$
+          \begin{itemize}
+            \item
+              Eingabe:~ $m \in M$;\quad Frage: $m \in X$\,?
+            \item
+              $m \in X$\,: \Bmph{Ja-Instanzen;}\quad $m \in M \setminus X$\,: \Bmph{Nein-Instanzen}
+          \end{itemize}
+          \par\smallskip
+        \item<2->
+          Beispiele:
+          \begin{Itemize}
+            \item
+              $X = \text{Menge aller Primzahlen}$, $M = \mathbb{N}$
+            \item
+              $\,X = \text{Menge aller NEAs \Aut{A} mit $L(\Aut{A}) \neq \emptyset$}$, \\
+              $M = \text{Menge aller NEAs}$
+          \end{Itemize}
+          \par\smallskip
+        \item<3->
+          man stelle sich eine Blackbox vor:
+%           \begin{Itemize}
+%             \item
+%               Eingabe $m \in M$
+%             \item
+%               Ausgabe \emph{ja}, falls $m \in P$, \emph{nein} sonst\quad (jede Berech.\ terminiert)
+%           \end{Itemize}
+          \begin{center}
+            \Fig{20}
+          \end{center}
+      \end{Itemize}
+
+      \par\smallskip
+      \uncover<4->{%
+        \Bmph{Entscheidbarkeit:} $X$ ist entscheidbar,\\
+        wenn es einen Algorithmus $A$ gibt, der die Blackbox implementiert.
+%        \[
+%          \left(
+%            \begin{array}{@{}l@{}}
+%              \text{} \\
+%              \text{}
+%            \end{array}
+%          \right)
+%        \]
+      }
+%      \vspace*{-3pt}
+
+      \note{
+        \textbf{9:15}
+%        \textbf{8:45 kurz}
+
+        \par\medskip
+        Entscheidungsprobleme sind zentral für diese Vorlesung,
+        denn wir werden sehen, dass algorithmische Probleme in Anwendungen
+        auf Entscheidungsprobleme gewisser Automatenmodelle
+        zurückzuführen sind.
+        
+        \par\smallskip
+        Z.\,B.:~ Validierung eines XML-Dokuments entspricht dem Wortproblem
+        für gewisse Baumautomaten.
+        
+        \par\smallskip
+        Durch das Studium dieser Entscheidungsprobleme bekommen wir also
+        einen prinzipiellen Ansatz zur Lösung der Anwendungsprobleme.
+        
+        \par\bigskip
+        Zunächst ein kurzer Abriss von Entscheidbarkeit und Komplexität;
+        mehr dazu im ThI2-Skript.
+        
+        \par\bigskip
+        "`Algorithmus"':~ Prog.sprache \& Rechnermodell sind relativ unerheblich \\
+        ((erweiterte) Church-Turing-These)
+        
+        \par
+      }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Komplexität}
+      
+      \begin{center}
+        \Fig{20}
+      \end{center}
+
+      \Bmph{Komplexität}:\\
+      zusätzliche Anforderungen an Zeit-/Speicherplatzbedarf von $A$%
+      \begin{Itemize}
+        \item<2->
+          \Bmph{Polynomialzeit:}
+          Anzahl Rechenschritte von $A$ ist $\leqslant |m|^k$,\\
+          $|m|:$ Länge der Eingabe;\quad $k:$ beliebige Konstante
+          \par\smallskip
+        \item<3->
+          \Bmph{Polynomieller Platz:}
+          von $A$ benötigter Speicherplatz $\leqslant |m|^k$
+          \par\smallskip
+        \item<4->
+          \Bmph{Exponentialzeit:}
+          Anzahl Rechenschritte von $A$ ist $\leqslant 2^{|m|^k}$
+          \par\smallskip
+        \item<5->
+          \dots
+      \end{Itemize}
+      \note{
+        \uz{9:18}
+%        \textbf{8:46 kurz}
+
+        \par\medskip
+        \textbf{Wichtig:}~
+        Es geht dabei immer um eine "`Worst-Case-Analyse"', \\
+        also: wie viele Ressourcen braucht ein Algorithmus/
+        der beste Algorithmus \textbf{im schlechtesten Fall}\,?
+        
+        \par
+      }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Einige übliche Komplexitätsklassen}
+      
+%        \par\vspace*{-10pt}
+%      \begin{block}{}
+%        \begin{center}
+        \hspace{-5mm}%
+          \scalebox{.94}[1]{%
+            \begin{tabular}{@{}lll@{}}
+              \hline\stab
+              Name            & Bedeutung                     & Beispiel-Problem           \\
+              \hline\stab
+              \LS             & logarithm.\ Speicherplatz     & Erreichbarkeit, ungerichtete Graphen \\
+              \NL             & nichtdetermin.\ log.\ Platz   & Erreichbarkeit, gerichtete Graphen \\
+  %             \leftthumbsup
+              \PT             & Polynomialzeit                & Primzahlen                 \\[5pt]
+              \hdashline[5pt/2pt]
+              \rule{0pt}{15pt}%
+  %             \leftthumbsdown
+              \NP             & nichtdeterminist.\ Polyzeit   & Erfüllbarkeit Aussagenlogik  \\
+              \PS             & polynom.\ Speicherplatz       & Erfüllbarkeit QBF  \\[10pt]
+              \EXP            & Exponentialzeit               & Gewinnstrategie $n\!\times\!n$-Schach
+              \\
+  %             \multirow{6}{3cm}{%
+  %               $\left.\rule{0pt}{3.05\baselineskip}\right\}$
+  %               \parbox[t]{2.5cm}{HL SAT \\[1.3\baselineskip]FOL SAT}%
+  %             }                                                                                              \\
+              \NEXP           & nichtdet. Exponentialzeit     & Clique f.\ schaltkreiscodierte Graphen             \\
+              \EXPSPACE       & exponentieller Platz          & Äquiv.\ regulärer Ausdrücke mit "`\,$\cdot^2$\,"'  \\[-2pt]
+              \qquad \vdots   & \qquad \vdots                 &                            \\%[10pt]
+  %             $\skull$
+                              & unentscheidbar                & Erfüllbarkeit Prädikatenlogik \\
+              \hline
+            \end{tabular}
+            \hspace*{-10mm}
+          }
+        
+%        \end{center}
+      
+        \par\bigskip
+        \hspace{-5mm}%
+        Komplementklassen:~ \coNL, \coNP etc.\
+%      \end{block}
+      \note{
+        \uz{9:21}
+%        \textbf{8:47 kurz}
+
+        \par\medskip
+        \textbf{Klassen so vorlesen:}~
+        "`\dots ist die Menge aller Probleme, die sich mit einer \dots TM in \dots\ Zeit/Platz lösen lassen"'
+        
+        \par\medskip
+        Beispiele nur am Rande erwähnen
+        
+        \par
+      }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Reduktion}
+      
+      \begin{center}
+        \Fig{20}
+      \end{center}
+
+      \Bmph{(Polynomielle) Reduktion} von $X \subseteq M$ nach $X' \subseteq M'$ \\
+      ist eine (in Polyzeit) berechenbare Funktion $\pi : M \to M'$ mit 
+%       \begin{Itemize}
+%         \item
+%           $\pi : M \to M'$
+%         \item
+%           $m \in X$ gdw.\ $\pi(m) \in X'$
+% %         \item
+% %           Skizze/Bsp.: siehe Tafel \Tafel
+%       \end{Itemize}
+      \[
+        m \in X\qquad \text{gdw.}\qquad \pi(m) \in X'
+      \]
+%         \item
+%           Skizze/Bsp.: siehe Tafel \Tafel
+
+      \uncover<2->{%
+        \begin{center}
+          \Fig{21}
+        \end{center}
+%        \vspace*{-2\baselineskip}
+%        \Tafel
+      }
+      
+      \par\medskip
+      \uncover<3->{%
+        Schreibweise: \Bmph{$X \leq X'$} bzw.\ \Bmph{$X \leq_{\text{P}} X'$} ($X$ auf $X'$ \Bmph{reduzierbar})
+        \Tafel\label{tafel:Reduktion}
+      }
+      
+      \par\medskip
+      \uncover<4->{%
+        Wenn alle Probleme aus Komplexitätsklasse $\mathcalreg{C}$ auf $X$ reduzierbar,\\
+        dann ist $X$ \Bmph{schwer für} $\mathcalreg{C}$.
+      }
+      \note{
+        \uz{9:26 bis 9:38}
+%        \textbf{8:48 -- hier wieder einsteigen}
+
+        \par\medskip
+        Reduktion:~ wichtiges Hilfsmittel zum genauen Bestimmen der Komplexität
+        
+        \par\bigskip
+        Intuition:~
+        Wenn $X \leq X'$, dann ist $X$ \emph{höchstens so schwer wie} $X'$.
+        
+        \par
+      }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Bestimmung der Komplexität}
+      
+      Normalerweise zeigt man, dass ein Problem $X \subseteq M$ \dots
+      \begin{Itemize}
+        \item
+          \Bmph{in} einer Komplexitätsklasse $\mathcalreg{C}$ liegt, indem man
+          \begin{Itemize}
+            \item
+              einen Algorithmus $A$ findet, der $X$ löst
+            \item
+              zeigt, dass $A$ korrekt ist (\emph{ja}/\emph{nein}-Antworten) und terminiert
+            \item
+              zeigt, dass $A$ für jedes $m\in M$ \Emph{höchstens} die $\mathcalreg{C}$-Ressourcen braucht
+            \item[]
+              \dots\ $A$ kann z.\,B.\ eine Reduktion zu einem Problem aus $\mathcalreg{C}$ sein
+          \end{Itemize}
+          \par\smallskip
+        \item<2->
+          \Bmph{schwer (hard) für} $\mathcalreg{C}$ ist, indem man
+          \begin{Itemize}
+            \item
+              ein Problem $X' \subseteq M'$ findet, dass \Emph{schwer für $\mathcalreg{C}$} ist
+            \item
+              und eine Reduktion von $X'$ nach $X$ angibt
+          \end{Itemize}
+          \par\smallskip
+        \item<3->
+          \Bmph{vollständig für} $\mathcalreg{C}$ ist, indem man zeigt, dass es
+          \begin{Itemize}
+            \item
+              \Emph{in $\mathcalreg{C}$} liegt und
+            \item
+              \Emph{schwer für $\mathcalreg{C}$} ist
+          \end{Itemize}
+      \end{Itemize}
+      \note{
+        \uz{9:38}
+
+        \par\medskip
+        {\textgray\textbf{Fragebogen F.\,1 $\leadsto$ 9:02}}
+        
+        \par
+      }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Entscheidungsprobleme für endliche Automaten}
+      
+      \begin{Itemize}
+        \item
+          Betrachten wesentliche Eigenschaften von Sprachen\\
+          (Sprachen repräsentiert durch NEAs oder reguläre Ausdr.)
+          \begin{Itemize}
+            \item
+              Ist eine gegebene Sprache leer?
+            \item
+              Ist ein gegebenes Wort $w$ in einer Sprache $L$?
+            \item
+              Beschreiben zwei Repräsentationen einer Sprache \\
+              tatsächlich dieselbe Sprache?
+          \end{Itemize}
+          \par\smallskip
+        \item<2->
+          Wichtig für Anwendungen (siehe Einführung)
+          \par\smallskip
+        \item<3->
+          Art der Repräsentation spielt manchmal eine Rolle: \\
+          NEA, DEA, regulärer Ausdruck, Typ-3-Grammatik etc.\
+          
+          \par\smallskip
+          Wir betrachten im Folgenden \Emph{NEAs und DEAs.}
+      \end{Itemize}
+
+      \note{
+        \textbf{9:42}
+
+        \par\medskip
+        Umwandlung \dots
+        \begin{Itemize}
+          \item
+            DEA $\to$ NEA:\quad konstante Zeit \dgre{\blacksmiley}
+          \item
+            NEA $\to$ DEA:\quad Exponentialzeit \dred{\frownie}
+          \item
+            reg.\ Ausdr.\ $\to$ NEA:\quad Polynomialzeit \dgre{\blacksmiley}
+          \item
+            NEA $\to$ reg.\ Ausdr.:\quad Exponentialzeit \dred{\frownie}
+          \item
+            NEA $\leftrightarrow$ Typ-3-Gramm.:\quad Polynomialzeit \dgre{\blacksmiley}
+        \end{Itemize}
+      }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Das Leerheitsproblem}
+      
+      \Bmph{Eingabe:}~ NEA (oder DEA) \Aut{A}
+      
+      \par\smallskip
+      \Bmph{Frage:}~ Ist $L(\Aut{A}) = \emptyset$\,?
+      
+      \par\medskip
+      \begin{tabular}{@{}l@{~~}l@{}}
+        d.\,h. & $\Bmph{$\text{LP}_\text{NEA}$} = \{\Aut{A} \mid \Aut{A} \text{~NEA,~} L(\Aut{A}) = \emptyset\}$, \\
+               & $\Bmph{$\text{LP}_\text{DEA}$} = \{\Aut{A} \mid \Aut{A} \text{~DEA,~} L(\Aut{A}) = \emptyset\}$
+      \end{tabular}
+      
+      \par\bigskip
+      \begin{Satz}<2->
+%        Das Leerheitsproblem für NEAs bzw.\ DEAs ist entscheidbar \\
+%        und \NL-vollständig.
+        $\text{LP}_\text{NEA}$ und $\text{LP}_\text{DEA}$ sind entscheidbar
+        und \coNL-vollständig.
+      \end{Satz}
+      
+      \par\medskip
+      \uncover<3->{%
+        \Bmph{Beweis.}
+        %
+        \begin{Itemize}
+          \item
+            Entscheidbarkeit (in Polyzeit):~ siehe ThI\,1
+          \item
+            \coNL-Zugehörigkeit:\\
+            Reduktion zu Erreichbarkeit in gerichteten Graphen,~ siehe T\arabic{part}.\ref{tafel:Reduktion}
+          \item
+            \coNL-Härte:\\
+            Reduktion \emph{von} Erreichbarkeit, analog \qed
+        \end{Itemize}
+    }      
+
+      \note{%
+        \textbf{9:44}\quad
+%
+%        \par\medskip
+        Def.\ der Probleme:~ Eingabe ist üblicherweise ein Wort, \\
+        also braucht man eine geeignete Kodierung von NEAs/DEAs (s.\, ThI\,2).
+        
+        \par\smallskip
+        Überprüfung, ob Eingabe wohlgeformt ist, ist üblicherweise billig, \\
+        macht also keinen Unterschied, ob sie mit in Komplexität zählt oder nicht.
+        
+        \par\bigskip
+        \textbf{co}NL, weil das Komplement (Nichtleerheit) NL-vollst. ist.
+        
+        \par\bigskip
+        {\textgray
+          \textbf{coNL-Härte:}~  bei DEAs aufpassen -- für jede ausgehende Kante e.\ Knotens braucht man ein neues Zeichen,
+          also Alphabetgröße $=$ max.\ Ausgangsgrad.%
+
+          \par\smallskip
+          Außerdem Papierkorbzustände einbauen.
+        }
+        
+        
+        \par\bigskip
+        (Nicht-)Leerheit von NEAs/DEAs ist also nichts anderes als Wegsuche in gerichteten Graphen.
+        
+        \par\medskip
+        {\textgray\textbf{Fragebogen F.\,2:} Tabelle, während der nächsten Folien vervollständigen}
+        
+        \par
+      }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Das Wortproblem}
+      
+      \Bmph{Eingabe:}~ NEA (oder DEA) \Aut{A},~ Wort $w \in \Sigma^*$
+
+      \par\smallskip
+      \Bmph{Frage:}~ Ist $w \in L(\Aut{A})$\,?
+      
+      \par\medskip
+      \begin{tabular}{@{}l@{~~}l@{}}
+        d.\,h. & $\Bmph{$\text{WP}_\text{NEA}$} = \{(\Aut{A},w) \mid \Aut{A} \text{~NEA,~} w \in L(\Aut{A})\}$, \\
+               & $\Bmph{$\text{WP}_\text{DEA}$} = \{(\Aut{A},w) \mid \Aut{A} \text{~DEA,~} w \in L(\Aut{A})\}$
+      \end{tabular}
+      
+      \par\bigskip
+      \begin{Satz}<2->
+%        Das Wortproblem für NEAs bzw.\ DEAs ist entscheidbar \\
+%        und \NL-vollständig.
+        $\text{WP}_\text{NEA}$ und $\text{WP}_\text{DEA}$ sind entscheidbar.\\
+        $\text{WP}_\text{NEA}$ ist \NL-vollständig;~ $\text{WP}_\text{DEA}$ ist \LS-vollständig.
+      \end{Satz}
+      
+      \par\medskip
+      \uncover<3->{%
+        \Bmph{Beweis.}
+        %
+        \begin{Itemize}
+          \item
+            Entscheidbarkeit (in Polyzeit):~ siehe ThI\,1 \\
+            (Reduktion zum LP:~ $w \in L(\Aut{A})$ ~gdw.~ $L(\Aut{A}) \cap L(\Aut{A}_w) \neq \emptyset$)
+          \item
+            \NL-Vollst.:~ $\approx$ Erreichbarkeit in gerichteten Graphen 
+%          \item
+%            \L-Vollständigkeit:~ \dots
+            \qed
+        \end{Itemize}
+      }      
+
+      \note{
+        \textbf{9:48}\quad
+%
+%        \par\medskip
+        Reduktion zum LP: \\
+        $\bullet$ $\Aut{A}_w$ ist ein N/DEA, der nur $w$ akzeptiert (einfach zu bauen) \\
+        $\bullet$ nutzt Abgeschlossenheit unter Schnitt (Konstr.\ Produktautomat) \\
+        $\bullet$ liefert nur "`in P"'
+      
+        \par\bigskip
+        obere Schranke:~ Rate Weg der Länge $\leq |Q|$ ab $q_0$, \\
+        so dass im $i$-ten Schritt das $i$-te Zeichen von $w$ gelesen wird. \\
+        Akzeptiere, wenn am Ende ein akz.\ Zustand erreicht ist.
+        
+        \par\smallskip
+        Für DEAs muss nicht geraten werden.
+        
+        \par\bigskip
+        NL-Härte:~ Wandle gegebenen $G=(V,E)$ in NEA, so dass
+        alle Kanten mit $a$ beschriftet sind. Anfangs-/akz.\ Zustand: $s,t$.
+        Zusätzlich $a$-Schleife an $t$. Dann frage nach $w = a^{|V|}$.
+        
+        \par\bigskip
+        L-Härte:~ Führt hier zu weit; braucht speziellen Reduktionsbegriff \\
+        (weak red., siehe auch Holzer \& Kutrib, Inf \& Comp.\ 2011)
+        
+        \par
+        
+      }
+    \end{frame}
+
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Das Äquivalenzproblem}
+      
+      \Bmph{Eingabe:}~ NEAs (oder DEAs) $\Aut{A}_1,\Aut{A}_2$
+
+      \par\smallskip
+      \Bmph{Frage:}~ Ist $L(\Aut{A}_1) = L(\Aut{A}_2)$\,?
+      
+      \par\medskip
+      \begin{tabular}{@{}l@{~~}l@{}}
+        d.\,h. & $\Bmph{$\text{ÄP}_\text{NEA}$} = \{(\Aut{A}_1,\Aut{A}_2) \mid \Aut{A}_1,\Aut{A}_2 \text{~NEAs,~} L(\Aut{A}_1) = L(\Aut{A}_2)\}$, \\
+               & $\Bmph{$\text{ÄP}_\text{DEA}$} = \{(\Aut{A}_1,\Aut{A}_2) \mid \Aut{A}_1,\Aut{A}_2 \text{~DEAs,~} L(\Aut{A}_1) = L(\Aut{A}_2)\}$
+      \end{tabular}
+      
+      \par\bigskip
+      \begin{Satz}<2->
+        %        Das Wortproblem für NEAs bzw.\ DEAs ist entscheidbar \\
+        %        und \NL-vollständig.
+        $\text{ÄP}_\text{NEA}$ und $\text{ÄP}_\text{DEA}$ sind entscheidbar.\\
+        $\text{ÄP}_\text{NEA}$ ist \PSPACE-vollständig;~ $\text{ÄP}_\text{DEA}$ ist \NL-vollständig.
+      \end{Satz}
+      
+      \par\medskip
+      \uncover<3->{%
+        \Bmph{Beweis.}
+        %
+        \begin{Itemize}
+          \item
+            Entscheidbarkeit:~ siehe ThI\,1 \\
+            (Red.\ zum LP:~ $L(\Aut{A}_1) = L(\Aut{A}_2)$ ~gdw.~ $L(\Aut{A}_1) \vartriangle L(\Aut{A}_2) = \emptyset$)
+          \item
+            Komplexität:~ Automat für $L(\Aut{A}_1) \vartriangle L(\Aut{A}_2)$ ist exponentiell in
+            der Größe der Eingabe-NEAs;  polynomiell im Fall von DEAs
+            
+            \par\smallskip
+            Details: siehe \cite{HK11}
+            \qed
+        \end{Itemize}
+      }      
+
+      \note{
+        \uz{9:54}
+
+        \par\medskip
+        $\vartriangle$ $=$ symmetrische Differenz zweier Mengen; \\
+        ausdrückbar mittels $\cup,\cap,\overline{\cdot}$\quad $\leadsto$ Abschlusseigenschaften!
+        
+        \par
+      }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Das Universalitätsproblem}
+      
+      \Bmph{Eingabe:}~ NEA (oder DEA) \Aut{A}
+
+      \par\smallskip
+      \Bmph{Frage:}~ Ist $L(\Aut{A}) = \Sigma^*$\,?
+      
+      \par\medskip
+      \begin{tabular}{@{}l@{~~}l@{}}
+        d.\,h. & $\Bmph{$\text{UP}_\text{NEA}$} = \{\Aut{A} \mid \Aut{A} \text{~NEA,~} L(\Aut{A}) = \Sigma^*\}$, \\
+               & $\Bmph{$\text{UP}_\text{DEA}$} = \{\Aut{A} \mid \Aut{A} \text{~DEA,~} L(\Aut{A}) = \Sigma^*\}$
+      \end{tabular}
+      
+      \par\bigskip
+      \begin{Satz}<2->
+        %        Das Leerheitsproblem für NEAs bzw.\ DEAs ist entscheidbar \\
+        %        und \NL-vollständig.
+        $\text{UP}_\text{NEA}$ und $\text{UP}_\text{DEA}$ sind entscheidbar.
+      \end{Satz}
+      
+      \par\medskip
+      \uncover<2->{%
+        \Bmph{Beweis:}~ Übungsaufgabe
+      }      
+
+      \note{
+        \textbf{9:57}
+
+        \par\medskip
+        Reduktion vom/zum Komplement LP: \\
+        $L(\Aut{A}) = \Sigma^*$ ~gdw.~ $\overline{L(\Aut{A})} = \emptyset$
+        
+        \par\medskip
+        Für DEAs NL-v., analog zu Wegsuche:\\ ist ein nicht-akz.\ Zustand erreichbar?
+        
+        \par\medskip
+        Für NEAs PSPACE-v., Wegsuche im Potenz-DEA on-the-fly
+      }
+    \end{frame}
+
+    \newlength{\sternchen}
+    \settowidth{\sternchen}{${}^*$}
+    \newcommand{\stNOst}{\hspace*{\sternchen}\NO{}${}^*$}
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Überblick Entscheidungsprobleme für NEAs/DEAs}
+      
+%      \begin{center}
+        \begin{tabular}{cccc}
+          \hline\stab
+                  &               & für DEAs          & für NEAs          \\
+          Problem & entscheidbar? & effizient lösbar? & effizient lösbar? \\
+          \hline\stab
+          LP      & \YES          & \YES              & \YES              \\
+          WP      & \YES          & \YES              & \YES              \\
+          ÄP      & \YES          & \YES              & \stNOst           \\
+          UP      & \YES          & \YES              & \stNOst           \\
+          \hline
+        \end{tabular}
+
+        \par\bigskip
+        \begin{tabular}{@{}l@{\,}l@{}}
+          ${}^*$ & unter den üblichen komplexitätstheoretischen Annahmen \\
+                 & (z.\,B.\ $\PSPACE \neq \PT$)
+        \end{tabular}
+%      \end{center}
+
+      \note{
+        \textbf{9:58 bis 10:00, Ende}
+
+        \par\medskip
+        Hier nochmal für Euch als Überblick \\
+%        (und zum Vergleich von Aufgabe 2 auf Fragebogen)
+        
+%        \par\medskip
+%        \textbf{Nächstes Mal (Mi.):}
+%        \begin{itemize}
+%          \item
+%            Beginn mit Baumautomaten (dann Neues, mehr Tafel, \dots)
+%          \item
+%            Abstimmung über Verschiebung des Montagstermins \\
+%            (bitte macht Euch Gedanken, welche Zeiten möglich wären \& welche nicht)
+%        \end{itemize}
+
+        \par\medskip
+        Zum \textbf{Literaturverzeichnis} blättern
+        
+        \par\medskip
+%        \textbf{5\,min Pause $\to$ bis 9:26}
+      }
+    \end{frame}
+%%%  }
+
+  \AtBeginSection{\relax}
+  % ==============================================================================================
+  % ==============================================================================================
+  \section*{}
+    \begin{frame}
+      \frametitle{Literatur für diesen Teil (Basis)}
+      \begin{small}
+        \begin{thebibliography}{99}
+          \bibitem{HMU01}
+            John E.\ Hopcroft, Rajeev Motwani, Jeffrey D.\ Ullman.
+            \newblock
+            Introduction to Automata Theory, Languages and Computation.
+            \newblock
+            2. Auf"|lage, Addison-Wesley, 2001.
+            \newblock
+            Kapitel 1,2.
+            \newblock
+            Verfügbar in SUUB (verschiedene Auf"|lagen, auch auf Deutsch)
+          \bibitem{Bie09}
+            Meghyn Bienvenu.
+            \newblock
+            Automata on Infinite Words and Trees.
+            \newblock
+            Vorlesungsskript, Uni Bremen, WS 2009/10.
+            \newblock
+            \url{http://www.informatik.uni-bremen.de/tdki/lehre/ws09/automata/automata-notes.pdf}
+        \end{thebibliography}
+        \par
+      \end{small}
+      \note{
+        "`Basis"':~ um die Inhalte der Vorlesung nachzulesen
+
+        \par
+      }
+    \end{frame}
+
+    \begin{frame}
+      \frametitle{Literatur für diesen Teil (weiterführend)}
+      \begin{small}
+        \begin{thebibliography}{99}
+          \bibitem[Holzer \& Kutrib 2011]{HK11}
+          Markus Holzer, Martin Kutrib.
+          \newblock
+          Descriptional and computational complexity of finite automata – A survey.
+          \newblock
+          Information and Computation 209:456--470, 2011.
+          \newblock
+          Kapitel 3:~
+          sehr umfassender Überblick über Entscheidungsprobleme für endliche Automaten
+          und deren Komplexität;~ viel Literatur
+          \newblock
+          Verfügbar in SUUB (elektronisch) \\
+          \url{https://doi.org/10.1016/j.ic.2010.11.013}
+        \end{thebibliography}
+        \par
+      \end{small}
+      \note{
+        "`weiterführend"':~ um bestimmte Details zu vertiefen, die in der Vorlesung nur am Rande angesprochen werden
+        
+        \par
+      }
+      \end{frame}
+
+%     \begin{frame}
+%       \frametitle{~}
+% %       \par\bigskip
+%       \uncover<1->{%
+%         \begin{center}
+%           \begin{Huge}
+%             \Bmph{Vielen Dank.}
+%           \end{Huge}
+%         \end{center}
+%       }
+%     \end{frame}
+
+
+%   \AtBeginSection{\frame{\frametitle{Und nun \dots}\tableofcontents[currentsection]}}
+
+\mode<presentation>{
+  {   
+    \setbeamercolor{background canvas}{bg=black}
+    \begin{frame}<handout:0>[plain]{}
+      \note{~}
+    \end{frame}
+  }
+}
+
+
+%     % ------------------------------------------------------------------------------------------
+%     \begin{frame}
+%       \frametitle{Ausblick}
+% 
+%       \dots
+%       
+%       \par\bigskip
+%       \uncover<2>{%
+%         \begin{center}
+%           \begin{Huge}
+%             \dblu{\textbf{Thank you.}}
+%           \end{Huge}
+%         \end{center}
+%       }
+%     \end{frame}
+
+%   % ==============================================================================================
+%   % ==============================================================================================
+%   \appendix
+%   
+%     % ------------------------------------------------------------------------------------------
+%     \begin{frame}
+%       \frametitle{\dots}
+%       \dots
+%     \end{frame}
+
+\end{document}

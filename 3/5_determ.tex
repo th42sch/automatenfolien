@@ -1,0 +1,2091 @@
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Ziel dieses Abschnitts}
+      
+      \Bmph{Wollen zeigen:}
+      \begin{Itemize}
+        \item
+          det.\ und nichtdet.\ Büchi-Automaten sind
+          \Emph{nicht} gleichmächtig
+          \begin{Itemize}
+            \item[]
+              d.\,h.: es gibt $\omega$-Sprachen, die von NBAs akzeptiert werden,\\
+              aber nicht von DBAs              
+          \end{Itemize}
+%           \par\smallskip
+        \item
+          Komplement-Abgeschlossenheit gilt trotzdem
+          \begin{Itemize}
+            \item[]
+              (der Beweis wird aber anspruchsvoll sein)
+          \end{Itemize}
+      \end{Itemize}
+
+      \par\bigskip
+      \begin{Definition}<2->
+        Ein \Bmph{deterministischer Büchi-Automat (DBA)} ist ein NBA $\Aut{A} = (Q,\Sigma,\Delta,I,F)$ mit
+        \begin{Itemize}
+          \item
+            $|I|=1$
+          \item
+            $|\{q' \mid (q,a,q') \in \Delta\}| = 1$ für alle $(q,a) \in Q \times \Sigma$
+        \end{Itemize}
+      \end{Definition}
+
+%       \uncover<2->{%
+%         \par\medskip
+%         \Bmph{Etwas Notation:}
+%         \begin{Itemize}
+%           \item
+%             \Bmph{Deterministischer Büchi-Automat (DBA):} NBA $\Aut{A} = (Q,\Sigma,\Delta,I,F)$ mit
+%             \begin{Itemize}
+%               \item
+%                 $|I|=1$
+%               \item
+%                 $|\{q' \mid (q,a,q') \in \Delta\}| = 1$ für alle $(q,a) \in Q \times \Sigma$
+%             \end{Itemize}
+%           \par\smallskip
+%           \item<3->
+%             Sei $W \subseteq \Sigma^*$.
+%             \par\smallskip
+%             \Bmph{$\Vec W$} $=$ $\{w \in \Sigma^\omega \mid w[0,n] \in W \text{~für unendlich viele $n$}\}$\\
+%             \hspace*{29.5mm}{\small (d.\,h.\ $w$ hat $\infty$ viele Präfixe in $W$)}
+%             \par\smallskip
+%             \uncover<4->{%
+%               \Gmph{Beispiel:} siehe Tafel \Tafel
+%             }
+%         \end{Itemize}
+%       }
+      \note{
+        \textbf{17:02}
+        
+        \parI
+        "`nicht gleichmächtig"':~ Überraschung! :)
+        
+        \parIII
+        Beachte: hier wieder "`genau ein"'\\
+        (Papierkörbe sind wieder einfach, wie bei DEAs)
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Zu Hilfe: Charakterisierung der DBA-erkennbaren Sprachen}
+
+      Sei $W \subseteq \Sigma^*$.
+      \par\smallskip
+      \Bmph{$\Vec W$} $=$ $\{\alpha \in \Sigma^\omega \mid \alpha[0,n] \in W \text{~für unendlich viele $n$}\}$\\
+      \hspace*{29.5mm}{\small (d.\,h.\ $\alpha$ hat $\infty$ viele Präfixe in $W$)} \Tafel
+
+      \par\bigskip
+      \begin{Satz}<2->
+        Eine $\omega$-Sprache $L \subseteq \Sigma^\omega$
+        ist DBA-erkennbar genau dann,\\
+        wenn es eine reguläre Sprache $W \subseteq \Sigma^*$ gibt
+        mit $L = \Vec W$.
+        \label{thm:Charakt_det_Buchi}
+      \end{Satz}
+
+      \par\smallskip
+      \uncover<3->{%
+        \Bmph{Beweis.}
+        Genügt zu zeigen, dass \\
+        für jeden \Emph{D}EA/\Emph{D}BA $\Aut{A}=(Q,\Sigma,\Delta,\{q_I\},F)$ gilt:
+        \[
+%           \underbrace{L_\omega(\Aut{A})}_{\text{als DBA}} = \underbrace{\Vec{L(\Aut{A})}}_{\text{als DEA}}
+          L_\omega(\Aut{A}) = \Vec{L(\Aut{A})}
+        \]
+
+        \Tafel~~~~
+        \par\vspace*{-.95\baselineskip}
+        \qed
+      }
+
+      \note{
+        \textbf{17:04}
+        
+        \parI
+        Dazu zunächst auch eine Charakt.\ der DBA-erkennbaren Sprachen, \\
+        die uns erlauben wird, NBAs und DBAs bezüglich der Mächtigkeit zu trennen.
+        
+        \parIII
+        \textbf{T3.5 bis 17:14}
+        
+        \parIII
+        \textbf{T3.6 bis 17:24}
+
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{DBAs sind schwächer als NBAs}
+      
+      \begin{Satz}
+        Es gibt eine Büchi-erkennbare Sprache,\\
+        die nicht durch einen DBA erkannt wird.
+        \label{thm:DBAs_schwaecher_als_NBAs}
+      \end{Satz}
+
+      \par\bigskip
+      \uncover<2->{%
+        \Bmph{Beweis.}
+        \begin{Itemize}
+          \item
+%             Betrachte $\Sigma = \{a,b\}$ und $L = \{\alpha \in \Sigma^\omega \mid \#_b(\alpha) \text{ ist endlich}\}$
+            Betrachte $L = \{\alpha \in \{a,b\}^\omega \mid \#_a(\alpha) \text{ ist endlich}\}$
+          \item
+            $L$ ist Büchi-erkennbar:\quad
+            \uncover<3->{$L = \Sigma^*\{b\}^\omega$, wende Satz \ref{thm:Charakt_Buchi} an}
+          \item<4->
+            Annahme, $L$ sei DBA-erkennbar.
+            \begin{Itemize}
+              \item[$\Rightarrow$]
+                Satz \ref{thm:Charakt_det_Buchi}: $L = \Vec W$ für eine reguläre Sprache $W$
+              \item<5->[$\Rightarrow$]
+                Wegen $b^\omega \in L$ gibt es ein nichtleeres Wort $b^{n_1} \in W$
+                \par\smallskip
+                \uncover<6->{%
+                  Wegen $b^{n_1}ab^\omega \in L$ gibt es ein nichtleeres Wort $b^{n_1}ab^{n_2} \in W$
+                }
+                \par\smallskip
+                \uncover<7->{%
+                  \quad\vdots
+                }
+              \item<8->[$\Rightarrow$]
+                $\alpha ~:=~ b^{n_1}ab^{n_2}ab^{n_3}\dots ~\in~ \Vec W$
+                \qquad
+                \uncover<9->{\Emph{Widerspruch:} $\alpha \notin L$ \qed}
+            \end{Itemize}
+        \end{Itemize}
+      }
+      \note{%
+        \textbf{17:24 bis 17:29}
+        
+        \parI
+        \textbf{Am Anfang fragen:}~ Ideen für so eine Sprache?
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Nebenprodukt des letzten Beweises}
+      
+      Die DBA-erkennbaren Sprachen sind \Emph{nicht} unter Komplement abgeschlossen:
+      \begin{Itemize}
+        \item
+          $L = \{\alpha \in \{a,b\}^\omega \mid \#_a(\alpha) \text{ ist endlich}\}$\\
+          wird von keinem DBA erkannt
+        \item
+          aber $\overline L$ wird von einem DBA erkannt (Ü)
+      \end{Itemize}
+
+      \note{%
+        \textbf{17:29 bis 17:30 $\to$ hoffentlich Punktlandung!}
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Wie können wir trotzdem determinisieren?}
+
+      \uncover<2->{%
+        \Emph{Indem wir das Automatenmodell ändern!}
+        \par\smallskip
+        Genauer: ändern die Akzeptanzbedingung%
+      }
+
+      \par\bigskip
+      \uncover<3->{%
+%         \Bmph{:}
+        \begin{block}{Zur Erinnerung}
+          \Bmph{NBA} ist 5-$\!$Tupel $\Aut{A} = (Q, \Sigma, \Delta, I, F)$ mit
+          \begin{Itemize}
+            \item
+              \dots
+            \item
+              $F \subseteq Q$\quad (Menge der akz.\ Zustände)
+          \end{Itemize}
+          \par\medskip
+          \Bmph{Erfolgreicher Run:} $r = q_0q_1q_2\dots$ ~mit~
+          $q_0 \in I$ ~und~ $\Inf(r) \cap F \neq \emptyset$
+        \end{block}
+        
+        \par\bigskip
+        \Bmph{Idee:} $r$ erfolgreich $\Leftrightarrow$ ein Zustand aus $F$ kommt $\infty$ oft in $r$ vor
+
+        \par\bigskip\bigskip
+        \begin{footnotesize}
+          \hspace*{\fill}
+          (Julius Richard Büchi, 1924--1984, Logiker/Mathematiker; Zürich, Lafayette)
+        \end{footnotesize}
+
+      }
+      \note{
+        \textbf{8:30}
+        
+        \parI
+        Erinnerung vom letzten Mal:~ haben DBAs eingeführt und gezeigt, \\
+        dass sie weniger mächtig sind als NBAs \\
+        (über versch.\ Charakterisierungen mittels regulärer Sprachen)
+        
+        \parI
+        Heute:~ wollen geänderte Automatenmodelle einführen 
+        und zeigen, dass ihre deterministischen Varianten
+        genauso mächtig sind wie NBAs.
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}[t]
+      \frametitle{Muller-Automaten \hfill {\footnotesize (David E.\ Muller, 1924--2008, Math./Inf.; Illinois)}}
+
+      \begin{Definition}{}
+        Nichtdet.\ \Bmph{Muller-Automat (NMA)} ist 5-$\!$Tupel $\Aut{A} = (Q, \Sigma, \Delta, I, \Uwave{\calF})$ mit
+        \begin{Itemize}
+          \item
+            \dots
+          \item
+            $\calF \subseteq 2^Q$\quad (Kollektion von Endzustandsmengen)
+        \end{Itemize}
+        \par\medskip
+        \Bmph{Erfolgreicher Run} $r = q_0q_1q_2\dots$ ~mit~
+        $q_0 \in I$ ~und~ $\UWave{\Inf(r) \in \calF}$
+      \end{Definition}
+
+      \par\bigskip
+      \Bmph{Idee:} $r$ erfolgreich $\Leftrightarrow$ $\Inf(r)$ stimmt mit einer Menge aus $\calF$ überein
+
+      \par\bigskip
+%      \Gmph{Beispiel:} Siehe Tafel 
+      \Tafel
+
+      \note{
+        \textbf{8:32 bis 8:44}
+
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}[t]
+      \frametitle{Rabin-Automaten \hfill \mbox{{\footnotesize (Michael O.\ Rabin, ${}^*$1931, Inf.; Jerusalem, Princeton, Harvard)}}\hspace*{-2.5mm}}
+
+      \begin{Definition}{}
+        Nichtdet.\ \Bmph{Rabin-Automat (NRA)} ist 5-$\!$Tupel $\Aut{A} = (Q, \Sigma, \Delta, I, \Uwave{\calP})$ mit
+        \begin{Itemize}
+          \item
+            \dots
+          \item
+            $\calP = \{(E_1,F_1),~\dots,~(E_n,F_n)\} \text{~~mit~~} E_i,F_i \subseteq Q$
+            \par\smallskip
+            (Menge "`akzeptierender Paare"')
+        \end{Itemize}
+        \par\medskip
+        \Bmph{Erfolgreicher Run} $r = q_0q_1q_2\dots$~mit~
+        $q_0 \in I$ ~und
+        \[
+          \exists i \in\{1,\dots,n\}
+          \text{~~~mit~~~}
+          \Inf(r) \cap E_i = \emptyset
+          \text{~~~und~~~}
+          \Inf(r) \cap F_i \neq \emptyset
+        \]
+      \end{Definition}
+
+      \par\bigskip
+      \Bmph{Idee:} $r$ erfolgreich $\Leftrightarrow$ es gibt Paar $(E_i,F_i)$, so dass
+      \begin{Itemize}
+        \item
+          \Emph{mindestens ein} Zustand aus $F_i$ unendlich oft in $r$ vorkommt \&
+        \item
+          \Emph{alle} Zustände aus $E_i$ nur endlich oft in $r$ vorkommen
+%          \hfill \Gmph{(Bsp. \Tafel)}
+          \Tafel
+      \end{Itemize}
+
+      \note{
+        \textbf{8:44 bis 8:54}
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}[t]
+      \frametitle{Streett-Automaten \hfill {\footnotesize (Robert S.\ Streett, ?; Boston, Oakland)}}
+
+      \begin{Definition}{}
+        \scalebox{.96}[1]{Nichtdet.\ \Bmph{Streett-Automat (NSA)} ist 5-$\!$Tupel $\Aut{A} = (Q, \Sigma, \Delta, I, \Uwave{\calP})$ mit}
+        \begin{Itemize}
+          \item
+            \dots
+          \item
+            $\calP = \{(E_1,F_1),~\dots,~(E_n,F_n)\} \text{~~mit~~} E_i,F_i \subseteq Q$
+            \par\smallskip
+            (Menge "`fairer Paare"')
+        \end{Itemize}
+        \par\medskip
+        \Bmph{Erfolgreicher Run} $r = q_0q_1q_2\dots$~mit~
+        $q_0 \in I$ ~und
+        \[
+          \Uwave{\forall} i \in\{1,\dots,n\}:
+          \text{~~wenn~~}
+          \Inf(r) \cap F_i \neq \emptyset,
+          \text{~~dann~~}
+          \Inf(r) \cap E_i \neq \emptyset
+        \]
+        \vspace*{-22pt}
+      \end{Definition}
+
+      \par\bigskip
+      \Bmph{Idee:} $r$ erfolgreich $\Leftrightarrow$ \Emph{für alle} Paare $(E_i,F_i)$ gilt:
+      \begin{Itemize}
+        \item
+          \Emph{wenn} ein Zustand aus $F_i$ unendlich oft in $r$ vorkommt,
+        \item
+          \Emph{dann} kommt ein Zustand aus $E_i$ unendlich oft in $r$ vor
+%          \hfill \Gmph{(Bsp. \Tafel)}
+          \Tafel
+      \end{Itemize}
+
+      \note{
+        \textbf{8:54 bis 9:06}
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Gleichmächtigkeit der vier Automatenmodelle}
+
+      Für $X \in \{\text{Muller},\text{Rabin},\text{Streett}\}$ werden analog definiert:
+      \begin{Itemize}
+        \item
+          \Bmph{$L_\omega(\Amcb)$} für (nichtdeterministische) $X$-Automaten
+        \item
+          \Bmph{$X$-erkennbar}
+      \end{Itemize}
+
+      \par\smallskip
+      \begin{Satz}<2->
+        Für jede Sprache $L \subseteq \Sigma^\omega$ sind die folgenden Aussagen äquivalent.
+        \par\smallskip
+%         \begin{tabular}{@{\quad}l@{~~}l@{}}
+%           \ddblu{\textup{(B)}} & $L$ ist Büchi-erkennbar. \\
+%           \ddblu{\textup{(M)}} & $L$ ist Muller-erkennbar. \\
+%           \ddblu{\textup{(R)}} & $L$ ist Rabin-erkennbar. \\
+%           \ddblu{\textup{(S)}} & $L$ ist Streett-erkennbar.
+%         \end{tabular}
+        \begin{tabular}{@{\quad}l@{~~}l@{\qquad}l@{~~}l@{}}
+          \ddblu{\textup{(B)}} & $L$ ist Büchi-erkennbar.  & \ddblu{\textup{(R)}} & $L$ ist Rabin-erkennbar.   \\
+          \ddblu{\textup{(M)}} & $L$ ist Muller-erkennbar. & \ddblu{\textup{(S)}} & $L$ ist Streett-erkennbar.
+        \end{tabular}
+        \label{thm:gleichmaechtigkeit}
+      \end{Satz}
+
+      \parIII
+      \uncover<3->{%
+        \Bmph{Beweis:}~
+        Konsequenz aus Lemmas~\ref{lem:BRStoM}--\ref{lem:MtoB}.~~~ \raisebox{-1.2mm}{\turnbox{90}{$\hookleftarrow$}}
+        \Tafel
+        \qed
+      }
+
+      \note{
+        \textbf{9:06}
+        
+        \par
+      }
+    \end{frame}
+    
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}[t]
+      \frametitle{Von B-, R-, S- zu Muller-Automaten}
+      
+      \begin{lemma}
+        \begin{Enumerate}
+          \item
+            Wenn $L$ Büchi-erkennbar, dann auch Muller-erkennbar.
+          \item
+            Wenn $L$ Rabin-erkennbar, dann auch Muller-erkennbar.
+          \item
+            Wenn $L$ Streett-erkennbar, dann auch Muller-erkennbar.
+        \end{Enumerate}%
+        \label{lem:BRStoM}%
+      \end{lemma}
+    
+      \parII
+      \uncover<2->{%
+        \Bmph{Beweis.}
+        
+        \parI
+        \Bmph{(1)}~ Sei $\Amc = (Q,\Sigma,\Delta,I,F)$ NBA.
+        
+        \parI
+        Konstruiere NMA $\Amc' = (Q,\Sigma,\Delta,I,\Fmc)$ mit
+        
+        \begin{center}
+          $\Fmc = \{Q' \subseteq Q \mid Q' \cap F \neq \emptyset\}$.
+        \end{center}
+      
+        Leicht zu sehen:~ $L_\omega(\Amc') = L_\omega(\Amc)$.
+      }
+      
+      \note{
+        \textbf{9:08}
+        
+        \parI
+        Idee:~ Kodiere $F$ in \Fmc. \\
+        Die $Q'$ sind alle erlaubten Unendlichkeitsmengen $\textsf{Inf}(r)$.
+
+        \par
+      }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}[t]
+      \frametitle{Von B-, R-, S- zu Muller-Automaten}
+      
+      \begin{block}{Lemma \ref{lem:BRStoM}}
+        \begin{Enumerate}
+          \item
+          Wenn $L$ Büchi-erkennbar, dann auch Muller-erkennbar.
+          \item
+          Wenn $L$ Rabin-erkennbar, dann auch Muller-erkennbar.
+          \item
+          Wenn $L$ Streett-erkennbar, dann auch Muller-erkennbar.
+        \end{Enumerate}%
+        \label{lem:BRStoM_dummy}%
+      \end{block}
+      
+      \parII
+      \Bmph{Beweis.}
+      
+      \parI
+      \Bmph{(2)}~ Sei $\Amc = (Q,\Sigma,\Delta,I,\Pmc)$ NRA.
+      
+      \parI
+      Konstruiere NMA $\Amc' = (Q,\Sigma,\Delta,I,\Fmc)$ mit
+      
+      \begin{center}
+        $\Fmc \,=\, \{Q' \!\!\:\subseteq\!\!\: Q \,\mid\, \exists i \!\!\:\leq\!\!\: n : Q' \!\!\:\cap\!\!\: E_i = \emptyset \text{~und~} Q' \!\!\:\cap\!\!\: F_i \neq \emptyset\}$.
+      \end{center}
+      
+      Leicht zu sehen:~ $L_\omega(\Amc') = L_\omega(\Amc)$.
+
+      \parII
+      \uncover<2->{%
+        \Bmph{(3)}~ Analog. \qed
+      }
+      
+      \note{
+        \textbf{9:11}
+        
+        \parI
+        Dieselbe Idee:~ Kodiere \Pmc in \Fmc.
+        
+        \parII
+        \dots\ und natürlich auch bei Streett-Automaten \dots
+        
+        \par
+      }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}[t]
+      \frametitle{Von Büchi- zu R- und S-Automaten}
+      
+      \begin{lemma}
+        Wenn $L$ Büchi-erkennbar, dann auch  
+        \begin{Enumerate}
+          \item
+            Rabin-erkennbar\quad und
+          \item
+            Streett-erkennbar.
+        \end{Enumerate}%
+        \label{lem:BtoRS}%
+      \end{lemma}
+      
+      \parII
+      \uncover<2->{%
+        \Bmph{Beweis.}
+        
+        \parI
+        \Bmph{(1)}~ Sei $\Amc = (Q,\Sigma,\Delta,I,F)$ NBA.
+        
+        \parI
+        Konstruiere NRA $\Amc' = (Q,\Sigma,\Delta,I,\Pmc)$ mit
+        
+        \begin{center}
+          $\Pmc = \uncover<3->{\{(\emptyset,F)\}.}$
+        \end{center}
+        
+        \uncover<4->{%
+          Leicht zu sehen:~ $L_\omega(\Amc') = L_\omega(\Amc)$.
+        }
+      }
+      
+      \parII
+      \uncover<5->{%
+        \Bmph{(2)}~ Analog, aber mit $\Pmc =$ \uncover<6->{$\{(F,Q)\}$. \qed}
+      }
+
+      \note{
+        \textbf{9:13 bis 9:15, 5\,min Pause.}
+        
+        \parII
+        Jeweils vorm Aufdecken von \Pmc:~ wer weiß es?
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Von Muller- zu Büchi-Automaten}
+      
+      \begin{Lemma}
+        Jede Muller-erkennbare Sprache ist Büchi-erkennbar.
+        \label{lem:MtoB}%
+      \end{Lemma}
+
+      \par\smallskip
+      \uncover<2->{%
+        \Bmph{Beweis.}
+        \begin{Itemize}
+          \item
+            Sei $\Aut{A} = (Q,\Sigma,\Delta,I,\calF)$ ein Muller-Automat
+            \par\smallskip
+          \item<3->
+            Dann ist\quad $L_\omega(\Aut{A}) ~=~ \bigcup_{F \in \calF}~ L_\omega(\,(Q,\Sigma,\Delta,I,\{F\})\,)$
+            \par\smallskip
+          \item<4->
+            Wegen $\cup$-Abgeschlossenheit genügt es zu zeigen,
+            dass $L_\omega(\,(Q,\Sigma,\Delta,I,\{F\})\,)$ Büchi-erkennbar ist
+            \par\smallskip
+          \item<5->
+            Konstruiere Büchi-Automaten $\Aut{A}' = (Q',\Sigma,\Delta',I,F')$, der
+            \begin{Itemize}
+              \item
+                $\Aut{A}$ simuliert
+              \item
+                einen Zeitpunkt rät,\\ ab dem nur noch Zustände aus
+%                 $F := \{q_1,\dots,q_n\}$ vorkommen
+                $F$ vorkommen
+              \item
+                ab dort sicherstellt, dass \emph{alle} diese unendlich oft vorkommen
+            \end{Itemize}
+% %             \par\smallskip
+%           \item<6->
+%             Details: siehe Tafel \Tafel~~~~~
+        \end{Itemize}
+      }
+
+      \note{
+        \textbf{9:20}
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}[t]
+      \frametitle{Von Muller- zu Büchi-Automaten}
+
+      Sei also $\Aut{A} = (Q,\Sigma,\Delta,I,\{F\})$\quad (Muller-Automat)
+
+      \par\smallskip
+      Konstruieren NBA $\Aut{A}' = (Q',\Sigma,\Delta',I',F')$ mit
+      \begin{Itemize}
+        \item<2->
+          $Q' = \underbrace{Q}_{\text{Phase 1}} \cup~~ \underbrace{\{\auf q_f,S\zu \mid q_f \in F, S \subseteq F\}}_{\text{Phase 2}}$
+
+          \par\medskip
+          \uncover<3->{%
+            {\small Ph.\,1: $\Aut{A}'$ simuliert \Aut{A}, bis \Aut{A} \Emph{irgendwann} in einem $q_f\!\!\:\in\!\!\:F$ ist}
+
+          \par\smallskip
+            {\small Ph.\,2: $\Aut{A}'$ will nur noch Zustände $\in F$ sehen und \Emph{jeden} $\infty$ oft}
+          }
+          \uncover<4->{%
+            \begin{Itemize}
+              \item
+                $\Aut{A}'$ wechselt in $\auf q_f,S\zu$ mit $S=\{q_f\}$
+              \item
+                $S$ enthält die seit dem letzten Zurücksetzen besuchten $q \in F$
+              \item
+                Wenn $S=F$, wird $S$ auf $\emptyset$ "`zurückgesetzt"'
+              \item
+                akz.\ Zustände: ein $\auf q_f,F\zu$ muss $\infty$ oft gesehen werden
+            \end{Itemize}
+          }
+      \end{Itemize}
+
+      \note{
+        \textbf{9:23}
+        
+        \parI
+        \textbf{TODO}~
+        Vorschlag (Tryggve, WiSe 18/19):
+        
+        \parI
+        Man kann auch die Zustände aus $F$ ordnen $(f_1,\dots, f_n)$ und dann analog zur Produktkonstruktion
+        $n$ Modi verwenden, d.\,h.\ Modus $i$ bedeutet "`erwarte $f_i$"'.
+        Dann sind die Zustände der Phase 2 nur Paare aus EZ und Modus,
+        und $\Delta'$ hat vielleicht eine angenehmere Notation. $\leadsto$ \textbf{Ausprobieren!}
+        
+        \par
+      }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}[t]
+      \frametitle{Von Muller- zu Büchi-Automaten}
+      
+      Sei also $\Aut{A} = (Q,\Sigma,\Delta,I,\{F\})$\quad (Muller-Automat)
+      
+      \par\smallskip
+      Konstruieren NBA $\Aut{A}' = (Q',\Sigma,\Delta',I',F')$ mit
+      \begin{Itemize}
+        \item
+          $Q' = \underbrace{Q}_{\text{Phase 1}} \cup~~ \underbrace{\{\auf q_f,S\zu \mid q_f \in F, S \subseteq F\}}_{\text{Phase 2}}$
+        \item
+          $\Delta' \,=\, \Delta$\\[2pt]
+          \uncover<2->{%
+            \hspace*{5mm}
+            ${}\cup \{(q,a,\auf q_f,\!\!\:\{q_f\}\zu) \mid (q,a,q_f) \in \Delta,~ q_f \in F\}$ \\[2pt]
+          }%
+          \uncover<3->{%
+            \hspace*{5mm}
+            \mbox{${}\cup \{(\auf q,\!\!\:S\zu, a, \auf q'\!\!\:, S \!\!\:\cup\!\!\: \{q'\}\zu) \mid (q,\!\!\:a,\!\!\:q') \!\!\:\in\!\!\: \Delta,~ q,\!\!\:q' \!\!\:\in\!\!\: F,~ S \!\!\:\neq\!\!\: F\}$} \\[2pt]
+          }%
+          \uncover<4->{%
+            \hspace*{5mm}
+            ${}\cup \{(\auf q,\!\!\:F\zu, a, \auf q'\!\!\:, \{q'\}\zu) \hspace*{6mm} \mid (q,\!\!\:a,\!\!\:q') \!\!\:\in\!\!\: \Delta,~ q,\!\!\:q' \!\!\:\in\!\!\: F\}$%
+          }%
+        \item<5->
+        $I'=I$
+        \item<6->
+        $F'=\{\auf q_f,\!\!\:F\zu \mid q_f \in F\}$
+      \end{Itemize}
+      %
+      \uncover<7->{%
+        Dann gilt: $L_\omega(\Amc') = L_\omega(\Amc)$.
+        \Tafel
+        \qed
+      }
+      
+      \note{
+        \textbf{9:26 bis spätestens 9:56}
+        
+        \par
+      }
+    \end{frame}
+    
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Abschlusseigenschaften}
+      
+%      \Bmph{Zur Erinnerung}
+%      \begin{block}{Satz \ref{thm:abgeschlossenheit_v+d}}
+%        Die Menge der Büchi-erkennbaren Sprachen ist abgeschlossen unter den Operationen
+%        $\cup$ und $\cap$.
+%      \end{block}
+%      
+%      \par\bigskip
+      \uncover<1->{%
+        \Bmph{Direkte Konsequenz aus}
+        %
+        \begin{Itemize}
+          \item
+            Satz~\ref{thm:abgeschlossenheit_v+d} (Abschlusseigenschaften der Büchi-erkennbaren Spr.)
+          \item
+            und Satz~\ref{thm:gleichmaechtigkeit} (Gleichmächtigkeit der Automatenmodelle):
+        \end{Itemize}
+        %
+        \begin{Folgerung}
+          Die Menge der 
+          \begin{itemize}
+            \item
+              Muller-erkennbaren Sprachen,
+            \item
+              Rabin-erkennbaren Sprachen,
+            \item
+              Streett-erkennbaren Sprachen
+          \end{itemize}
+          ist abgeschlossen unter den Operationen
+          $\cup$ und $\cap$.
+        \end{Folgerung}
+      }
+      
+      \par\bigskip
+      \uncover<2->{%
+        \Emph{Zu Komplement-Abgeschlossenheit kommen wir jetzt.}
+        
+        \par
+        Benötigen zunächst deterministische Varianten von Muller-, Rabin-, Streett-Automaten.
+      }
+
+      \note{
+        \textbf{9:56}
+        
+        \parI
+        Tief durchatmen; wir sind so gut wie fertig für heute. :)
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Deterministische Varianten}
+
+      Deterministische Varianten sind analog zu NBA definiert:
+
+      \par\medskip
+      Ein Muller-, Rabin- oder Streett-Automat
+      $\Aut{A} = (Q,\Sigma,\Delta,I,\textsl{Acc})$ \\
+      ist \Bmph{deterministisch}, wenn gilt:
+      \begin{Itemize}
+        \item
+          $|I|=1$
+        \item
+          $|\{q' \mid (q,a,q') \in \Delta\}| = 1$ für alle $(q,a) \in Q \times \Sigma$
+      \end{Itemize}
+
+      \par\bigskip
+      \uncover<2->{%
+        \Bmph{Zu Satz \ref{thm:gleichmaechtigkeit} analoge Aussage:}
+        \begin{Satz}
+          Für jede Sprache $L \subseteq \Sigma^\omega$ sind die folgenden Aussagen äquivalent.
+          \par\smallskip
+          \begin{tabular}{@{}l@{~~}l@{}}
+            \ddblu{\textup{(M)}} & $L$ ist von einem deterministischen Muller-Autom.\ erkennbar. \\
+            \ddblu{\textup{(R)}} & $L$ ist von einem deterministischen Rabin-Autom.\ erkennbar. \\
+            \ddblu{\textup{(S)}} & $L$ ist von einem deterministischen Streett-Autom.\ erkennbar.
+          \end{tabular}          
+          \label{thm:gleichmaechtigkeit_deterministisch}
+        \end{Satz}
+      }
+
+      \par\smallskip
+      \uncover<3->{%
+        Ohne Beweis (ähnlich wie Lemmas~\ref{lem:BRStoM}--\ref{lem:MtoB}).%
+      }
+
+      \note{
+        \textbf{9:58 bis 10:00 $\leadsto$ Punktlandung?}
+        
+        \parII
+        \textcolor{black!70}{\textbf{Wenn Zeit,} dann was zum Ablauf Prüfungen sagen.}
+        
+        \parII
+        Satz~\ref{thm:gleichmaechtigkeit_deterministisch} folgt \textbf{nicht}
+        unmittelbar aus den bisherigen Resultaten für \textbf{N}xAs. \\
+        Er wird stückweise in Meghyns Skript bewiesen; \\
+        dort sind Muller-, Rabin- und Streett-Automaten immer deterministisch.
+        
+%        \parII
+%        % TODO!
+%        \textbf{TODO:}~ Diese Folie \textbf{nach} der folgenden?
+%        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Überblick der Automatenmodelle}
+      
+      \Bmph{Büchi-Automat (NBA):}~
+      %
+      \begin{Itemize}
+        \item
+          $\Amc = (Q,\Sigma,\Delta,I,F)$ mit $F \subseteq Q$
+        \item
+          Erfolgreicher Run $r$:~ $\textsf{Inf}(r) \cap F \neq \emptyset$
+      \end{Itemize}
+      
+      \par\smallskip
+      \Bmph{Muller-Automat (NMA):}~
+      %
+      \begin{Itemize}
+        \item
+          $\Amc = (Q,\Sigma,\Delta,I,\Fmc)$ mit $\Fmc \subseteq 2^Q$
+        \item
+          Erfolgreicher Run $r$:~ $\textsf{Inf}(r) \in \Fmc$
+      \end{Itemize}
+      
+      \par\smallskip
+      \Bmph{Rabin-Automat (NRA):}~
+      %
+      \begin{Itemize}
+        \item
+          $\Amc = (Q,\Sigma,\Delta,I,\Pmc)$ mit $\Pmc \subseteq 2^Q \times 2^Q$
+        \item
+          Erfolg:~ $\exists (E,F) \in \Pmc : \textsf{Inf}(r) \cap F \neq \emptyset \text{~und~} \textsf{Inf}(r) \cap E = \emptyset$
+      \end{Itemize}
+      
+      \par\smallskip
+      \Bmph{Streett-Automat (NSA):}~
+      %
+      \begin{Itemize}
+        \item
+          $\Amc = (Q,\Sigma,\Delta,I,\Pmc)$ mit $\Pmc \subseteq 2^Q \times 2^Q$
+        \item
+          Erfolg:~ $\forall (E,F) \in \Pmc : \textsf{Inf}(r) \cap F \neq \emptyset \text{~impliziert~} \textsf{Inf}(r) \cap E \neq \emptyset$
+      \end{Itemize}
+      \note{
+        \textbf{16:00}
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Determinisierung von Büchi-Automaten}
+
+      Erinnerung an Satz \ref{thm:DBAs_schwaecher_als_NBAs}:
+      Es gibt eine Büchi-erkennbare Sprache,\\
+      die nicht durch einen DBA erkannt wird.
+
+      \par\bigskip
+      \uncover<2->{%
+        \begin{alertblock}{Ziel}
+          Prozedur zur Umwandlung eines gegebenen NBA\\
+          in einen äquivalenten deterministischen \Emph{Rabin}-Automaten
+        \end{alertblock}
+%         \Emph{Ziel:} Prozedur, um gegebenen NBA in äquivalenten deterministischen \Emph{Rabin}-Automaten umzuwandeln
+        \begin{Itemize}
+          \item<3->[$\leadsto$]
+            wegen Satz \ref{thm:gleichmaechtigkeit_deterministisch} erhält man daraus auch
+            äquivalente deterministische Muller-/Streett-Automaten
+          \item<4->
+            Resultat geht auf McNaughton zurück \\
+            {\footnotesize (1965 von Robert McNaughton, Philosoph/Inform., Harvard, Rensselaer)}
+          \item<5->
+            Wir verwenden intuitiveren Beweis von Safra \\
+            {\footnotesize (1988 von Shmuel Safra, Informatiker, Tel Aviv)}
+        \end{Itemize}
+      }
+      
+      \note{
+        \textbf{16:02}
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Potenzmengenkonstruktion versagt}
+      
+      \Bmph{Zwei naheliegende Versuche:}
+      \begin{Enumerate}
+        \item
+          NBA $\leadsto$ DBA mittels Potenzmengenkonstruktion \Emph{(PMK)}
+          \begin{Itemize}
+            \item[]
+              muss wegen Satz \ref{thm:DBAs_schwaecher_als_NBAs} fehlschlagen -- Bsp.\ siehe Tafel \Tafel
+          \end{Itemize}
+        \item<2->
+            NBA $\leadsto$ determ.\ Muller-(Rabin-/Streett-)Automat via PMK
+            \begin{Itemize}
+              \item[]
+                schlägt auch fehl -- mit demselben Gegenbeispiel \Tafel
+            \end{Itemize}
+      \end{Enumerate}
+
+      \par\bigskip%\bigskip
+      \uncover<3->{%
+        \Emph{Hauptproblem:}
+        \begin{Itemize}
+          \item
+            Potenzautomat simuliert mehrere Runs gleichzeitig\\
+          \item
+            akzeptierende Zustände \Bmph{(akzZ)} müssen dabei \Emph{nicht synchron} erreicht werden
+          \item
+            \Emph{Bad runs:}
+            \par
+            Wenn DBA $\Aut{A}^d$ für $\alpha$ eine $\infty$ Folge von akzZ findet,\\
+            dann können diese akzZ von \Emph{verschiedenen} Runs des NBA~$\Aut{A}$ 
+            auf \Emph{Präfixen} von $\alpha$ stammen.\\
+            Diese Runs müssen nicht zu einem Run auf $\alpha$ fortsetzbar sein.
+        \end{Itemize}
+      }
+
+      \note{
+        \textbf{16:03}
+        
+        \parII
+        \textbf{T3.12 bis 16:10}
+        
+        \parII
+        \textbf{T3.13 bis 16:17}
+
+        \parII
+        \textbf{insg.\ bis 16:19}
+
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Abhilfe: Safras "`Tricks"'}
+
+      \Bmph{Ziel}
+      \begin{Itemize}
+        \item
+          Wandle NBA $\Aut{A} = (Q,\Sigma,\Delta,I,F)$\\
+          in determ.\ Rabin-Automaten $\Aut{A}^d = (Q^d,\Sigma,\Delta^d,I^d,\calP^d)$ um\\
+          mit $L_\omega(\Aut{A}) = L_\omega(\Aut{A}^d)$
+        \item
+          Vermeide ``bad runs'': \Bmph{Safras Tricks}
+      \end{Itemize}
+
+
+%       \begin{Itemize}
+%         \item
+%           \Bmph{Ziel:}\\
+%           NBA $\Aut{A} = (Q,\Sigma,\Delta,I,F)$ $\leadsto$ DRA $\Aut{A}^d = (Q^d,\Sigma,\Delta^d,I^d,\calP^d)$\\
+%           mit $L_\omega(\Aut{A}) = L_\omega(\Aut{A}^d)$
+%         \item
+%           \Bmph{Problem mit PMK:}\\
+%           \Emph{bad runs} von $\Aut{A}^d$, die keinem erfolgr.\ Run von \Aut{A} entsprechen
+%         \item
+%           \Bmph{Safras Tricks} erweitern die PMK und vermeiden das Problem
+%       \end{Itemize}
+
+      \par\bigskip
+      \uncover<2->{%
+        \Bmph{Vorbetrachtungen}
+        \begin{Itemize}
+          \item
+            \Bmph{Makrozustände}:~ Zustände der alten PMK (Mengen $M \subseteq Q$)
+          \item
+            \Bmph{Zustände von $\Autb{A}^d$:}\\
+            $\approx$ Bäume, deren Knoten mit Makrozuständen markiert sind
+          \item
+            \Bmph{Startzustand:}\\
+            Knoten $I$ (Menge der Anfangszust., wie bei PMK)
+        \end{Itemize}
+
+      }
+
+      \note{
+        \textbf{16:19}
+
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Safras Trick 1}
+
+      \Bmph{Trick 1:}\\
+      In Makrozuständen $M$ mit $M\cap F \neq \emptyset$, initialisiere neue (Teil)Runs:
+      \begin{Itemize}
+        \item
+          Folgezustand bekommt ein Kind mit Folgezuständen aller akzZ
+
+          \begin{small}
+            \begin{center}
+%              $M$ 
+              \begin{tikzpicture}[%
+                baseline=-2pt,node distance=20mm,>=Latex,
+                every state/.style={rectangle,rounded corners,draw=black,semithick,fill=black!5,inner sep=1mm,minimum size=6mm},
+                every edge/.style={draw=black,semithick}
+              ]              
+                \node[state] (M) {$M$};
+              \end{tikzpicture}
+              \quad
+              $\stackrel{a}{\longrightarrow}$
+              \quad
+%              \begin{tabular}{l}
+%                $\{q \in Q \mid (m,a,q) \in \Delta,~ m \in M\}$ \\
+%                $\{q \in Q \mid (m,a,q) \in \Delta,~ m \in M \cap F\}$~~$(X)$ \\
+%              \end{tabular}
+              \begin{tikzpicture}[%
+                baseline=-2pt,node distance=20mm,>=Latex,
+                every state/.style={rectangle,rounded corners,draw=black,semithick,fill=black!5,inner sep=1mm,minimum size=6mm},
+                every edge/.style={draw=black,semithick}
+              ]              
+                \node[state]                (M)  {$\{q \in Q \mid (m,a,q) \in \Delta,~ m \in M\}$};
+                \node[state,below=5mm of M] (M') {$\{q \in Q \mid (m,a,q) \in \Delta,~ m \in M \cap F\}$};
+                \node[right=2mm of M']      (X)  {$X$};
+                
+                \path[-] (M) edge (M');
+              \end{tikzpicture}
+            \end{center}
+          \end{small}
+
+%         \item[$\Rightarrow$]
+%           Zustände in $\Aut{A}^d$ sind \emph{Bäume} von Makrozuständen
+        \item
+          PMK wird auf jeden Knoten einzeln angewendet
+        \item
+          Neuer Knoten $X$ enthält alle Nachfolger von akzZ;
+          \par\smallskip
+          Info wird gebraucht, um aus einem erfolgreichen Run für $\Aut{A}^d$\\
+          einen für $\Aut{A}$ zu konstruieren
+          \hfill
+          $\leadsto$ vermeidet \emph{bad runs}
+      \end{Itemize}
+      Beispiel: siehe Tafel \Tafel
+
+      \note{
+        \textbf{16:22}
+
+        \parII        
+        Safras Ideen bestehen aus drei Tricks, die ich jetzt halb formal, halb intuitiv vorstelle.
+        
+        \parI
+        Anschließend präzise als Konstruktion mit 6 Schritten beschreiben.
+        
+        \parIII
+        Kinder im Baum sind immer unten; deshalb keine Pfeilspitzen!
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Konsequenzen aus Trick 1}
+
+      \begin{Itemize}
+        \item
+          Organisation dieser Mengen von Makrozuständen: \\
+          als geordnete Bäume -- \Bmph{Safra-Bäume}
+          \par\smallskip
+        \item
+          Trick 1 fügt neue Kinder/Geschwister hinzu \\
+          $\leadsto$ Höhe/Breite des Safra-Baums wächst
+          \par\smallskip
+        \item
+          Zum Begrenzen der Höhe/Breite: Trick 2 und 3
+      \end{Itemize}
+
+      \note{
+        \textbf{16:32}
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Safras Trick 2}
+
+      \Bmph{Trick 2:}\\
+      Erkenne zusammenlaufende Teilruns und lösche überflüssige Info
+
+      \par\medskip
+      Bsp.: Betrachte Teilruns, die in demselben Zustand $q_n$ enden:
+      \begin{small}%
+        \begin{align*}
+          r  & = q_0q_1q_2   \dots \Bmph{$f$}  \dots\dots q_{n-1}\Emph{$q_n$}  \\
+          r' & = q_0q_1'q_2' \dots\dots \Bmph{$f'$} \dots q_{n-1}'\Emph{$q_n$} \qquad (\Bmph{$f$},\Bmph{$f'$} \in F)
+        \end{align*}
+      \end{small}%
+
+      \par\smallskip
+      Zugehörige $n$ Schritte von $\Aut{A}^d$ unter Anwendung von Trick 1:
+
+      \begin{small}
+        \begin{center}
+          \begin{tikzpicture}[%
+            baseline=-2pt,node distance=20mm,>=Latex,
+            every state/.style={rectangle,rounded corners,draw=black,semithick,fill=black!5,inner sep=1mm,minimum size=6mm},
+            every edge/.style={draw=black,semithick}
+          ]              
+            \node[state]                (oben)  {$\cdots q_0\cdots$};
+          \end{tikzpicture}
+          ~$\longrightarrow^*$~
+          \begin{tikzpicture}[%
+            baseline=-2pt,node distance=20mm,>=Latex,
+            every state/.style={rectangle,rounded corners,draw=black,semithick,fill=black!5,inner sep=1mm,minimum size=6mm},
+            every edge/.style={draw=black,semithick}
+          ]              
+            \node[state]                   (oben)  {$\cdots \Bmph{$f$}\cdots$};
+            \node[state,below=5mm of oben] (unten) {\Bmph{$f$}};
+            
+            \path[-] (oben) edge (unten);
+          \end{tikzpicture}
+          ~$\longrightarrow^*$
+          \begin{tikzpicture}[%
+            baseline=-2pt,node distance=20mm,>=Latex,
+            every state/.style={rectangle,rounded corners,draw=black,semithick,fill=black!5,inner sep=1mm,minimum size=6mm},
+            every edge/.style={draw=black,semithick}
+          ]              
+            \node[state]                                 (oben)    {$\cdots \Bmph{$f'$}\cdots$};
+            \node[state,below left=5mm and -5mm of oben]  (ulinks)  {$\cdots$};
+            \node[state,below right=5mm and -5mm of oben] (urechts) {\Bmph{$f'$}};
+            
+            \path[-] (oben) edge (ulinks)
+                     (oben) edge (urechts);
+          \end{tikzpicture}
+          $\longrightarrow^*$
+          \begin{tikzpicture}[%
+            baseline=-2pt,node distance=20mm,>=Latex,
+            every state/.style={rectangle,rounded corners,draw=black,semithick,fill=black!5,inner sep=1mm,minimum size=6mm},
+            every edge/.style={draw=black,semithick}
+          ]              
+            \node[state]                                  (oben)    {$\cdots \Emph{$q_n$}\cdots$};
+            \node[state,below left=5mm and -5mm of oben]  (ulinks)  {\Emph{$q_n$}};
+            \node[state,below right=5mm and -5mm of oben] (urechts) {\Emph{$q_n$}};
+            
+            \path[-] (oben) edge (ulinks)
+                     (oben) edge (urechts);
+          \end{tikzpicture}
+        \end{center}
+      \end{small}
+
+      Trick 2 vereinigt die beiden $\{q_n\}$-Kinder ("`horizontal merge"')
+
+      \par\medskip
+      $\leadsto$ \Emph{Weite} von Safra-Bäumen wird beschränkt
+
+      \note{
+        \textbf{16:33}
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Safras Trick 3}
+
+      \Bmph{Trick 3:}\\
+      Gib überflüssige Makrozustände zur Löschung frei
+
+      \par\bigskip
+      Wenn alle Kinder eines MZ $M$ bezeugen,\\
+      dass \emph{jeder} Zustand in $M$ einen akz.\ Zustand als Vorgänger hat,\\
+      dann können die Kinder gelöscht werden
+
+      \par\bigskip
+      Genauer:
+      \mbox{wenn $M$ Kinder $M_1,\dots,M_n$ hat mit $M_1 \cup\dots\cup M_n = M$,\hspace*{-10mm}} \\
+      dann werden die $M_i$ gelöscht und $M$ mit \circled{!} markiert
+
+      \par\bigskip
+      $\leadsto$ "`vertical merge"', beschränkt die \Emph{Tiefe} von Safra-Bäumen
+
+      \note{
+        \textbf{16:37 bis 16:39, dann 5min Pause}
+        
+        \par
+      }
+    \end{frame}
+
+%   % ------------------------------------------------------------------------------------------
+%     \begin{frame}
+%       \frametitle{Safras Tricks}
+%       
+%       Beginne wie bei der PMK mit Knoten $I$
+%       \par\smallskip
+%       \begin{Enumerate}
+%         \item
+%           Von Makrozuständen mit akz.\ Zuständen, beginne neue Runs
+%           \Tafel
+%           \begin{Itemize}
+%             \item
+%               erzeuge neues Kind mit Nachfolgezuständen aller akz.\ Zustände
+%             \item
+%               wende zukünftig PMK auf jeden Knoten an
+%           \end{Itemize}
+%           \par\smallskip
+%         \item<2->
+%           Erkenne zusammenlaufende Runs; lösche überflüssige Info
+%           \Tafel
+%           \begin{Itemize}
+%             \item
+%               das beschränkt Weite eines Safra-Baums
+%             \item
+%               "`horizontal merge"'
+%           \end{Itemize}
+%           \par\smallskip
+%         \item<3->
+%           Gib überflüssige Makrozustände zur Löschung frei
+%           \Tafel
+%           \begin{Itemize}
+%             \item
+%               wenn alle Kinder eines MZ $M$ bezeugen,\\
+%               dass jeder Zustand in $M$ einen akz.\ Zustand als Vorgänger hat,\\
+%               dann kann $M$ gelöscht werden
+%             \item
+%               "`vertical merge"'
+%           \end{Itemize}
+%       \end{Enumerate}
+%       \note{~}
+%     \end{frame}
+% 
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Definition Safra-Baum}
+      
+      Sei \Bmph{$Q$} Zustandsmenge des ursprünglichen NBA \\
+      und \Bmph{$V$} eine nichtleere Menge von \Bmph{Knotennamen.}
+      
+      \parIII
+      \Bmph{Makrozustand (MZ)} über $Q$:~ Teilmenge $M \subseteq Q$
+
+      \parIII
+      \Bmph{Safra-Baum} über $Q,V$:
+      \begin{Itemize}
+        \item
+          geordneter Baum mit Knoten aus $V$
+          \begin{Itemize}
+            \item[]
+              (der leere Baum ist erlaubt!)
+          \end{Itemize}
+        \item
+          jeder Knoten mit einem \Emph{nichtleeren} MZ markiert\\
+          und möglicherweise auch mit \circled{!}
+        \item
+          Wenn Knoten $v$ mit $M$ und $v$'s Kinder mit $M_1,\dots,M_n$ markiert sind, dann:
+          \begin{Enumerate}
+            \item
+              $M_1 \cup \dots \cup M_n \subsetneq M$
+            \item
+              $M_i$ sind paarweise disjunkt
+          \end{Enumerate}
+      \end{Itemize}
+
+      \note{
+        \textbf{16:44}
+        
+        \parII
+        \textbf{Fragen:}~ Wer ahnt, wozu die letzte Bedingung (1 und 2) wichtig ist? \\
+        (Antw.: stellt sicher, dass es nicht zu viele mögliche SB gibt -- zeigen wir jetzt!)
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Safra-Bäume sind beschränkt}
+      
+%      \Bmph{Zur Erinnerung}
+%      \par\smallskip
+      \begin{itshape}
+        "`Wenn Knoten $v$ mit $M$ und $v$'s Kinder mit $M_1,\dots,M_n$ markiert sind, dann:
+        \begin{Enumerate}
+          \item
+            $M_1 \cup \dots \cup M_n \subsetneq M$
+          \item
+            $M_i$ sind paarweise disjunkt"'
+        \end{Enumerate}
+      \end{itshape}
+      
+      \par\bigskip
+      \uncover<2->{%
+        \Bmph{Konsequenzen}
+        \begin{Itemize}
+          \item
+            \emph{wegen (1):}~ Höhe jedes SB ist durch $|Q|$ beschränkt
+          \item
+            \emph{wegen (2):}~ Anzahl Kinder pro Knoten kleiner als $|Q|$
+          \item
+            \emph{sogar:}~ Jeder SB über $Q$ hat höchstens $|Q|$ Knoten\\
+            {\small (Beweis per Induktion über Baumhöhe)}
+            \parII
+          \item<3->[$\leadsto$]
+            Anzahl der möglichen SB ist beschränkt durch
+            \only<3|handout:0>{\Emph{?}}%
+            \only<4->{$2^{O(|Q| \cdot \text{log}|Q|)}$}
+        \end{Itemize}
+
+      }
+      \note{
+        \textbf{16:47}
+        
+        \parI
+        % TODO
+        \textbf{TODO:}~ Größe und Anzahl der Safra-Bäume sauber abschätzen \& erklären!
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Details der Konstruktion}
+      
+      Sei $\Aut{A} = (Q,\Sigma,\Delta,I,F)$ ein NBA und $V=\{1,\dots,2|Q|\}$.
+      \par\smallskip
+      Konstruieren DRA $\Aut{A}^d = (Q^d,\Sigma,\Delta^d,I^d,\calP)$:
+      \begin{Itemize}
+        \item
+          $Q^d = $ Menge aller Safra-Bäume über $Q,V$
+        \item
+          $I^d = $ Safra-Baum mit einzigem Knoten $I$
+        \item
+          $\Delta^d = \{(S,a,S') \mid S' \text{~wird aus $S$ wie folgt konstruiert}\}$
+      \end{Itemize}
+
+      \note{
+        \textbf{16:50}
+        
+        \parII
+        Knotennamen $1,\dots,2|Q|$ reichen wegen der Beschränkungen,
+        die wir für die Knotenzahl eines SB gerade aufgestellt haben.
+        
+        \parII
+        Übergangsrelation folgt genau Safras Tricks (in jedem \textbf{einzelnen} Übergang!).
+        
+        \parI
+        Akzeptanzkomponente kommt am Ende.
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Konstruktion von $S'$ aus $S$ in 6 Schritten}
+
+      Sei $S$ Safra-Baum mit Knotennamen $V' \subseteq V$; sei $a \in \Sigma$
+
+      \begin{Enumerate}
+        \item<+->
+          Beginne mit $S$; entferne alle Markierungen \circled{!}
+          \par%\smallskip
+        \item<+->
+          Für jeden Knoten $v$ mit Makrozustand $M$ und $M \cap F \neq \emptyset$,\\
+%           \par\smallskip
+          füge neues Kind $v' \in V\setminus V'$ mit Markierung $M \cap F$ hinzu\\
+          {\small (als \Bmph{jüngstes} (rechtes) Geschwister aller evtl.\ vorhandenen Kinder)}
+          \par%\smallskip
+        \item<+->
+          Wende Potenzmengenkonstruktion auf alle Knoten $v$ an:\\
+          ersetze MZ $M$ durch $\{q \in Q \mid (m,a,q) \in \Delta \text{~für ein~} m \in M\}$
+          \par%\smallskip
+        \item<+->
+          \Bmph{Horizontales Zusammenfassen:}
+          Für jeden Knoten $v$ mit MZ $M$,\\
+          lösche jeden Zustand $q$, der im MZ eines älteren Geschwisters vorkommt,
+          aus $M$ \emph{und aus den MZen der Kinder von $v$}
+          \par%\smallskip
+        \item<+->
+          Entferne alle Knoten mit leeren MZen
+          \par%\smallskip
+        \item<+->
+          \Bmph{Vertikales Zusammenfassen:}
+          Für jeden Knoten $v$, dessen Markierung nur Zustände aus $v$'s Kindern enthält,\\
+          lösche alle Nachfolger von $v$ und markiere $v$ mit \circled{!}
+      \end{Enumerate}
+
+      \note{
+        \textbf{16:52}
+        
+        \parII
+        Und das sind die 6 Schritte, die auf den 3 Tricks von Safra beruhen.
+        
+        \parII
+        Schritt 2 = Trick 1 \\
+        Schritt 4 = Trick 2 \\
+        Schritt 6 = Trick 3
+        
+        \parII
+        Illustration auf nächster Folie
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Illustration der Schritte 2--5}
+
+      \begin{Enumerate}
+        \refstepcounter{enumi}
+        \item
+          ~\par\vspace*{-\baselineskip}
+          \begin{small}
+            \begin{tikzpicture}[%
+              baseline=-2pt,node distance=20mm,>=Latex,
+              every state/.style={rectangle,rounded corners,draw=black,semithick,fill=black!5,inner sep=1mm,minimum size=6mm},
+              every edge/.style={draw=black,semithick}
+            ]              
+              \node[state]                                   (oben)    {$\cdots f_1 \cdots f_2 \cdots f_3 \cdots$};
+              \node[state,below left=3mm and -14mm of oben]  (ulinks)  {$\cdots$};
+              \node[state,below right=3mm and -14mm of oben] (urechts) {$\cdots$};
+              
+              \path[-] (oben) edge (ulinks)
+                       (oben) edge (urechts);
+            \end{tikzpicture}          
+            \quad$\leadsto$\quad
+            \begin{tikzpicture}[%
+              baseline=-2pt,node distance=20mm,>=Latex,
+              every state/.style={rectangle,rounded corners,draw=black,semithick,fill=black!5,inner sep=1mm,minimum size=6mm},
+              every edge/.style={draw=black,semithick}
+            ]              
+              \node[state]                                   (oben)    {$\cdots f_1 \cdots f_2 \cdots f_3 \cdots$};
+              \node[state,below left=3mm and -6mm of oben]   (ulinks)  {$\cdots$};
+              \node[state,below left=3mm and -18mm of oben]  (umitte)  {$\cdots$};
+              \node[state,below right=3mm and -11mm of oben] (urechts) {$f_1,f_2,f_3$};
+              
+              \path[-] (oben) edge (ulinks)
+                       (oben) edge (umitte)
+                       (oben) edge (urechts);
+            \end{tikzpicture}          
+          \end{small}
+          \par\bigskip
+        \item
+          \begin{small}
+            \begin{tikzpicture}[%
+              baseline=-2pt,node distance=20mm,>=Latex,
+              every state/.style={rectangle,rounded corners,draw=black,semithick,fill=black!5,inner sep=1mm,minimum size=6mm},
+              every edge/.style={draw=black,semithick}
+            ]              
+              \node[state]                                   (oben)    {$\cdots q \cdots$};
+              \node[state,below left=3mm and -7mm of oben]  (ulinks)  {$\cdots$};
+              \node[state,below right=3mm and -7mm of oben] (urechts) {$\cdots$};
+              
+              \path[-] (oben) edge (ulinks)
+                       (oben) edge (urechts);
+            \end{tikzpicture}          
+            \quad$\leadsto$\quad
+            \begin{tikzpicture}[%
+              baseline=-2pt,node distance=20mm,>=Latex,
+              every state/.style={rectangle,rounded corners,draw=black,semithick,fill=black!5,inner sep=1mm,minimum size=6mm},
+              every edge/.style={draw=black,semithick}
+            ]              
+              \node[state]                                   (oben)    {$\cdots q' \cdots$};
+              \node[state,below left=3mm and -7mm of oben]  (ulinks)  {$\cdots$};
+              \node[state,below right=3mm and -7mm of oben] (urechts) {$\cdots$};
+              
+              \path[-] (oben) edge (ulinks)
+                       (oben) edge (urechts);
+            \end{tikzpicture}          
+            \quad
+            wenn $(q,a,q') \in \Delta$
+          \end{small}
+          \par\bigskip
+        \item
+          \begin{small}
+            \begin{tikzpicture}[%
+              baseline=-2pt,node distance=20mm,>=Latex,
+              every state/.style={rectangle,rounded corners,draw=black,semithick,fill=black!5,inner sep=1mm,minimum size=6mm},
+              every edge/.style={draw=black,semithick}
+            ]              
+              \node[state]                                   (oben)    {$\cdots$};
+              \node[state,below left=3mm and -2.5mm of oben]  (ulinks)  {$\cdots q \cdots$};
+              \node[state,below right=3mm and -2.5mm of oben] (urechts) {$\cdots q \cdots$};
+              
+              \path[-] (oben) edge (ulinks)
+                       (oben) edge (urechts);
+            \end{tikzpicture}          
+            \quad$\leadsto$\quad
+            \begin{tikzpicture}[%
+              baseline=-2pt,node distance=20mm,>=Latex,
+              every state/.style={rectangle,rounded corners,draw=black,semithick,fill=black!5,inner sep=1mm,minimum size=6mm},
+              every edge/.style={draw=black,semithick}
+            ]              
+              \node[state]                                   (oben)    {$\cdots$};
+              \node[state,below left=3mm and -4mm of oben]  (ulinks)  {$\cdots q \cdots$};
+              \node[state,below right=3mm and -1mm of oben] (urechts) {$\cdots$};
+              
+              \path[-] (oben) edge (ulinks)
+                       (oben) edge (urechts);
+            \end{tikzpicture}          
+          \end{small}
+          \par\bigskip
+        \item
+          \begin{small}
+            \begin{tikzpicture}[%
+              baseline=-2pt,node distance=20mm,>=Latex,
+              every state/.style={rectangle,rounded corners,draw=black,semithick,fill=black!5,inner sep=1mm,minimum size=6mm},
+              every edge/.style={draw=black,semithick}
+            ]              
+              \node[state]                                    (oben)    {$\cdots$};
+              \node[state,below=3mm of oben]                  (umitte)  {$\emptyset$};
+              \node[state,left=2mm of umitte]                 (ulinks)  {$\cdots$};
+              \node[state,right=2mm of umitte]                (urechts) {$\cdots$};
+              
+              \path[-] (oben) edge (ulinks)
+                       (oben) edge (umitte)
+                       (oben) edge (urechts);
+            \end{tikzpicture}          
+            \quad$\leadsto$\quad
+            \begin{tikzpicture}[%
+              baseline=-2pt,node distance=20mm,>=Latex,
+              every state/.style={rectangle,rounded corners,draw=black,semithick,fill=black!5,inner sep=1mm,minimum size=6mm},
+              every edge/.style={draw=black,semithick}
+            ]              
+              \node[state]                                    (oben)    {$\cdots$};
+              \node[state,below left=3mm and -2.5mm of oben]  (ulinks)  {$\cdots$};
+              \node[state,below right=3mm and -2.5mm of oben] (urechts) {$\cdots$};
+              
+              \path[-] (oben) edge (ulinks)
+                       (oben) edge (urechts);
+            \end{tikzpicture}          
+          \end{small}
+      \end{Enumerate}
+
+      \note{
+        \textbf{16:58}
+        
+        \parII
+        Hier wieder schematische Skizzen; als nächstes am konkreten Bsp.
+        
+        \parII
+        nur letztes Bild an Tafel (ist hier nicht eindeutig)
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Illustration von Schritt 6}
+
+      \begin{Enumerate}
+        \setcounter{enumi}{5}
+        \item
+          \begin{small}
+            \begin{tikzpicture}[%
+              baseline=-2pt,node distance=20mm,>=Latex,
+              every state/.style={rectangle,rounded corners,draw=black,semithick,fill=black!5,inner sep=1mm,minimum size=6mm},
+              every edge/.style={draw=black,semithick}
+            ]              
+              \node[state]                                       (oben)    {$M = M_1 \cup \dots \cup M_n$};
+              \node[state,below=7mm of oben,draw=none,fill=none] (umitte)  {$\dots$};
+              \node[state,above left=-4mm and 4mm of umitte]      (ulinks)  {$M_1$};
+              \node[state,above right=-4mm and 4mm of umitte]     (urechts) {$M_n$};
+              
+              \node[state,below=7mm of ulinks, draw=none,fill=none]           (ulm) {$\vdots$};
+              \node[state,below=7mm of urechts,draw=none,fill=none]           (urm) {$\vdots$};
+              \node[state,above left =-6mm and 2mm of ulm,draw=none,fill=none] (ull) {};
+              \node[state,above left =-6mm and 2mm of urm,draw=none,fill=none] (url) {};
+              \node[state,above right=-6mm and 2mm of ulm,draw=none,fill=none] (ulr) {};
+              \node[state,above right=-6mm and 2mm of urm,draw=none,fill=none] (urr) {};
+              
+              \path[-] (oben) edge (ulinks)
+                       (oben) edge (umitte)
+                       (oben) edge (urechts)
+                       (ulinks) edge (ull)
+                       (ulinks) edge (ulm)
+                       (ulinks) edge (ulr)
+                       (urechts) edge (url)
+                       (urechts) edge (urm)
+                       (urechts) edge (urr);
+            \end{tikzpicture}          
+%            \begin{tabular}{c}
+%              $M$ \\
+%              $M_1$ \quad \dots \quad $M_n$ \\
+%              $\vdots$ \qquad\qquad $\vdots$
+%            \end{tabular}
+            \quad$\leadsto$\qquad
+           \begin{tikzpicture}[%
+              baseline=-2pt,node distance=20mm,>=Latex,
+              every state/.style={rectangle,rounded corners,draw=black,semithick,fill=black!5,inner sep=1mm,minimum size=6mm},
+              every edge/.style={draw=black,semithick}
+            ]              
+              \node[state] (M)      {$M$};
+              \node[right=0mm of M] (excl) {\circled{!}};
+            \end{tikzpicture}          
+%%            \quad
+%            wenn $M = M_1 \cup \dots \cup M_n$
+          \end{small}
+%          \Tafel
+          \par\medskip
+          d.\,h.\ alle Zustände in $M$ kommen im Makrozustand eines Kindes $M_i$ vor
+          
+          \par\smallskip
+          d.\,h.\ jeder Zustand in $M$ hat einen akzZ als Vorgänger!
+      \end{Enumerate}
+
+      \note{
+        \textbf{17:01}
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Erläuterungen zur Konstruktion}
+
+      \begin{Itemize}
+        \item
+          $S'$ ist wieder ein Safra-Baum:
+          \par\smallskip
+          \begin{itshape}
+            Wenn Knoten $v$ mit $M$ und $v$'s Kinder mit $M_1,\dots,M_n$ markiert sind, dann:
+            \begin{Enumerate}
+              \item
+                $M_1 \cup \dots \cup M_n \subsetneq M$ \hfill ``$\subseteq$'': Schritte 2,\,3\\
+                                                       \hfill ``$\neq$'': Schritt 6
+              \item
+                $M_i$ sind paarweise disjunkt \hfill Schritt 4
+            \end{Enumerate}
+          \end{itshape}
+%           Siehe Tafel \Tafel
+          \par\bigskip
+        \item<2->
+          Beispiel: siehe Tafel \Tafel
+      \end{Itemize}
+
+      \note{
+        \textbf{17:04}
+        
+        \parII
+        Def.\ der Akzeptanzkomponente kommt nach dem Beispiel.
+        
+        \parII
+        \textbf{Bsp. bis 17:28}
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Akzeptanzkomponente von $\Aut{A}^d$}
+
+      $\calP = \{(E_v,F_v) \mid v \in V\}$ mit
+      \begin{Itemize}
+        \item
+          $E_v = $ alle Safra-Bäume ohne Knoten $v$
+        \item
+          $F_v = $ alle Safra-Bäume, in denen $v$ mit \circled{!} markiert ist
+      \end{Itemize}
+
+      \par\bigskip
+      \uncover<2->{%
+        $\leadsto$ d.\,h.\ Run $r = S_0 S_1 S_2 \ldots$ von $\Aut{A}^d$ ist erfolgreich,\\
+        wenn es einen Knotennamen $v$ gibt, so dass
+        \begin{Itemize}
+          \item
+            alle $S_i$, bis auf endlich viele, einen Knoten $v$ haben und
+          \item
+            unendlich oft auf $v$ Schritt 6 angewendet wurde,\\
+            d.\,h.\ vorher kamen alle Zustände in $v$'s MZ in $v$'s Kindern vor
+        \end{Itemize}
+        \TafelForts
+      }
+
+      \note{
+        \textbf{17:28 bis 17:30 $\leadsto$ Punktlandung?}
+        
+        \parII
+        Jetzt müssen wir natürlich noch zeigen, dass die Konstruktion korrekt ist.
+        
+        \parI
+        Das tun wir nächste Woche! :)
+        
+        \par
+      }
+    \end{frame}
+
+  \newlength{\Danngilt}
+  \settowidth{\Danngilt}{Dann gilt}
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Korrektheit und Vollständigkeit der Konstruktion}
+
+      \begin{Lemma}
+        Sei $\Aut{A} = (Q,\Sigma,\Delta,I,F)$ ein NBA
+        und sei $\Aut{A}^d = (Q^d,\Sigma,\Delta^d,I^d,\calP)$ der DRA,
+        den man nach Safras Konstruktion aus \Aut{A} erhält.
+        \par\smallskip
+        Dann gilt $L_\omega(\Aut{A}^d) = L_\omega(\Aut{A})$.
+        \label{lem:soundness+completeness_safra}
+      \end{Lemma}
+
+      \par\bigskip
+      \Bmph{Korrektheit}: \hfill \emph{(Soundness)}\\
+      $\Aut{A}^d$ akzeptiert nur Wörter, die $\Aut{A}$ akzeptiert
+      \par\smallskip
+      \parbox{\Danngilt}{~} $L_\omega(\Aut{A}^d) \subseteq L_\omega(\Aut{A})$
+
+      \par\bigskip
+      \Bmph{Vollständigkeit}: \hfill \emph{(Completeness)}\\
+      $\Aut{A}^d$ akzeptiert (mindestens) alle Wörter, die $\Aut{A}$ akzeptiert
+      \par\smallskip
+      \parbox{\Danngilt}{~} $L_\omega(\Aut{A}^d) \supseteq L_\omega(\Aut{A})$
+
+      \par\bigskip
+      \Bmph{Beweis:} Folgerung aus den nächsten beiden Lemmas
+      
+      \note{%
+        \textbf{8:30}
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Korrektheit}
+
+      \begin{Lemma}
+        Sei $\Aut{A} = (Q,\Sigma,\Delta,I,F)$ ein NBA
+        und sei $\Aut{A}^d = (Q^d,\Sigma,\Delta^d,I^d,\calP)$ der DRA,
+        den man nach Safras Konstruktion aus \Aut{A} erhält.
+        \par\smallskip
+        Dann gilt $L_\omega(\Aut{A}^d) \mathbin{\Emph{$\subseteq$}} L_\omega(\Aut{A})$.
+        \label{lem:soundness_safra}
+      \end{Lemma}
+
+      \par\bigskip
+      \Bmph{Beweisidee.}
+      Sei $I=\{q_I\}$ und $I^d = \{S_I\}$.\quad Sei $\alpha \in L_\omega(\Aut{A}^d)$.
+      \begin{Itemize}
+        \item
+          Betrachte erfolgreichen Run $s$ von $\Aut{A}^d$ auf $\alpha$.
+        \item
+%           Benutze $\mathcal{P}^d$, um einen erfolgreichen Run von $\Aut{A}$ auf $\alpha$ zu konstruieren
+          "`Konstruiere"' daraus erfolgr.\ Run von $\Aut{A}$ auf $\alpha$ \emph{stückweise:}
+          \[
+            s = S_I \dots T_1 \dots T_2 \dots T_3 \dots, \qquad \text{(alle $T_i$ laut $\mathcalreg{P}$ gewählt)}
+          \]
+        \item
+          Jeder Teilrun $T_i\dots T_{i+1}$ induziert Teilrun von $\Aut{A}$ auf Teilwort von $\alpha$,
+          der einen akz.\ Zustand enthält
+        \item
+          Ordnen diese endl.\ Teilruns in einem $\infty$ Baum $\mathcalreg{T}$ an
+        \item
+          Gesuchter Run von $\Aut{A}$ ist ein $\infty$ Pfad in $\mathcalreg{T}$
+      \end{Itemize}
+
+%       siehe Tafel. \Tafel~~~~
+%       \par
+%       \vspace*{-1\baselineskip}
+%       \strut \qed
+
+      \note{%
+        \textbf{8:32}
+        
+        \parI
+        Zuerst die Beweis\textbf{idee.}
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Korrektheit}
+
+      \Bmph{Beweis.}~
+      Sei also $\alpha \in L_\omega(\Aut{A}^d)$.
+
+      \par\smallskip
+      Dann gibt es erfolgreichen Run $s=S_0S_1S_2\dots$ von $\Aut{A}^d$ auf $\alpha$
+      und ein Knoten $v$, der (wegen $\mathcalreg{P}^d$)
+      \begin{Itemize}
+        \item
+          \mbox{in allen Safra-Bäumen $S_j,S_{j+1},\dots$ vorkommt, für ein $j\!\!\:\geqslant\!\!\:0$, und\hspace*{-10mm}}
+        \item
+          in $\infty$ vielen Safra-Bäumen mit \circled{!} markiert ist.\\
+          Seien diese $T_1,T_2,\dots$ und sei $T_0=S_0$:
+          \[
+            s = T_0\dots T_1\dots T_2 \dots T_3 \dots
+          \]
+      \end{Itemize}
+
+      \par\smallskip
+      \uncover<2->{%
+        Zeigen \Bmph{Hilfsaussage [HA]:}
+        \begin{block}{}
+          Für alle $T_i$ und alle Zustände $p$ im MZ von $v$ in $T_{i+1}$\\
+          gibt es einen Zustand $q$ im MZ von $v$ in $T_{i}$\\
+          und einen endlichen Run $q\dots p$ von $\Aut{A}$ auf dem zugehörigen Teilwort von $\alpha$,
+          der einen akzZ enthält.
+        \end{block}
+      }
+
+      \par\bigskip
+      \uncover<3->{%
+        Beweis der Hilfsaussage: s.\ Tafel \Tafel
+      }
+
+      \note{%
+        \textbf{8:36}
+        
+        \parI
+        Jetzt der eigentliche Beweis.
+        
+        \parII
+        \textbf{Bis 9:10}
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Korrektheit}
+
+%       \Bmph{Beweis (Rest).}~
+      Kombiniere nun Runs aus [HA] zu $\infty$ Run von $\Aut{A}$
+      \begin{Itemize}
+        \item
+          Seien $0 = i_0 < i_1 < i_2 < \dots$ Positionen der $T_i$ in $s$
+        \item
+          Sei $M_j$ der MZ von $v$ an Positionen $i_j$, $j \geqslant 0$
+      \end{Itemize}
+
+      \par\vspace*{5.3pt}
+      \uncover<2->{%
+        Konstruiere Baum $\mathcalreg{T}$:
+        \begin{Itemize}
+          \item
+            Knoten $=$ Paare $(q,j)$ mit $q \in M_j$, $j \geqslant 0$
+          \item
+            Jeder Knoten $(p,j+1)$ bekommt \emph{genau ein} Elternteil:\\
+            beliebiger $(q,j)$ mit $q \in M_j$ und $\exists$ Run $q\dots p$ wie in \Bmph{[HA]}
+%             \par\smallskip
+%           \item[$\leadsto$]
+%             $\mathcalreg{T}$ ist Baum mit Wurzel $(q_I,0)$\qquad $(I = \{q_I\})$
+%           \item[$\leadsto$]
+%             $\mathcalreg{T}$ hat $\infty$ viele Knoten, endl.\ Verzweigungsgrad $\leqslant |Q|$
+          \item[$\Rightarrow$]
+%             $\mathcalreg{T}$ hat 
+            $\infty$ viele Knoten, Verzweigungsgrad $\leqslant |Q|$, Wurzel $(q_I,0)$
+        \end{Itemize}
+      }
+
+      \par\vspace*{5.3pt}
+      \uncover<3->{%
+        Nach Lemma von K\H onig (nächste Folie) folgt:
+        \begin{Itemize}
+          \item
+            $\mathcalreg{T}$ hat einen $\infty$ Pfad $(q_I,0),~ (q_1,1),~ (q_2,2),~ \dots$;
+          \item
+            Verkettung aller Teilruns entlang dieses Pfades ist ein Run von $\Aut{A}$ auf $\alpha$,
+            der $\infty$ oft einen akzZ besucht
+          \item[$\Rightarrow$]
+            $\alpha \in L_\omega(\Aut{A})$ \qed
+        \end{Itemize}
+      }
+
+
+      \note{%
+        \textbf{9:10}
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Im Korrektheitsbeweise benutztes Werkzeug}
+      
+      \begin{Lemma}[Lemma von K\H onig]
+        Jeder unendliche Baum mit endlichem Verzweigungsgrad\\
+        hat einen unendlichen Pfad.
+      \end{Lemma}
+      
+      \par\bigskip
+%       \uncover<2->{%
+        \begin{Itemize}
+          \item
+            ohne Beweis
+          \item
+            "`endlicher Verzweigungsgrad"':\\
+            jeder Knoten hat endlich viele Kinder
+          \item
+            1936 von D\'enes K\H onig (1884--1944, Mathematiker, Budapest)
+        \end{Itemize}
+%       }
+      
+      \note{%
+          \textbf{9:15}
+          
+          \parII
+          \textbf{einschl.\ 4min Pause bis 9:20}
+          
+          \par
+        }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Vollständigkeit}
+
+      \begin{Lemma}
+        Sei $\Aut{A} = (Q,\Sigma,\Delta,I,F)$ ein NBA
+        und sei $\Aut{A}^d = (Q^d,\Sigma,\Delta^d,I^d,\calP)$ der DRA,
+        den man nach Safras Konstruktion aus \Aut{A} erhält.
+        \par\smallskip
+        Dann gilt $L_\omega(\Aut{A}) \subseteq L_\omega(\Aut{A}^d)$.
+        \label{lem:completeness_safra}
+      \end{Lemma}
+
+      \par\smallskip
+      \Bmph{Beweis.} %\qquad Sei $I^d = \{S_I\}$
+      \begin{Itemize}
+        \item
+          Sei $\alpha \in L_\omega(\Aut{A})$ und $r=q_0q_1q_2\dots$ erfolgr.\ Run von $\Aut{A}$ auf $\alpha$
+        \item
+          $\Aut{A}^d$ hat \emph{eindeutigen} Run $s=S_0S_1S_2\dots$ auf $\alpha$ % mit $S_0 = S_I$
+        \item
+          Zu zeigen: $s$ ist erfolgreich, d.\,h.:
+      \end{Itemize}
+
+      \par
+      \uncover<2->{%
+%         Zeigen \Bmph{Hilfsaussage [HA]:}
+        \begin{block}{}
+          Es gibt einen Knotennamen $v$, für den gilt:
+          \vspace*{-2pt}
+          \begin{Enumerate}
+            \item[\Bmph{(a)}]
+              $\exists m \geqslant 0$ : 
+              $S_i$ enthält Knoten $v$ für alle $i \geqslant m$
+              \vspace*{-1pt}
+            \item[\Bmph{(b)}]
+              $v$ ist in $\infty$ vielen $S_i$ mit $\circled{!}$ markiert
+          \end{Enumerate}
+        \end{block}
+      }
+
+%       \par\bigskip
+%       \uncover<3->{%
+%         \Bmph{Aus [HA] folgt:}
+%         \par\medskip
+%         (1) $\text{Inf}(s) \cap E_v = \emptyset$\quad und \quad
+%         (2) $\text{Inf}(s) \cap F_v \neq \emptyset$
+%         \par\medskip
+%         $\Rightarrow$ Also ist $s$ erfolgreich
+%       }
+
+      \par\smallskip
+      \uncover<3->{%
+        Beweis dieser Aussage: s.\ Tafel \Tafel~~~~
+        \par
+        \vspace*{-.95\baselineskip}
+        \qed
+      }
+      
+      
+%       siehe Tafel. \Tafel~~~~
+%       \par
+%       \vspace*{-1\baselineskip}
+%       \strut \qed
+
+      \note{%
+        \textbf{9:20 bis 9:55}
+        
+        \par
+      }
+    \end{frame}
+
+  \newcommand{\myto}{\only<3|handout:0>{$\to$}\only<4>{\Emph{\ding{220}}}}
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Konsequenz aus Safras Konstruktion}
+      
+      \begin{Satz}[Satz von McNaughton]
+        Sei $\Aut{A}$ ein NBA.
+        Dann gibt es einen DRA $\Aut{A}^d$
+        mit $L_\omega(\Aut{A}^d) = L_\omega(\Aut{A})$.%
+        \label{thm:mcnaughton}
+      \end{Satz}
+      
+      \par\smallskip
+%       \Bmph{Beweis.} Folgt aus Lemmas \ref{lem:completeness_safra} und \ref{lem:soundness_safra}.
+%       \Bmph{Beweis.} Folgt aus Lemmas \ref{lem:soundness_safra} und \ref{lem:completeness_safra}.
+      \Bmph{Beweis.} Folgt aus Lemma \ref{lem:soundness+completeness_safra}.
+      
+      \par\bigskip
+      \uncover<2->{%
+        \begin{Folgerung}
+          Die Klasse der Büchi-erkennbaren Sprachen ist unter Komplement abgeschlossen.
+        \end{Folgerung}
+      }
+      
+      \par\smallskip
+      \uncover<3->{%
+%         \Bmph{Beweis.} Über folgende Transformationskette:
+%         \par\smallskip
+        \begin{tabular}[b]{@{}llcll@{}}
+           \Bmph{Beweis.} & \multicolumn{4}{l}{Über folgende Transformationskette:}                                           \\[2pt]
+                          & NBA für $L$ & \myto & DRA für $L$           & (gemäß Satz \ref{thm:mcnaughton})                         \\
+                          &             & $\to$ & DMA für $L$           & (gemäß Satz \ref{thm:gleichmaechtigkeit_deterministisch}) \\
+                          &             & $\to$ & DMA für $\overline L$ & (wie gehabt)                                              \\
+                          &             & \myto & NBA für $\overline L$ & (gemäß Satz \ref{thm:gleichmaechtigkeit})%
+        \end{tabular}%
+        \qed
+      }
+      \note{%
+        \textbf{9:55}
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \label{fra:komplexitaet_komplementierung}
+      \frametitle{Anmerkungen zur Komplexität}
+      
+
+      \Bmph{Determinisierung} NBA $\to$ DRA gemäß Safras Konstruktion
+      \begin{Itemize}
+        \item
+          liefert einen \Emph{exponentiell} größeren DRA
+        \item
+          genauer: wenn der NBA $n$ Zustände hat,
+          \begin{Itemize}
+            \item
+              gibt es $2^n$ mögliche Makrozustände
+            \item
+              und $2^{O(n \log n)}$ mögliche Safrabäume
+            \item[$\leadsto$]
+              DRA hat maximal $m := 2^{O(n \log n)}$ Zustände
+          \end{Itemize}
+        \item
+          Das ist optimal (siehe Roggenbachs Kapitel in LNCS 2500)
+      \end{Itemize}
+
+
+      \par\bigskip
+      \uncover<2->{%
+        \Bmph{Komplementierung} beinhaltet auch den Schritt DMA $\to$ NBA
+        \begin{Itemize}
+          \item
+            liefert einen nochmal \Emph{exponentiell} größeren DBA:
+            \par\smallskip
+            wenn der DMA $m$ Zustände hat, \\
+            hat der NBA $O(m\cdot 2^m)$ Zustände
+          \item[$\leadsto$]
+            Resultierender NBA hat $2^{2^{O(n^2)}}$ Zustände
+          \item<3->
+            Alternative Prozedur erfordert nur $2^{O(n \log n)}$ Zustände
+        \end{Itemize}
+      }
+
+      \note{%
+        \textbf{9:57 bis Ende}
+        
+        \parI
+        % TODO
+        \textbf{TODO:}~ Größe und Anzahl der Safra-Bäume sauber abschätzen \& erklären!
+        (siehe Folie $\approx{}$66)
+        
+        \par
+      }
+    \end{frame}
+
+

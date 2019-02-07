@@ -1,0 +1,215 @@
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Vorbetrachtungen}
+      
+      Betrachten 4 Standardprobleme:
+      \begin{Itemize}
+        \item
+          Leerheitsproblem
+        \item
+          Wortproblem\quad {\small (Wort ist durch NBA gegeben)}
+        \item
+          Äquivalenzproblem
+        \item
+          Universalitätsproblem
+      \end{Itemize}
+
+      \par\medskip
+      \uncover<2->{%
+        \Emph{Beschränken} uns auf das \Emph{Leerheitsproblem} -- die anderen \dots \\
+        \begin{Itemize}
+          \item
+            lassen sich wie üblich darauf reduzieren
+          \item
+            aber teils mit (doppelt) exponentiellem "`Blowup"' \\
+            {\small (Determinisierung, Komplementierung, siehe Folie \ref{fra:komplexitaet_komplementierung})} \\
+%             $\leadsto$ höhere, teils nicht optimale Komplexität
+            $\leadsto$ höhere Komplexität
+        \end{Itemize}
+      }
+
+      \par\medskip
+      \uncover<3->{%
+        \Emph{Beschränken} uns auf \Emph{NBA},\\
+        aber Entscheidbarkeit überträgt sich auf die anderen Modelle%
+      }
+
+      \note{
+        \textbf{16:00}
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Das Leerheitsproblem}
+      
+      \Bmph{Zur Erinnerung:}
+      \begin{Itemize}
+        \item[]
+          Gegeben: NBA $\Aut{A}$
+        \item[]
+          Frage: Gilt $L_\omega(\Aut{A}) = \emptyset$\,?
+      \end{Itemize}
+%       Mengenschreibweise: $\{\text{NBA~} \Aut{A} \mid L_\omega(\Aut{A}) = \emptyset\}$
+
+      \uncover<2->{%
+        \par %\bigskip
+        \begin{Satz}
+          Das Leerheitsproblem für NBAs ist entscheidbar.
+        \end{Satz}
+      }
+
+      \par\medskip
+      \uncover<3->{%
+          \Bmph{Quiz:} Welche Komplexität hat es? \NL\ \dots\ \PT\ \dots\ höher?
+      }
+
+      \par\bigskip
+      \uncover<4->{%
+        \Bmph{Beweis.}
+        \quad $L_\omega(\Aut{A}) \neq \emptyset$ genau dann, wenn gilt:
+
+        \par\medskip
+        \qquad Es gibt $q_0 \in I$ und $q_f \in F$ \\
+        \qquad und einen Pfad von $q_0$ zu $q_f$ in $\Aut{A}$\\
+        \qquad und einen Pfad von $q_f$ zu $q_f$ in $\Aut{A}$
+
+        \par\bigskip
+        \Bmph{$\Rightarrow$} Reduktion zum Leerheitsproblem für NEAs:
+%         siehe Tafel. \Tafel        
+      }
+
+%       \par\bigskip\bigskip
+%       \uncover<3->{%
+%         \Bmph{Komplexität:} \NL-vollständig (Wegsuche in Graphen)%
+%       }
+
+      \note{
+        \textbf{16:02}
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Das Leerheitsproblem}
+
+      Bezeichne $L(\Aut{A}_{q_1,q_2})$
+      die von $\Aut{A}$ \Emph{als NEA} erkannte Sprache,\\
+      wenn $\{q_1\}$ Anfangs- und $\{q_2\}$ Endzustandsmenge ist
+
+      \par\bigskip
+      Folgender Algorithmus entscheidet das Leerheitsproblem:
+      %
+      \begin{block}{}
+        \renewcommand{\baselinestretch}{1.2}
+        \begin{algorithm}[H]
+          \DontPrintSemicolon
+          \SetKwProg{Fn}{Function}{:}{end}
+          \SetKwFunction{nonreach}{\myblu{nonreach}}%
+          \SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
+          \SetKwComment{tcp}{//}{}
+          \SetKw{KwRet}{return}
+          \SetKw{Return}{return}
+
+          Rate nichtdeterministisch $q_0 \in I$ und $q_F \in F$\;
+          \lIf{$L(\Aut{A}_{q_0,q_f}) \subseteq \{\varepsilon\}$ oder $L(\Aut{A}_{q_f,q_f}) \subseteq \{\varepsilon\}$}{\Return "`leer"'}
+          \Return "`nicht leer"'        
+        \end{algorithm}
+      \end{block}
+
+      Dabei ist~ $L(\Amc_{\dots}) \subseteq \{\varepsilon\}$ ~gdw.~ $L(\Amc_{\dots}) \cap \underbrace{(\Sigma \setminus \{\varepsilon\})}_{\text{konst.\ NEA}} = \emptyset$
+      
+      \parI
+      $\Big($"`$L(\Amc_{\dots}) = \emptyset$"' genügt nicht, denn $L_\omega($
+      %
+      \hspace*{-2mm}%
+      \begin{tikzpicture}[%
+        baseline=-2pt,node distance=20mm,>=Latex,
+        initial text="",
+        every state/.style={draw=black,semithick,fill=black!5,inner sep=0mm,minimum size=3mm},
+        every edge/.style={draw=black,semithick}
+      ]              
+        \node[state,initial,accepting] {~};
+      \end{tikzpicture}%
+      %
+      $) = \emptyset%$, aber $L(\Amc_{q_0,q_0})=\{\varepsilon\}
+      .\Big)$
+      \qed
+      
+%      \begin{Enumerate}
+%        \item
+%          Rate nichtdeterministisch $q_0 \in I$
+%        \item
+%          Rate nichtdeterministisch $q_f \in F$
+%        \item
+%          Wenn $L(\Aut{A}_{q_0,q_f}) = \emptyset$, dann Ausgabe "`leer"' und stop
+%        \item
+%          Wenn $L(\Aut{A}_{q_f,q_f}) = \emptyset$, dann Ausgabe "`leer"' und stop
+%        \item
+%          Ausgabe "`nicht leer"' \qed
+%      \end{Enumerate}
+
+      \par\bigskip
+      \uncover<2->{%
+        Das ist ein \NL-Algorithmus\\
+        \begin{footnotesize}
+          (eigentlich \coNL, aber \NL\ $=$ \coNL\ ist bekannt, Immerman–Szelepcsényi 1987)
+        \end{footnotesize}
+
+        \par\medskip
+        Leerheit für NBAs ist \NL-vollständig
+      }
+
+      \note{
+        \textbf{16:05 bis 16:07}
+        
+        \parII
+        \textbf{TODO:}~ besser formatieren! \\
+        $\leadsto$ die 2 Zeilen unter der Box als Tafelanschrieb?
+        
+        \par
+      }
+    \end{frame}
+
+    \newlength{\sternchen}
+    \settowidth{\sternchen}{${}^*$}
+    \newcommand{\stNOst}{\hspace*{\sternchen}\NO{}${}^*$}
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Überblick Entscheidungsprobleme für NBAs}
+      
+%      \begin{center}
+        \begin{tabular}{cccc}
+          \hline\stab
+%                  &               &                 & für NEAs          \\
+          Problem & entscheidbar? & Komplexität     & effizient lösbar? \\
+          \hline\stab
+          LP      & \YES          & \NL-vollständig & \YES              \\
+          WP      & \multicolumn{3}{c}{{\small \textcolor{black!70}{--- macht keinen Sinn, da Eingabewort $\infty$ ---}}} \\
+          ÄP      & \YES          & \PSPACE-vollst. & \stNOst           \\
+          UP      & \YES          & \PSPACE-vollst. & \stNOst           \\
+          \hline
+        \end{tabular}
+
+        \par\bigskip
+        \begin{tabular}{@{}l@{\,}l@{}}
+          ${}^*$ & unter den üblichen komplexitätstheoretischen Annahmen \\
+                 & (z.\,B.\ $\PSPACE \neq \PT$)
+        \end{tabular}
+%      \end{center}
+      \note{
+        \textbf{16:07}
+
+        \par\medskip
+        Hier nochmal für Euch als Überblick. \\
+        Situation dieselbe wie für NEAs; nur WP macht hier keinen Sinn.
+
+        \par
+      }
+    \end{frame}
+

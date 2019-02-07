@@ -1,0 +1,303 @@
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Ziel}
+
+      \Bmph{Ziel dieses Abschnitts}
+      \par\smallskip
+      Charakterisierung der Büchi-erkennbaren Sprachen\\
+      mittels regulärer Sprachen
+
+      \par\bigskip
+      \uncover<2->{%
+        \Bmph{Etwas Notation}
+        \par\smallskip
+        Seien $W \subseteq \Sigma^*$ und $L \subseteq \Sigma^\omega$.
+        \begin{Itemize}
+          \item
+            \Bmph{$W^\omega$} $=$ $\{w_0w_1w_2 \dots \mid w_i \in W\setminus\{\varepsilon\} \text{~für alle~} i \geqslant 0\}$
+            \parI
+            {\small (ist $\omega$-Sprache, weil $\varepsilon$ ausgeschlossen wurde)}
+            \parII
+          \item
+            \Bmph{$WL$} $=$ $\{w\alpha \mid w \in W,~ \alpha \in L\}$
+            \parI
+            {\small (ist $\omega$-Sprache)}
+        \end{Itemize}
+      }
+      \note{
+        \textbf{16:20}
+        
+        \parI
+        $W^{\omega}$ entspricht dem Kleene-Stern bei Sprachen endlicher Wörter; \\
+        $WL$ entspricht der Konkatenation.
+
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}[t]
+      \frametitle{Von regulären zu Büchi-erkennbaren Sprachen (1)}
+
+      \begin{lemma}
+        Für jede reguläre Sprache $W \subseteq \Sigma^*$ gilt:~
+        $W^\omega$ ist Büchi-erkennbar.%
+        \label{lem:Charakt_Buchi_hoch_omega}%
+      \end{lemma}
+
+      \parII%\bigskip
+      \uncover<2->{%
+        \Bmph{Beweis. (Schritt 1)}
+
+        \par\smallskip
+        Sei $\Aut{A}$ ein \Emph{NEA} mit $L(\Aut{A}) = W$.
+      }
+    
+      \parI
+      \uncover<3->{
+        Dann gibt es NEA $\Aut{A}_1$ mit $L(\Aut{A}_1) = W\!\setminus\!\{\varepsilon\}$ (Abschlusseig.!)
+      }
+        
+      \parI
+      \uncover<4->{
+        O.\,B.\,d.\,A.\ habe $\Aut{A}_1$ \dots
+        %
+        \begin{Enumerate}
+          \item
+            einen \Emph{einzigen} Anfangszustand $q_I$\quad und
+          \item
+            \Emph{keine} in $q_I$ \Emph{eingehenden} Kanten:~ keine Transitionen $(\cdot,\cdot,q_I$)
+          \item
+            und sei $q_I \notin F$.
+        \end{Enumerate}
+      }
+        
+      \parI
+      \uncover<5->{
+        Diese Form lässt sich durch Hinzufügen eines frischen Anfangs-\\
+        zustandes (und der entsprechenden Transitionen) erreichen! (Ü)
+      }
+    
+      \note{
+        \textbf{16:22}
+        
+        \parI
+        $\Big($Idee:~ Füge neuen Startzustand hinzu; dupliziere alle Kanten, die von bisherigen SZen ausgehen.
+        
+        \parI
+        Damit sind (1) und (2) erreicht.~
+        (3) ist korrekt, weil $\varepsilon \notin L(\Aut{A}_1)$.$\Big)$
+        
+        \parIII
+        $\Big($Gegenbeispiel für die Rückrichtung:
+        
+        \parI
+        $W = \{a^n \mid n \text{~ist prim}\}$
+        
+        \parI
+        $\Rightarrow~ W^\omega = \{a^\omega\}$\qquad (und $W^* = \{a^n \mid n \geq 2\}$)$\Big)$
+
+        \par        
+      }
+    \end{frame}
+
+    \addtocounter{theorem}{-1}
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}[t]
+    \frametitle{Von regulären zu Büchi-erkennbaren Sprachen (1)}
+    
+      \begin{lemma}
+        Für jede reguläre Sprache $W \subseteq \Sigma^*$ gilt:~
+        $W^\omega$ ist Büchi-erkennbar.%
+%        \label{lem:Charakt_Buchi_hoch_omega}
+      \end{lemma}
+    
+      \parII
+      \Bmph{Beweis. (Schritt 2a)}
+      
+      \parI
+      Sei also $\Aut{A}_1 = (Q_1, \Sigma, \Delta_1, \{q_I\}, F)$ mit den genannten Eigenschaften
+      und $L(\Aut{A}_1) = W\!\setminus\!\{\varepsilon\}$.
+      
+      \parII
+      \uncover<2->{%
+        \Bmph{Idee:}~ konstruiere \Bmph{NBA $\Amcb_2$}\,, der
+        \begin{Itemize}
+          \item
+            $\Aut{A}_1$ simuliert, bis ein akzeptierender Zustand erreicht ist und
+          \item
+            dann \Emph{nichtdeterministisch entscheidet,} \\
+            ob die Simulation fortgesetzt wird \\
+            oder eine neue Simulation von $q_0$ aus gestartet wird
+        \end{Itemize}
+      }
+
+      \note{
+        \textbf{16:24}
+        
+        \parI
+        Letztlich ist das dieselbe Idee wie bei der Kleene-Abg.\ der NEA-erkennbaren Sprachen: \\
+        erzeuge Kreis, der $\infty$ oft durchlaufen werden kann.
+        
+        \parI
+        Die kann man aber nicht so leicht auf Büchiaut.\ übertragen,
+        denn sie führt $\varepsilon$-Kanten ein, und diese kann man innerhalb von Kreisen
+        nicht so leicht eliminieren wie bei NEAs
+        (ehemals akz.\ Zustände könnten keine ausgehenden Kanten mehr haben, also gehen erfolgr.\ Runs verloren \dots)
+        
+
+        \par
+      }
+    \end{frame}
+
+    \addtocounter{theorem}{-1}
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}[t]
+      \frametitle{Von regulären zu Büchi-erkennbaren Sprachen (1)}
+      
+      \begin{lemma}
+        Für jede reguläre Sprache $W \subseteq \Sigma^*$ gilt:~
+        $W^\omega$ ist Büchi-erkennbar.%
+        %        \label{lem:Charakt_Buchi_hoch_omega}
+      \end{lemma}
+      
+      \parII
+      \Bmph{Beweis. (Schritt 2b)}
+      
+      \parI
+      Sei also $\Aut{A}_1 = (Q_1, \Sigma, \Delta_1, \{q_I\}, F)$ mit den genannten Eigenschaften
+      und $L(\Aut{A}_1) = W\!\setminus\!\{\varepsilon\}$.
+      
+      \parII
+      Definiere NBA $\Bmph{$\Amcb_2$} = (Q_1, \Sigma, \Bmph{$\Delta_2$}, \{q_I\}, \Emph{$\{q_I\}$})$ mit
+      %
+      \begin{center}
+        \parbox{.85\linewidth}{%
+          \uncover<2->{%
+            $\Bmph{$\Delta_2$} \,=\, \Delta_1 \cup \{(q,a,q_I) \mid (q,a,q_f) \in \Delta_1 \text{~für ein~} q_f \in F\}$
+          }%
+          
+          \parII
+          \uncover<3->{%
+            \begin{footnotesize}
+              (d.\,h.\ alle Kanten, die in $\Aut{A}_1$ zu einem akz.\ Zustand führen, \\
+              können in $\Aut{A}_2$ zusätzlich zu $q_I$ führen \\
+              -- siehe "`nichtdeterministisch entscheidet"' auf voriger Folie!)
+              \par
+            \end{footnotesize}
+          }
+        }
+      \end{center}
+      %
+      
+      \uncover<4->{%
+        \Bmph{Noch zu zeigen:}~
+        $L_\omega(\Aut{A}_2) = L(\Aut{A}_1)^\omega$
+        \Tafel~~~~~
+        \par\vspace*{-.95\baselineskip}
+        \qed
+      }
+      
+      \note{
+        \textbf{16:26 bis 16:45 $\to$ 5min Pause}
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Von regulären zu Büchi-erkennbaren Sprachen (2)}
+
+      \begin{lemma}
+        \label{lem:Charakt_Buchi_Konkat}
+        ~\par\vspace*{-1.4\baselineskip}
+        Für jede reguläre Sprache $W \subseteq \Sigma^*$\\
+        und jede Büchi-erkennbare Sprache $L \subseteq \Sigma^\omega$ gilt:
+        \par\smallskip
+        $WL$ ist Büchi-erkennbar.
+      \end{lemma}
+
+      \par\bigskip
+      \uncover<2->{%
+        \Bmph{Beweis:}
+        \par\smallskip
+        Wie Abgeschlossenheit der regulären Sprachen unter Konkatenation.
+        \qed
+      }
+
+      \note{
+        \textbf{16:50}
+
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Satz von Büchi}
+
+      \begin{Satz}
+        \label{thm:Charakt_Buchi}
+        ~\par\vspace*{-1.4\baselineskip}
+        Eine Sprache $L \subseteq \Sigma^\omega$ ist Büchi-erkennbar
+        genau dann,\\
+        wenn es reguläre Sprachen $V_1,W_1,\dots,V_n,W_n$ gibt mit $n \geqslant 1$ und
+
+        \par\medskip
+        \centerline{$L = V_1W_1^\omega \cup \dots \cup V_nW_n^\omega$}
+%         \[
+%           L = V_1W_1^\omega \cup \dots \cup V_nW_n^\omega
+%         \]
+      \end{Satz}
+
+      \par\smallskip
+      \uncover<2->{%
+        \Bmph{Beweisskizze:}
+        \only<2|handout:0>{\hfill (Quiz: Welche der Richtungen $\Rightarrow$, $\Leftarrow$ ist leichter?)}
+      }
+
+      \par\smallskip
+      \uncover<3->{%
+        ``$\Leftarrow$'': folgt aus Lemmas~\ref{lem:abgeschlossenheit_vereinigung}, \ref{lem:Charakt_Buchi_hoch_omega} und~\ref{lem:Charakt_Buchi_Konkat}
+
+        \par\medskip
+        ``$\Rightarrow$'': bilden $V_i,W_i$ aus denjenigen Wörtern,
+        die zum jeweils nächsten Vorkommen eines akzeptierenden Zustandes führen
+
+        \par\medskip
+        Details siehe Tafel. \Tafel~~~~
+        \par\vspace*{-.95\baselineskip}
+        \qed
+      }
+      
+      \par\bigskip
+      \uncover<4->{%
+        \Bmph{Konsequenz:}
+        \par\smallskip
+        Büchi-erkennbare Sprachen durch
+        \Bmph{$\omega$-reguläre Ausdrücke} darstellbar:
+        \par\medskip
+        \centerline{%
+          $r_1s_1^\omega + \dots + r_ns_n^\omega$
+          \qquad\qquad
+          ($r_i,s_i$ sind reguläre Ausdrücke)%
+        }%
+%         \[
+%           r_1s_1^\omega + \dots + r_ns_n^\omega
+%           \qquad\qquad
+%           \text{($r_i,s_i$ sind reguläre Ausdrücke)}%
+%         \]
+      }
+      \note{
+        \textbf{16:52 bis 17:02}
+        
+        \parI
+        TODO: Tafelanschrieb auf Folie; hier passiert nix Anstrengendes.
+        
+        \par
+      }
+    \end{frame}
+
+

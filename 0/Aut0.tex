@@ -1,0 +1,755 @@
+%\setbeamertemplate{navigation symbols}{}
+%\beamertemplatenavigationsymbolsempty
+
+\AtBeginSection{\frame{\frametitle{Einführung}\tableofcontents[currentsection]\note{~}}}
+
+\setcounter{part}{0}
+
+% \showfromto{5}{5}
+
+\begin{document}
+
+  % ------------------------------------------------------------------------------------------
+  \begin{frame}
+    \titlepage
+
+    \note{
+      \textbf{8:15}
+      
+      \par\bigskip
+    }
+  \end{frame}
+
+  % ==============================================================================================
+  % ==============================================================================================
+  \section{Organisatorisches}
+
+%     % ------------------------------------------------------------------------------------------
+%     \begin{frame}
+%       \begin{center}
+%         \begin{Huge}
+%           \dblu{\textbf{Herzlich willkommen!}}
+%         \end{Huge}
+%       \end{center}
+%     \end{frame}
+    
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Organisatorisches}
+
+%      \begin{Itemize}
+%        \item
+          \Bmph{Zeit und Ort}
+          \par\smallskip
+          \begin{tabular}{@{}l@{~}r@{~~}l@{~~}l@{}}
+            Mo. & 12--14 & MZH 6340 \\
+            Mi. &  8--10 & MZH 6340
+          \end{tabular}
+%          \par\smallskip
+          \par\bigskip
+%        \item
+          \Bmph{Vortragender}
+          \par\smallskip
+          Thomas Schneider \\
+          Cartesium, Raum 1.56 \\
+          Tel. (218) 64432 \\
+          \texttt{ts[ÄT]cs.uni-bremen.de}
+%          \par\medskip
+          \par\bigskip
+%        \item
+          \Bmph{Position im Curriculum}
+          \par\smallskip
+          Informatik: Master-Ergänzung,\\
+          Modul "`Spezielle Themen der Theoretischen Informatik"'
+          \par\smallskip
+          Mathematik: Ergänzungsfach
+%      \end{Itemize}
+
+      \note{%
+      \textbf{8:16}
+
+        \par\bigskip
+        Anfangszeiten diskutieren?%
+      }
+    \end{frame}
+          
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Organisatorisches}
+%      \begin{Itemize}
+%        \item
+          \Bmph{Form}
+          \par\smallskip
+          K4\quad (in der Regel 3V, 1Ü)
+          \par\smallskip
+          Fragen und Diskussion \Emph{jederzeit erwünscht}.
+%          \par\smallskip
+          \par\bigskip
+%        \item
+          \Bmph{Voraussetzungen}
+          \par\smallskip
+          Grundkenntnisse aus Theoret.\ Informatik 1+2 hilfreich,\\
+          aber nicht zwingend erforderlich
+%          \par\smallskip
+          \par\bigskip
+%        \item
+          \Bmph{Vorlesungsmaterial:}
+          \begin{Itemize}
+            \item
+              Folien und Aufgabenblätter:~ \href{http://tinyurl.com/ws1819-autom}{\texttt{tinyurl.com/ws1819-autom}}
+            \item
+              Folien werden online gestellt, enthalten aber nicht alle Details.\\
+              (Beweise, Beispiele etc.\ von der Tafel bitte mitschreiben.)
+            \item
+              Skript (englisch) für den Theorie-Teil der Vorlesung in Stud.IP           
+            \item
+              Literatur:~ wird bei jedem Kapitel bekannt gegeben
+          \end{Itemize}
+%      \end{Itemize}
+
+      \note{%
+        \textbf{8:18}
+
+        \par\smallskip
+        \textbf{Vorkenntnisse:}~
+        natürlich endliche Aut.\ aus ThI\,1 (werden wir hier aber wiederholen)
+        sowie Berechenbarkeit und Komplexität aus ThI\,2.
+        
+        \par\smallskip
+        Wer es nicht (mehr) parat hat,
+        kann es an den entspr.\ Stellen nacharbeiten.
+        
+        \par\medskip
+        \textbf{Studiengänge erfragen:}~ Informatik? MSc/BSc? Mathematik? Andere Studiengänge (welche)?
+        \qquad
+        $\leadsto$ Im Gegenzug \textbf{paar Daten zu mir}
+        
+        \par\medskip
+        \textbf{ThI-Skript} kann ich bei Stud.IP hochladen; ist in sich abgeschlossen \\
+        (und es müssen nur wenige Abschnitte durchgearbeitet werden).~ \textbf{Bedarf?}
+        
+        \par\smallskip
+        Bitte tragt euch also in Stud.IP für die Veranstaltung ein.
+        
+        \par\medskip
+        \textbf{AT-Skript:}~ von Meghyn, enthält den Theorie-Teil vollständig, einschl. Beweisen,
+        aber vielleicht weniger/andere Beispiele
+        
+        \par\smallskip
+        Ich fertige \textbf{möglicherweise} ein Skript mit den Tafelmitschriften an, \\
+        kann es aber noch nicht versprechen.
+        
+        \par
+      }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Prüfungsmodalitäten}
+      
+%      \begin{Itemize}
+%        \item
+          \Bmph{Übungsaufgaben \& Fachgespräch:}
+          \begin{Itemize}
+            \item
+              Übungsaufgaben ca.\ jede zweite Woche; \\
+              voraussichtlich 6 Blätter, mit Zusatzaufgaben
+            \item
+              Werden in Gruppen (2–3 Personen) bearbeitet, abgegeben und korrigiert – jede\_r muss mindestens einmal vorrechnen
+            \item
+              Aus der erreichten Gesamtpunktzahl aller Blätter ergibt sich die vorläufige Note für diesen Kurs
+            \item
+              Fachgespräche am Ende des Semesters\\
+              (Prüfungsleistung, Änderung der Note möglich)\\
+              Voraussetzung:  insgesamt 50\,\% der Punkte in Übungsaufgaben             
+          \end{Itemize}
+
+          \par\smallskip
+          oder
+          \par\smallskip
+%        \item
+          \Bmph{Mündliche Prüfung}
+          
+          \par\bigskip
+          \Bmph{Wiederholungsregelungen}
+          auf der nächsten Folie \dots
+%      \end{Itemize}
+    
+      \note{%
+        \begin{footnotesize}
+          \textbf{8:24}
+
+          \par\medskip
+          \textbf{Sagen:}~  ich biete folgende Prüfungsmodalitäten an.
+          
+          \par\smallskip
+          „ca. jede 2. Woche“:  erst Mo., dann Mi.\ (wegen Dies Academicus 5.12.) \\
+          Liste folgt; steht auch auf Homepage
+  
+          \par\smallskip
+          Erstes Blatt bereits online — sage ich gleich was dazu.
+  
+          \par\smallskip
+          Gruppen:  nicht 1, nicht 4. (Hilfe anbieten)
+  
+          \par\smallskip
+          Man muss \textbf{insgesamt} 50\,\% der Punkte haben!
+  
+          \par\smallskip
+          Übungen besuchen: auch bei mündl. Prüfung (Teil der VL)
+  
+          \par\smallskip
+          Gegen Ende November (Hälfte 2. Teil der VL) Genaueres zum Ablauf der Prüfungsformen
+          –> Entscheidungshilfe beim Anmelden für Modul$+$Prüfungsform \\
+          Für \textbf{beide} Prüfungsformen ist Üben unerlässlich \\
+          (Abgabe+Korrektur ohne Verwendung der Punkte ist mgl. und erwünscht!)
+  
+          \par\medskip
+          \textbf{Fragen/Anmerkungen/Änderungswünsche zu den Prüf.modalitäten?}
+          $\leadsto$ Festgelegt.      
+          \par
+        \end{footnotesize}
+      }
+      
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Prüfungsmodalitäten}
+
+      \Bmph{Wiederholungsregelungen}
+      \begin{itemize}
+        \item
+          Fachgespräch nicht bestanden?
+          \par\smallskip
+          $\leadsto$ 1 Wiederholungsversuch im selben Semester möglich
+          \par\smallskip
+        \item
+          Weitere Wiederholungsversuche (wenn nötig): \\
+          \par\smallskip
+          mündliche Prüfung in den folgenden 4 Semestern \\
+          (je 1 Versuch pro Semester)
+      \end{itemize}
+
+      \note{%
+%        \begin{footnotesize}
+          \textbf{8:29}
+
+          \par\smallskip
+          \textbf{Sagen:}~  ich biete folgende Wiederholungsregelungen an.
+          
+          \par\medskip
+          Wer 2. Versuch FG nicht besteht, kann ÜA nicht als „Teilleistung“ mitnehmen.~ %\\
+          Dann ist eine mP erforderlich.
+          
+          \par\medskip
+          Vorlesung findet \textbf{nicht} regelmäßig statt
+          $\leadsto$ kann im unwsl.\ Fall des Nichtbestehens 2er Versuche
+          nicht pauschal anbieten, nochmal den Übungsbetrieb zu besuchen.
+          
+%          \par\smallskip
+%          50\,\% der Punkte nicht erreicht?  Dann mündliche Prüfung bei mir.
+%          Die ist aber deutlich anspruchsvoller als FG – 
+%          wenn Ihr also sowieso Probleme habt, die 50\,\% zu schaffen,
+%          dann verlasst Euch nicht auf die mP!
+%          Ich empfehle das Lösen der ÜA, weil sie Euch am meisten beim Lernen unterstützen.
+%          
+          \par\medskip
+          Die üblichen Krankheitsregelungen bleiben hiervon unberührt;
+          meldet Euch im Falle des Falles einfach bei mir oder beim Prüfungsamt.
+          
+%          \par\smallskip
+%          Letzter Punkt:
+%          Ebenso natürlich beim Verwenden anderer Quellen:
+%          immer Quelle angeben und Eigenanteil kenntlich machen! (Nur den kann ich bewerten.)
+%          Idealerweise aber stammt die gesamte Lösung von Euch allein (Gruppe).
+%          
+          \par\medskip
+          \textbf{Fragen/Anmerkungen/Änderungswünsche zu diesen Regelungen?}
+          $\leadsto$ Festgelegt.
+          
+          \par
+%        \end{footnotesize}
+                
+      }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+    \frametitle{Termine}
+    
+      \Bmph{Terminübersicht Übung (geplant)}
+      
+      \begin{center}
+        \begin{tabular}{rlll}
+          \hline\rule{0pt}{12pt}%
+          Blatt & Erscheinen     & Abgabe               & Besprechung,         \\
+                & (geplant)      &                      & Übungstermin         \\[1pt]
+          \hline\rule{0pt}{12pt}%
+              1 & ist online!    & Do.\ 1.\,11.\        & Mo.\ 5.\,11.\        \\
+              2 & Do.\ 1.\,11.\  & Do.\ 15.\,11.\       & Mo.\ 19.\,11.\       \\
+              3 & Do.\ 15.\,11.\ & Do.\ 29.\,11.\       & Mo.\ 3.\,12.\        \\
+              4 & Mo.\ 3.\,12.\  & \Emph{Mo.} 17.\,12.\ & \Emph{Mi.} 19.\,12.\ \\
+              5 & Mo.\ 17.\,12.\ & Mo.\ 14.\,1.\        & Mi.\ 16.\,1.\        \\
+              6 & Mo.\ 14.\,1.\  & Mo.\ 28.\,1.\        & Mi.\ 30.\,1.\        \\[1pt]
+          \hline
+        \end{tabular}
+      \end{center}
+      
+      \begin{Itemize}
+        \item
+          Blätter erscheinen auf Homepage der Vorlesung
+        \item
+          Abgabe per PDF in Stud.IP (separater Ordner, bis 23:59 Uhr)
+      \end{Itemize}
+
+      \parI
+      \scalebox{.96}[1]{\Bmph{Vorlesung:} Ausfall 29.\,10., 31.\,10.\ (Reformationstag), 5.\,12.\ (Dies Acad.)}
+    
+      \note{
+        \begin{footnotesize}
+          \textbf{8:32 \quad $\to$ 8:35}
+
+          \par\smallskip
+          Übungstermine und Blätter~
+          (stehen auch auf Homepage der VL)
+  
+          \par\smallskip        
+          ¡¡Erstes Blatt bereits online — abzugeben am 29.10. (Ende nächster Wo.)
+          
+          \par\smallskip        
+          Dann noch 1x Abgabe Sonntag; danach immer schon freitags! \\
+          (Ü auf Montag wg.\ Dies Academicus 22.11.). \\
+          Blatt immer knapp 2 Wochen vorher verfügbar ($\pm$ 1--2 Tage)
+          
+          \par\smallskip        
+          Blätter werden auf Homepage hochgeladen. \\
+          Abgabe: elektronisch in Stud.IP bis jeweils 23:59. \\
+          Ich richte Ordner ein, in den man nur schreiben, nicht lesen kann. \\
+          $\leadsto$ wer hat Einwände?  (ggf. Postfach o.\,Ä.\ anbieten)
+          
+          \par\smallskip        
+          Stud.IP:  bitte für diese Veranstaltung eintragen, sofern noch nicht geschehen!
+          
+          \par\smallskip
+          Grund für diese Vorgehensweise:
+          Ich möchte die ÜS vor der Besprechung korrigieren,
+          um in der Übung auf Schwierigkeiten einzugehen und den Fokus nach Eurem Bedarf zu setzen.
+          Ich habe aber viel zu tun und brauche ein paar Tage „Puffer“ zum Korrigieren.
+          Kann auch noch nicht versprechen, dass das immer so klappt
+          (ist in AT das 2.\ Mal, dass ich das so mache.)
+          
+          \par
+        \end{footnotesize}
+      }
+    \end{frame}
+
+  % ==============================================================================================
+  % ==============================================================================================
+  \section{Vorlesungsüberblick}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Ursprünge der Automatentheorie}
+      
+      \Bmph{Automaten als Berechnungsmodelle, zur Definition formaler Sprachen}
+      
+      \begin{Enumerate}
+        \item[\Bmph{(3)}]
+          (Nicht-)deterministische endliche Automaten (NEA/DEA) \\
+          \Lit{[McCulloch \& Pitts 1943;~ Kleene 1956]}
+          \par\smallskip
+        \item[\Bmph{(2)}]
+          Kellerautomaten (pushdown automata, PDA) \\
+          \Lit{[Newell, Shaw, Simon 1959]}
+        \item[\Bmph{(1)}]
+          Linear beschränkte Automaten (LBA) \\
+          \Lit{[Myhill 1960;~ Kuroda 1964]}
+        \item[\Bmph{(0)}]
+          Turingmaschinen (TM) \\
+          \Lit{[Turing 1936]}
+      \end{Enumerate}
+    
+      \note{
+        \textbf{8:35}
+
+        \par\medskip
+        Die kennt Ihr (hoffentlich) alle aus Theorie 1.\\
+        Hier nach Chomsky-Typ geordnet, nicht historisch.
+        
+        \par\smallskip
+        N/DEAs:~ Ideen 1943 zur Modellierung Nervensysteme, \\
+        präzise definiert 1956 von Kleene
+        
+        \par\smallskip
+        LBAs:~ determ.\ Variante von Myhill, nichtdet.\ von Kuroda
+        
+        \par\smallskip
+        TMs:~ dazu muss ich sicherlich nichts mehr sagen \dots
+      }
+    \end{frame}
+  
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+    \frametitle{Ursprünge der Automatentheorie}
+    
+      \Bmph{Varianten endlicher Automaten} \\
+      zum Lösen von Entscheidungsproblemen
+      
+      \begin{Itemize}
+        \item
+          \Bmph{Baumautomaten} \\
+          $=$ endliche Automaten auf Bäumen (statt auf Wörtern)
+          \par\smallskip
+          ursprünglich für Schaltkreisverifikation \\
+          \Lit{[Church, 50er/60er]}
+          \par\smallskip
+        \item
+          \Bmph{Büchi-Automaten} \\
+          $=$ endliche Automaten auf unendlichen Wörtern
+          \par\smallskip
+          ursprünglich zum Entscheiden logischer Theorien \\
+          \Lit{[Büchi 1962]}
+          \par\smallskip
+        \item
+          \Bmph{alternierende Automaten} \\
+          (Alternierung $=$ Verallgemeinerung des Nichtdeterminismus)
+          \par\smallskip
+          \Lit{[Chandra, Kozen, Stockmeyer 1981]}
+          \par\smallskip
+         \item
+           und viele weitere \dots
+      \end{Itemize}
+    
+      \note{
+        \textbf{8:37}
+
+        \par\medskip
+        Hier wird der Begriff des (nichtdet.) endl.\ Automaten
+        auf verschiedene Weisen erweitert
+      }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Moderne Anwendungen der Automatentheorie}
+    
+      Automaten werden in der Informatik angewendet z.\,B.\ für
+      
+      \begin{Itemize}
+        \item
+          Validierung semistrukturierter Daten (XML)
+        \item
+          Verifikation von Hard- und Software
+        \item
+          Komplexitätstheorie (Definition Komplexitätsklassen)
+        \item
+          Entscheidungsverfahren \\
+          z.\,B.\ für Logiken (aus der KI, Verifikation und mehr)
+        \item
+          etc.\
+      \end{Itemize}
+    
+      \par\medskip
+      Es besteht eine enge Verbindung zwischen Automaten und Logik.
+      
+      \par\medskip
+      Automaten haben die Entwicklung der Informatik entscheidend mitbestimmt.
+
+      \note{
+        \textbf{8:39}
+
+        \par\medskip
+      }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Fallbeispiel 1: XML}
+      
+      \Bmph{XML-Schema und Validierung von XML-Dokumenten} \\
+      können als Automatenprobleme verstanden werden:
+      
+      \begin{Itemize}
+        \item
+          XML-Dokument $\approx$ \Emph{Baum}
+        \item
+          XML-Schema beschreibt Menge der gültigen XML-Dokumente \\
+          $\approx$ \Emph{formale Sprache} (Menge von Bäumen, i.\,d.\,R.\ unendlich)
+        \item
+          Formale Sprache kann man durch \Emph{endlichen Baumautomaten} beschreiben.
+      \end{Itemize}
+    
+      \par\medskip
+      Dann entspricht \dots
+      
+      \begin{Itemize}
+        \item
+          Validität eines XML-Dokuments $\hat=$ \Emph{Wortproblem}
+        \item
+          Konsistenz des XML-Schemas $\hat=$ \Emph{Leerheitsproblem}
+        \item
+          \dots
+      \end{Itemize}
+    
+    \note{
+      \textbf{8:41}
+
+      \par\medskip
+      "`$\approx$ Baum"':~
+      Struktur kann als Baum aufgeschrieben werden, \\
+      wenn man konkrete Datenwerte vernachlässigt
+    }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Fallbeispiel 2: Verifikation}
+      
+      \Bmph{Verifikation:}~ nachweisen, dass ein Chip/Programm eine gewünschte
+      Spezifikation erfüllt (z.\,B.\ keine Division durch 0, keine Deadlocks)
+      
+      \par\medskip
+      Manche Systeme sollen $\infty$ lange laufen (keine Terminierung): \\
+      Betriebssysteme, Bankautomaten, Flugsicherungssysteme
+      
+      \par\medskip
+      Wichtige Technik:~ \Emph{Model checking} -- oft automatenbasiert:
+      
+      \begin{Itemize}
+        \item
+          Lauf des Systems $=$ \Emph{unendliches Wort}
+        \item
+          System $=$ \Emph{formale Sprache} $L_1$ \\
+          (Menge aller Läufe, i.\,d.\,R.\ unendlich)
+        \item
+          erlaubtes Verhalten $=$ \Emph{formale Sprache} $L_2$ \\
+          (Menge aller erlaubten Läufe, i.\,d.\,R.\ unendlich)
+        \item
+          Beschreiben $L_1$ und $L_2$ durch \Emph{Büchi-Automaten} \\
+          (endliche Automaten auf unendlichen Wörtern)
+        \item[$\leadsto$]
+          Model checking ~$\hat=$~ "`$L_1 \subseteq L_2\,?$"'
+          ~$\approx$~ \Emph{Äquivalenzproblem}
+      \end{Itemize}
+    
+      \note{
+        \textbf{8:43}
+
+        \par\medskip
+        Bei diesen kritischen Systemen wäre Terminierung ein Fehler, \\
+        oft sogar ein fataler.
+        
+        \par\medskip
+        Letzte Zeile:~
+        das ist eigentlich nichts anderes als das Äquivalenzproblem,
+        wie wir sehen werden. \\
+        (genau genommen braucht man da noch gewisse Abschlusseig.\ \dots)
+      }
+    \end{frame}
+    
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Ziele der Vorlesung}
+      
+      \Bmph{Einführung in grundlegende Automatenbegriffe}
+      \begin{Itemize}
+        \item
+          auf endlichen Bäumen
+        \item
+          auf unendlichen Wörtern
+        \item
+          auf unendlichen Bäumen
+      \end{Itemize}
+    
+      \par\bigskip
+      \Bmph{Untersuchung der zugehörigen Sprachklassen}
+      \begin{Itemize}
+        \item
+          Abschlusseigenschaften, Determinisierung, Charakterisierungen, Entscheidungsprobleme
+        \item
+          teils einfach, teils anspruchsvoll
+        \item
+          interessante Techniken: Safra-Konstruktion, Paritätsspiele
+      \end{Itemize}
+      
+      \par\bigskip
+      \Bmph{Herstellung von Bezügen zu Anwendungen}
+      \par\smallskip
+      Einsatz dieser Automaten z.\,B.\ in XML-Validierung und Verifikation
+
+      \note{
+        \textbf{8:46}
+
+        \par\medskip
+      }
+    \end{frame}
+
+    \newlength{\teileins}
+    \settowidth{\teileins}{\Bmph{Teil 1:}}
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Übersicht Vorlesung}
+      
+      Einführung \YES
+      
+      \par\bigskip
+      \Bmph{Teil 1:}~ Endliche Automaten auf endlichen Wörtern \\
+      \hspace*{\teileins}~ (Kurzwiederholung und Anwendungen, ca.\ 2 Sitzungen)
+    
+      \par\bigskip
+      \Bmph{Teil 2:}~ Endliche Automaten auf endlichen Bäumen
+      
+      \par\bigskip
+      \Bmph{Teil 3:}~ Endliche Automaten auf unendlichen Wörtern
+      
+      \par\bigskip
+      \Bmph{Teil 4:}~ Endliche Automaten auf unendlichen Bäumen
+      
+      \note{
+        \textbf{8:48\quad  $\to$ 8:50}
+
+        \par\medskip
+        \textbf{5\,min Pause;}~ Übungsgruppen zusammenfinden lassen!
+      }
+    \end{frame}
+
+%    % ------------------------------------------------------------------------------------------
+%    \begin{frame}
+%      \frametitle{Teil 1:~ Endliche Automaten auf endlichen Wörtern}
+%      
+%      \Bmph{überwiegend Wiederholung (ca.\ 2 Sitzungen)}
+%      \begin{Itemize}
+%        \item
+%          Grundbegriffe: (nicht)deterministische EA
+%        \item
+%          Determinisierung
+%        \emphitem
+%          \emph{Anwendung: Textsuche}
+%          \par\bigskip
+%        \item
+%          Abschlusseigenschaften
+%        \item
+%          Reguläre Ausdrücke und der Satz von Kleene
+%        \emphitem
+%          \emph{Anwendungen: Patternsuche, Textersetzung}
+%          \par\bigskip
+%        \item
+%          Satz von Myhill-Nerode
+%        \item
+%          Pumping-Lemma für reguläre Sprachen
+%        \item
+%          Entscheidungsprobleme
+%      \end{Itemize}
+%    \end{frame}
+%
+%    % ------------------------------------------------------------------------------------------
+%    \begin{frame}
+%      \frametitle{Teil 2:~ Endliche Automaten auf endlichen Bäumen}
+%      \begin{Itemize}
+%        \item
+%          Grundbegriffe: Bottom-up-Baumautomaten
+%        \item
+%          Determinisierung
+%        \emphitem
+%          \emph{Anwendung: Termersetzungssysteme}
+%          \par\bigskip
+%        \item 
+%          Pumping-Lemma für reguläre Baumsprachen
+%        \item 
+%          Abschlusseigenschaften regulärer Baumsprachen
+%        \item
+%          Top-down-Baumautomaten
+%        \item
+%          Entscheidungsprobleme
+%          \par\bigskip
+%        \emphitem
+%          \emph{Anwendung: XML}
+%          \begin{Itemize}
+%            \emphitem
+%              \emph{Vernetzung von Kenntnissen über Baumautomaten und reguläre Ausdrücke}
+%          \end{Itemize}
+%      \end{Itemize}
+%    \end{frame}
+%
+%    % ------------------------------------------------------------------------------------------
+%    \begin{frame}
+%      \frametitle{Teil 3:~ Endliche Automaten auf unendlichen Wörtern}
+%      \begin{Itemize}
+%        \item
+%          Grundbegriffe: Büchi-Automaten
+%        \item
+%          Abschlusseigenschaften
+%        \item
+%          Charakterisierung mittels regulärer Sprachen
+%        \emphitem
+%          Determinisierung
+%          \begin{Itemize}
+%            \item
+%              Deterministische Büchi-Automaten
+%            \item
+%              Müller-, Rabin- und Streett-Automaten %\\
+%%               (und Gleichmächtigkeit mit BA)
+%            \emphitem
+%              Safras Tricks
+%          \end{Itemize}
+%          \par\bigskip
+%        \item
+%          Entscheidungsprobleme
+%        \emphitem
+%          \emph{Anwendung: Verifikation und (Temporal-)Logik}
+%      \end{Itemize}
+%    \end{frame}
+%
+%    % ------------------------------------------------------------------------------------------
+%    \begin{frame}
+%      \frametitle{Teil 4:~ Endliche Automaten auf unendlichen Bäumen}
+%      \begin{Itemize}
+%        \item
+%          Grundbegriffe
+%        \item
+%          Zusammenhang zwischen den Baumautomatenmodellen
+%        \emphitem
+%          Komplementierung: Reduktion zu Paritätsspielen
+%          \par\bigskip
+%        \item
+%          \emph{Anwendung: Verifikation und (Temporal-)Logik}
+%      \end{Itemize}
+%    \end{frame}
+
+% 
+%     % ------------------------------------------------------------------------------------------
+%     \begin{frame}
+%       \frametitle{\dots}
+% 
+%     \end{frame}
+
+  
+
+%     % ------------------------------------------------------------------------------------------
+%     \begin{frame}
+%       \frametitle{Ausblick}
+% 
+%       \dots
+%       
+%       \par\bigskip
+%       \uncover<2>{%
+%         \begin{center}
+%           \begin{Huge}
+%             \dblu{\textbf{Thank you.}}
+%           \end{Huge}
+%         \end{center}
+%       }
+%     \end{frame}
+
+%   % ==============================================================================================
+%   % ==============================================================================================
+%   \appendix
+%   
+%     % ------------------------------------------------------------------------------------------
+%     \begin{frame}
+%       \frametitle{\dots}
+%       \dots
+%     \end{frame}
+
+\end{document}

@@ -1,0 +1,482 @@
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Terminierung}
+
+      \begin{block}{}
+        \Bmph{Terminierung} von Algorithmen ist wichtig für Problemlösung.
+      \end{block}
+
+      \par\bigskip
+      \Bmph{Übliches Szenario:}
+      \begin{Itemize}
+        \item
+          Eingabe: endliche Menge von Daten
+        \item
+          Lasse Programm $P$ laufen, bis es \Emph{terminiert}
+        \item
+          Ausgabe: Ergebnis, das durch $P$ berechnet wurde
+      \end{Itemize}
+      Um Ausgabe zu erhalten, \Emph{muss $P$ für jede Eingabe terminieren}.
+
+      \par\bigskip
+      \uncover<2->{%
+        \begin{exampleblock}{}
+          \Gmph{Beispiel:} Validierung von XML-Dokumenten für gegebenes Schema
+          \begin{Itemize}
+            \item
+              Konstruiere Automaten für Schema und Dokument \Emph{(terminiert)}
+            \item
+              Reduziere auf Leerheitsproblem \Emph{(terminiert)}
+            \item
+%               Löse Leerheitsprob.\ (sammle erreichb.\ Zustände -- \Emph{terminiert})
+                Löse Leerheitsproblem\\
+                \hspace*{\fill} (sammle erreichbare Zustände -- \Emph{terminiert})
+          \end{Itemize}
+        \end{exampleblock}
+      }
+      \note{
+        \uz{8:41}
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Terminierung unerwünscht}
+
+      \begin{block}{}
+        Von manchen Systemen/Programmen fordert man,\\
+        dass sie \Bmph{nie terminieren}.
+      \end{block}
+
+      \par\bigskip
+      \begin{exampleblock}{}
+        \Gmph{Beispiele:}
+        \par\vspace*{-6pt}
+        \begin{Itemize}
+          \item
+            (Mehrbenutzer-)Betriebssysteme\\
+            {\small sollen beliebig lange laufen ohne abzustürzen, egal was Benutzer tun}
+          \item
+            Bankautomaten, Flugsicherungssysteme, Netzwerkkommunikationssysteme, \dots
+        \end{Itemize}
+      \end{exampleblock}
+
+      \par\bigskip
+      \uncover<2->{%
+        \Bmph{Gängiges Berechnungsmodell:}
+        \begin{Itemize}
+          \item
+            endliche Automaten mit nicht-terminierenden Berechnungen
+          \item
+            Terminierung wird als Nicht-Akzeptanz angesehen
+          \item
+            ursprünglich durch Büchi entwickelt (1960)\\
+            {\small Ziel: Algorithmen zur Entscheidung mathematischer Theorien}
+%             z.\,B.\ bestimmte Fragmente der Arithmetik
+        \end{Itemize}
+      }
+      \note{
+        \uz{8:43}
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Ziel und Vorgehen dieses Kapitels}
+
+      \Bmph{Ziel}
+      \par\smallskip
+      Beschreibung von Automatenmodellen mit \Emph{unendlichen} Eingaben \\
+      und \Emph{nicht-terminierenden} Berechnungen
+
+      \par\bigskip\noindent
+      \Bmph{Vorgehen}
+      \begin{Itemize}
+        \item
+          Theorie: ausgiebiges Studium von Büchi-Automaten\\
+          und der von ihnen erkannten Sprachen
+          \begin{Itemize}
+            \item
+              Definition, Abschlusseigenschaften
+            \item
+              Charakterisierung mittels regulärer Sprachen
+            \item
+              Determinisierung
+            \item
+              Entscheidungsprobleme
+          \end{Itemize}
+        \item
+          Anwendung von Büchi-Automaten:\\
+          Spezifikation \& Verifikation in Linearer Temporallogik (LTL)\\
+      \end{Itemize}
+
+      \note{
+        \uz{8:45}
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Beispiel: Philosophenproblem \hfill {\normalsize (Dining Philosophers Problem)}}
+
+      Erläutert Nebenläufigkeit und Verklemmung von Prozessen
+
+      \par\medskip
+      Demonstriert auch unendliche Berechnungen
+
+      \par\medskip
+      Hier: einfachste Version mit 3 Philosophen
+
+      \begin{exampleblock}<2->{Philosophenproblem}
+%         \begin{Itemize}
+%           \item
+%             3 Philosophen $P_1,P_2,P_3$
+%           \item
+%             Für alle $i$ gilt: entweder denkt $P_i$, oder $P_i$ isst.
+%           \item
+%             Alle $P_i$ sitzen um einen runden Tisch.
+%           \item
+%             Jeder $P_i$ hat einen Teller mit Essen vor sich.
+%           \item
+%             Zwischen je zwei Tellern liegt ein Essstäbchen.
+%           \item
+%             Um zu essen, muss $P_i$ beide Stäbchen neben seinem Teller benutzen.
+%             \par
+%             \hfill $\Rightarrow$ Keine zwei $P_i,P_j$ können gleichzeitig essen.
+%         \end{Itemize}
+        3 Philosophen $P_1,P_2,P_3$
+
+        \par\medskip
+        Für alle $i$ gilt: entweder denkt $P_i$, oder $P_i$ isst.
+
+        \par\medskip
+        Alle $P_i$ sitzen um einen runden Tisch.
+
+        \par\medskip
+        Jeder $P_i$ hat einen Teller mit Essen vor sich.
+
+        \par\medskip
+        Zwischen je zwei Tellern liegt ein Essstäbchen.
+
+        \par\medskip
+        Um zu essen, benötigt $P_i$ beide Stäbchen neben seinem Teller.
+
+        \par\medskip
+        \uncover<3->{%
+          \hfill $\Rightarrow$ Keine zwei $P_i,P_j$ können gleichzeitig essen.%
+        }
+      \end{exampleblock}
+      \note{
+        \uz{8:46}
+        
+        \parI
+        Weil dieses Beispiel so schräg und archaisch ist, \\
+        belasse ich es mal bei der männlichen Form.
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Skizze zum Philosophenproblem}
+      \begin{exampleblock}{Zusammenfassung}
+        \begin{Itemize}
+          \item
+            Für alle $i$: entweder denkt $P_i$, oder $P_i$ isst.
+          \item
+            Keine zwei $P_i,P_j$ können gleichzeitig essen.
+        \end{Itemize}
+      \end{exampleblock}
+
+%       \par\bigskip
+      \uncover<2->{%
+        \begin{center}
+          \begin{minipage}{.48\textwidth}
+            \begin{exampleblock}{}
+              \begin{center}
+                \Fig{0}
+                \par\medskip
+                \begin{small}
+                  $P_1,P_2,P_3$ denken.
+                  \par
+                \end{small}
+              \end{center}
+            \end{exampleblock}
+          \end{minipage}
+          \hfill
+          \begin{minipage}{.48\textwidth}
+            \begin{exampleblock}{}
+              \begin{center}
+                \Fig{1}
+                \par\medskip
+                \begin{small}
+                  $P_1,P_3$ denken; $P_2$ isst.
+                  \par
+                \end{small}
+              \end{center}
+            \end{exampleblock}
+          \end{minipage}
+        \end{center}
+
+      }
+      \note{
+        \uz{8:48}
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Modellierung durch endliches Transitionssystem}
+
+      \Bmph{Annahmen}
+      \begin{Itemize}
+        \item
+          Am Anfang denken \Bmph{(d)} alle $P_i$.
+          \par\smallskip
+        \item
+          Reihum können sich $P_1,P_2,P_3$ entscheiden,\\
+          ob sie denken oder essen \Bmph{(e)} wollen.
+      \end{Itemize}
+
+      \par\bigskip
+      \Bmph{Zustände des Systems}
+      \begin{Itemize}
+        \item
+%           Anfangszustand $(d,d,d,1)$:
+          Anfangszustand ddd1:
+          \par%\smallskip
+          alle $P_i$ denken, und $P_1$ trifft nächste Entscheidung.
+          \par\smallskip
+        \item
+          alle zulässigen Zustände:
+          \begin{center}
+            \begin{tabular}{@{}l@{~~~}l@{~~~}l@{~~~}l@{}}
+%               $(d,d,d,1)$ & $(e,d,d,1)$ & $(d,e,d,1)$ & $(d,d,e,1)$ \\
+%               $(d,d,d,2)$ & $(e,d,d,2)$ & $(d,e,d,2)$ & $(d,d,e,2)$ \\
+%               $(d,d,d,3)$ & $(e,d,d,3)$ & $(d,e,d,3)$ & $(d,d,e,3)$
+              ddd1 & edd1 & ded1 & dde1 \\
+              ddd2 & edd2 & ded2 & dde2 \\
+              ddd3 & edd3 & ded3 & dde3
+            \end{tabular}
+          \end{center}
+
+      \end{Itemize}
+
+      \par\bigskip
+      \Bmph{Zustandsüberführungen:}
+      \begin{Itemize}
+        \item[]
+          $d$ oder $e$ -- je nach Entscheidung des $P_i$, der an der Reihe ist
+      \end{Itemize}
+      \note{
+        \uz{8:49}
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Das Transitionssystem}
+
+      \begin{center}
+        \Fig{10}
+      \end{center}
+
+      \uncover<2->{%
+        \Emph{Was sind die Eingaben in das System?}
+
+        \begin{Enumerate}
+          \item<3->[]
+            Endliche Zeichenketten über $\Sigma = \{d,e\}$\,?
+            \par\smallskip
+            \uncover<4->{Dann ist das System ein NEA.}
+          \item<4->[\Gmph{$\blacktriangleright$}]
+            \Gmph{Unendliche Zeichenketten über $\Sigma = \{d,e\}$\,!}
+        \end{Enumerate}
+
+      }
+      \note{
+        \uz{8:51}
+        
+        \par
+      }
+    \end{frame}
+
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Warum unendliche Zeichenketten?}
+
+%       \begin{Itemize}
+%         \item
+%           Nehmen an, jeder $P_i$ möchte \Emph{beliebig oft} denken und essen.
+%           \par\smallskip
+%           Dann ist $P_i$ \Bmph{zufrieden}.
+%           \par\smallskip
+%         \item
+%           System soll \Emph{beliebig lange} ohne Terminierung laufen.
+%           \par\smallskip
+%         \item[$\leadsto$]
+%           \Bmph{mögliche Fragen:}
+%           \begin{Enumerate}
+%             \item
+%               Ist es überhaupt möglich, dass das System beliebig lange läuft?
+%             \item
+%               Ist es zusätzlich möglich, dass $P_i$ zufrieden ist?
+%             \item
+%               Ist es möglich, dass $P_1,P_2$ zufrieden sind, aber $P_3$ nicht?
+%             \item
+%               Ist es möglich, dass alle $P_i$ zufrieden sind?
+%           \end{Enumerate}
+%       \end{Itemize}
+
+      Nehmen an, jeder $P_i$ möchte \Emph{beliebig oft} denken und essen.
+
+      \par\medskip
+      System soll dazu \Emph{beliebig lange} ohne Terminierung laufen.
+
+      \par\medskip
+      Philosoph $P_i$ heißt \Bmph{zufrieden}, wenn er währenddessen \Emph{unendlich oft} denkt und isst.
+
+      \par\bigskip
+      \uncover<2->{%
+        \Bmph{$\leadsto$ Mögliche Fragen:}
+        \begin{Enumerate}
+          \item
+            Kann das System überhaupt beliebig lange laufen?
+          \item
+            Ist es zusätzlich möglich, dass $P_i$ zufrieden ist?
+          \item
+            Ist es möglich, dass $P_1,P_2$ zufrieden sind, aber $P_3$ nicht?
+          \item
+            Ist es möglich, dass alle $P_i$ zufrieden sind?
+        \end{Enumerate}
+      }
+
+      \note{
+        \uz{8:55}
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}[t]
+      \frametitle{Frage 1}
+
+      \begin{center}
+        \Fig{10}
+      \end{center}
+
+      \Emph{Ist es überhaupt möglich, dass das System beliebig lange läuft?}%
+
+      \par\bigskip
+      \uncover<2->{%
+        \begin{tabular}{@{}l@{~~}l@{}}
+          \Gmph{Ja:} & jeder Zustand hat mindestens einen Nachfolgerzustand.\\
+                     & $dddddd\dots$ ist ein möglicher unendlicher Lauf.
+        \end{tabular}%
+      }
+      \note{
+        \uz{8:57}
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}[t]
+      \frametitle{Frage 2}
+
+      \begin{center}
+        \Fig{10}
+      \end{center}
+
+      \Emph{Ist es möglich, dass $P_1$ zufrieden ist?}%
+
+      \par\bigskip
+      \uncover<2->{%
+        \begin{tabular}{@{}l@{~~}l@{}}
+          \Gmph{Ja:} & z.\,B.\ wenn ein Lauf ddd1 und edd1 unendlich oft durchläuft:\\
+                     & $ed^5ed^5\dots$
+        \end{tabular}%
+      }
+      \note{
+        \uz{8:58}
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}[t]
+      \frametitle{Frage 3}
+
+      \begin{center}
+        \Fig{10}
+      \end{center}
+
+      \Emph{Ist es möglich, dass $P_1,P_2$ zufrieden sind, aber $P_3$ nicht?}%
+
+      \par\bigskip
+      \uncover<2->{%
+        \begin{tabular}{@{}l@{~~}l@{}}
+          \Gmph{Ja:} & z.\,B.\ "`ddd1, edd1, ddd2, ded2 unendlich oft, aber dde$i$ nicht"':\\
+                     & $ed^3ed^4ed^3ed^4\dots$
+        \end{tabular}%
+      }
+      \note{
+        \uz{8:59}
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}[t]
+      \frametitle{Frage 4}
+
+      \begin{center}
+        \Fig{10}
+      \end{center}
+
+      \Emph{Ist es möglich, dass alle $P_i$ zufrieden sind?}%
+
+      \par\bigskip
+      \uncover<2->{%
+        \begin{tabular}{@{}l@{~~}l@{}}
+          \Gmph{Ja:} & z.\,B.\ "`ddd1, edd1, ddd2, ded2, ddd3, dde3 unendlich oft"': \\
+                     & $ed^3ed^3\dots$ \quad oder \quad $ed^2ed^3ed^2ed^3\dots$ \quad oder \quad $\dots$
+        \end{tabular}%
+      }
+      \note{
+        \uz{9:00}
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Weiteres Beispiel}
+      
+      \dots\ siehe Anhang, Folie \ref{fra:anhang_bsp2} \dots
+      \note{
+        \uz{9:01}
+        
+        \par
+      }
+    \end{frame}
+
+

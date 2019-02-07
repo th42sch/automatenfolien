@@ -1,0 +1,39 @@
+%!PS
+%%BoundingBox: -26 -69 65 7 
+%%HiResBoundingBox: -25.73181 -68.03137 64.9502 6.0868 
+%%Creator: MetaPost 1.504
+%%CreationDate: 2014.05.15:1111
+%%Pages: 1
+%*Font: ectt1000 9.96265 9.96265 22:8008ec03100a68017b7cf08
+%%BeginProlog
+%%EndProlog
+%%Page: 1 1
+ 0 0 0 setrgbcolor
+0 0 moveto
+(Person) ectt1000 9.96265 fshow
+5.22914 -22.67712 moveto
+(Name) ectt1000 9.96265 fshow
+-17.88817 -45.35425 moveto
+(VN) ectt1000 9.96265 fshow
+38.80464 -45.35425 moveto
+(NN) ectt1000 9.96265 fshow
+-25.73181 -68.03137 moveto
+("Ada") ectt1000 9.96265 fshow
+23.1173 -68.03137 moveto
+("Schulz") ectt1000 9.96265 fshow
+ 0.79701 0 dtransform exch truncate exch idtransform pop setlinewidth
+ [] 0 setdash 1 setlinecap 1 setlinejoin 10 setmiterlimit
+newpath 15.68735 -2.99994 moveto
+15.68735 -13.59021 lineto stroke
+ 0 0.79701 dtransform truncate idtransform setlinewidth pop
+newpath 8.1332 -25.67706 moveto
+-5.10468 -36.26733 lineto stroke
+newpath 23.2415 -25.67706 moveto
+36.47937 -36.26733 lineto stroke
+ 0.79701 0 dtransform exch truncate exch idtransform pop setlinewidth
+newpath -12.65906 -48.35419 moveto
+-12.65906 -58.94446 lineto stroke
+newpath 44.03375 -48.35419 moveto
+44.03375 -58.94446 lineto stroke
+showpage
+%%EOF

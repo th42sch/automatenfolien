@@ -1,0 +1,302 @@
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Grundbegriffe}
+
+      \Bmph{Unendliches Wort} über \Bmph{Alphabet} $\Sigma$
+      \begin{Itemize}
+        \item
+          ist Funktion $\Bmph{$\alpha$} : \mathbb{N} \to \Sigma$
+        \item
+          \Bmph{$\alpha(n)$:}~ Symbol an $n$-ter Stelle (auch: \Bmph{$\alpha_n$})
+        \item
+          wird oft geschrieben als $\alpha = \alpha_0\alpha_1\alpha_2\dots$
+      \end{Itemize}
+%       Ab jetzt: unendliche Wörter $\alpha,\dots$; endliche Wörter $w,\dots$
+
+      \par\bigskip
+      \uncover<2->{%
+        \Bmph{Weitere Notation}
+        \begin{Itemize}
+          \item
+            \Bmph{$\alpha[m,n]$:}~ endliche Teilfolge $\alpha_m\alpha_{m+1}\dots \alpha_n$
+          \item
+            \begin{tabular}[t]{@{}l@{~}l@{}}
+              \Bmph{$\#_w(\alpha)$:}~ & Anzahl der Vorkommen von $w$ als Teilwort in $\alpha$\\
+                                      & $= \#\{(m,n) \mid \alpha[m,n] = w\}$
+            \end{tabular}
+          \item
+            \begin{tabular}[t]{@{}l@{~}l@{}}
+              \Bmph{$w^\omega$:}~ & unendliche Verkettung von $w$ \\ %\hfill(sei $n := |w|$)\\
+                                  & ($\alpha$ mit $\alpha[i\!\!\:\cdot\!\!\:n,(i\!\!\:+\!\!\:1)n\!\!\;-\!\!\;1] = w \text{ f.\ alle } i \geqslant 0,~ n = |w|$)
+            \end{tabular}
+        \end{Itemize}
+
+      }
+      \par\bigskip
+      \uncover<3->{%
+        \Bmph{$\Sigma^\omega$:} Menge aller unendlichen Wörter
+      }
+
+      \par\bigskip
+      \uncover<3->{%
+        \Bmph{$\omega$-Sprache:} $L \subseteq \Sigma^\omega$
+      }
+      \note{
+        \uz{9:02}
+        
+        \par
+      }
+    \end{frame}
+
+  % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Büchi-Automaten}
+
+      \begin{Definition}
+        Ein \Bmph{nichtdeterministischer Büchi-Automat (NBA)}
+        über einem \Bmph{Alphabet} $\Sigma$ ist ein 5-$\!$Tupel
+        $\Aut{A} = (Q, \Sigma, \Delta, I, F)$, wobei
+        \begin{Itemize}
+          \item
+            $Q$ eine endliche nichtleere \Bmph{Zustandsmenge} ist,
+          \item
+            $\Sigma$ eine endliche nichtleere Menge von Zeichen ist,
+          \item
+            $\Delta \subseteq Q \times \Sigma \times Q$ die \Bmph{Überführungsrelation} ist,
+          \item
+            $I \subseteq Q$ die Menge der \Bmph{Anfangszustände} ist,
+          \item
+            $F \subseteq Q$ die Menge der \Bmph{akzeptierenden Zustände} ist.
+        \end{Itemize}
+      \end{Definition}
+
+      \par\bigskip
+      \uncover<2->{%
+        Bisher kein Unterschied zu NEAs, aber \dots
+      }
+      
+      \note{
+        \uz{9:04}
+        
+        \par
+      }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Berechnungen und Akzeptanz}
+
+      \begin{Definition}
+        Sei $\Aut{A} = (Q,\Sigma,\Delta,I,F)$ ein Büchi-Automat.
+        \begin{Itemize}
+          \item
+            Ein \Bmph{Run} von \Aut{A} auf $\omega$-Wort $\alpha$
+            ist eine Folge
+            \vspace*{-.4\baselineskip}
+            \[
+              r = q_0q_1q_2\dots,
+            \]
+            \par\vspace*{-.4\baselineskip}
+            so dass für alle $i\geqslant0$ gilt: $(q_i,\alpha_i,q_{i+1}) \in \Delta$.
+            \par\smallskip
+          \item<2->
+            \Bmph{Unendlichkeitsmenge $\Inf(r)$} von $r = q_0q_1q_2\dots$:\\
+            Menge der Zustände, die unendlich oft in $r$ vorkommen
+            \par\smallskip
+          \item<3->
+            \Bmph{Erfolgreicher Run} $r = q_0q_1q_2\dots$:\hfill
+            $q_0 \in I$ und $\Inf(r) \cap F \neq \emptyset$
+            \par\smallskip
+          \item<4->
+            \Aut{A} \Bmph{akzeptiert} $\alpha$,\\
+            wenn es einen erfolgreichen Run von \Aut{A} auf $\alpha$ gibt.
+            \par\smallskip
+          \item<5->
+            Die von \Aut{A} \Bmph{erkannte Sprache} ist
+            $\ddblu{L_\omega(\Aut{A})} = \{\alpha \in \Sigma^\omega \mid \text{\Aut{A} akzeptiert $\alpha$}\}$.
+        \end{Itemize}
+      \end{Definition}
+
+      \note{
+        \uz{9:06}
+        
+        \par
+      }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Beispiele}
+%       \label{frame:automatenbsp}
+
+      \begin{exampleblock}{}
+        $\Aut{A}_1$:\quad \raisebox{-3mm}{\Fig{30}}
+        \hfill
+        \begin{minipage}{.55\textwidth}
+          $L_\omega(\Aut{A}_1) = \uncover<2->{\{a^nb^\omega \mid n \geqslant 1\}}$
+        \end{minipage}
+
+        \par\bigskip
+        \uncover<3->{$\Aut{A}_2$:\quad \raisebox{-3mm}{\Fig{31}}}
+        \hfill
+        \begin{minipage}{.55\textwidth}
+          $\uncover<3->{L_\omega(\Aut{A}_2) = }\uncover<4->{\{\alpha\!\!\:\in\!\!\:\Sigma^\omega \mid \#_a(\alpha) < \infty\}}$
+        \end{minipage}
+
+        \par\bigskip
+        \uncover<5->{$\Aut{A}_3$:\quad \raisebox{-3mm}{\Fig{32}}}
+        \hfill
+        \begin{minipage}{.55\textwidth}
+          $\uncover<5->{L_\omega(\Aut{A}_3) = }\uncover<6->{\{\alpha \in \Sigma^\omega \mid \text{s.\ unten}\}}$
+        \end{minipage}
+        \par\bigskip
+        \uncover<6->{%
+%           Zwischen zwei aufeinanderfolgenden $a$'s in $\alpha$\\
+%           -- und am Anfang von $\alpha$ -- steht eine gerade Anzahl von $b$'s.%
+          \hspace*{\fill} Zwischen je zwei $a$'s in $\alpha$ sowie vor dem ersten $a$ \\
+          \hspace*{\fill} steht jeweils eine gerade Anzahl von $b$'s.%
+        }
+
+
+%         \hfill
+%         $L(\Aut{A}_1) = \uncover<2->{\{a^nb^m \mid n \geqslant 0, m \geqslant 1\}}$
+% 
+%         \par\bigskip
+%         \uncover<3->{$\Aut{A}_2$: \raisebox{-3mm}{\Fig{10}}}
+%         \par\bigskip
+%         $\uncover<3->{L(\Aut{A}_2) = }\uncover<4->{\{\alpha \in \{a,b\}^* \mid \text{$\alpha$ enthält Teilwort $ab$}\}}$
+% 
+%         \par\bigskip
+%         \uncover<5->{$\Aut{A}_3$: \raisebox{-3mm}{\Fig{11}}}
+%         \par\bigskip
+%         $\uncover<5->{L(\Aut{A}_3) = }\uncover<6->{\{\alpha \in \{a,b\}^* \mid \text{$\alpha$ endet auf $ab$}\}}$
+      \end{exampleblock}
+
+      \note{
+        \uz{9:08 bis 9:14}
+        
+        \par
+      }
+    \end{frame}
+
+%     % ------------------------------------------------------------------------------------------
+%     \begin{frame}
+%       \frametitle{Mehr Beispiele}
+%       
+%       \begin{exampleblock}{}
+%         \begin{small}
+%           $\Aut{A}_4$: \raisebox{-6mm}{\Fig{40}}
+%           \hfill
+%           \begin{minipage}{.557\textwidth}
+%             \begin{align*}
+%               L_\omega(\Aut{A}_4) & = \uncover<2->{\{\alpha\!\in\!\Sigma^\omega \mid \#_{ab}(\alpha) = \infty\}} \\
+%                                   & \uncover<3->{= \{\alpha \mid \#_{a}(\alpha) = \#_{b}(\alpha) = \infty\}}
+%             \end{align*}
+%           \end{minipage}
+% 
+%           \par\bigskip
+%           \uncover<4->{$\Aut{A}_5$: \raisebox{-6mm}{\Fig{41}}}
+%           \hfill
+%           \begin{minipage}{.54\textwidth}
+%             $\uncover<4->{L_\omega(\Aut{A}_5) = }\uncover<5->{\{\alpha \mid \#_a(\alpha) = \infty\}}$
+%           \end{minipage}
+%           \par\smallskip
+%           \uncover<6->{%
+%             (Idee:~ $q_1$ kann nur erreicht werden, wenn ein $a$ gelesen wird)%
+%           }
+% 
+%           \par\bigskip
+%           \uncover<7->{$\Aut{A}_6$: \raisebox{-6mm}{\Fig{42}}}
+%           \hfill
+%           \begin{minipage}{.54\textwidth}
+%             $\uncover<7->{L_\omega(\Aut{A}_6) = }\uncover<8->{\{\alpha \mid \#_{bb}(\alpha) = \infty\}}$
+%           \end{minipage}
+%           \par\smallskip
+%           \uncover<9->{%
+%             (Idee:~ $q_0$ nur durch $bb$ erreichbar;~ jeder Teilstring $bb$ führt zu $q_0$)%
+%           }
+%         \par
+%         \end{small}
+%       \end{exampleblock}
+%       \note{~}
+%     \end{frame}
+% 
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Mehr Beispiele}
+
+      \begin{exampleblock}{}
+        \begin{small}
+          $\Aut{A}_4$: \raisebox{-8mm}{\Fig{50}}
+          \hfill
+          \begin{minipage}[t]{.54\textwidth}
+            \vspace*{-1.6\baselineskip}
+            \begin{align*}
+              L_\omega(\Aut{A}_4) & = \uncover<2->{\{\alpha\in\Sigma^\omega \mid \#_{a}(\alpha) < \infty} \\
+                                  & \uncover<2->{\qquad\qquad \text{oder } \#_b(\alpha) < \infty\}}
+            \end{align*}
+          \end{minipage}
+
+          \par\bigskip
+          \uncover<3->{$\Aut{A}_5$: \raisebox{-34mm}{\Fig{51}}}
+%           \hspace*{-20mm}%
+          \hfill
+          \begin{minipage}[t]{.54\textwidth}
+            \vspace*{-1.6\baselineskip}
+            \begin{align*}
+              \uncover<3->{L_\omega(\Aut{A}_5) =}~ & \uncover<4->{\{\alpha\in\Sigma^\omega \mid \#_{a}(\alpha) < \infty} \\
+                                                   & \uncover<4->{\qquad~~ \text{oder } \#_{aa}(\alpha) = 0\}}
+            \end{align*}
+            \uncover<5->{%
+              \begin{footnotesize}%
+                \hspace*{\fill}(Letzteres heißt:~~~~\\
+                \hspace*{\fill}auf jedes $a$ in $\alpha$ folgt direkt ein $b$)~~~~%
+                \par
+              \end{footnotesize}%
+            }
+
+          \end{minipage}
+%           \par\vspace*{-\baselineskip}
+%           \uncover<5->{%
+%             \hspace{\fill}{\footnotesize (letzteres heißt: auf jedes $a$ in $\alpha$ folgt direkt ein $b$)}%
+%           }
+
+%           \par\bigskip
+%           \uncover<7->{$\Aut{A}_6$: \raisebox{-6mm}{\Fig{42}}}
+%           \hfill
+%           \begin{minipage}{.54\textwidth}
+%             $\uncover<7->{L_\omega(\Aut{A}_6) = }\uncover<8->{\{\alpha \mid \#_{bb}(\alpha) = \infty\}}$
+%           \end{minipage}
+%           \par\smallskip
+%           \uncover<9->{%
+%             (Idee:~ $q_0$ nur durch $bb$ erreichbar;~ jeder Teilstring $bb$ führt zu $q_0$)%
+%           }
+        \par
+        \end{small}
+      \end{exampleblock}
+
+      \note{
+        \uz{9:14 bis 9:20; 5\,min Pause}
+        
+        \par
+      }
+    \end{frame}
+
+    % ------------------------------------------------------------------------------------------
+    \begin{frame}
+      \frametitle{Erkennbare Sprache}
+      
+      \begin{Definition}
+        Eine Sprache $L \subseteq \Sigma^\omega$ ist \Bmph{Büchi-erkennbar}, \\
+        wenn es einen NBA \Aut{A} gibt mit $L = L_\omega(\Aut{A})$.
+      \end{Definition}
+
+      \note{
+        \uz{9:20}
+        
+        \par
+      }
+    \end{frame}
+
+  
