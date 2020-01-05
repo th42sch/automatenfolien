@@ -1,5 +1,5 @@
 # Automatenfolien
-Folien zum Kurs „Automatentheorie und ihre Anwendungen“
+Folien zum Kurs „Automatentheorie und ihre Anwendungen“ im **WiSe 2018/19(!)**
 
 ## Überblick
 * Einführung und Kapitel 1–5 sind auf die Ordner <code>0</code>–<code>5</code> aufgeteilt.
